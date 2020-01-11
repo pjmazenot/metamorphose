@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "firstname": "John",
+  "lastname": "Smith",
+  "extra_data": {
+    "email": "j.smith@test.com",
+    "phone": "+15140010001"
+  },
+  "metas": {
+    "permissions": ["user", "admin"],
+    "description": {
+      "title": "Desc Title",
+      "content": "Great description"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+namespace: Tests\Codeception
+actor: Tester
+bootstrap: _bootstrap.php
+paths:
+    log: /var/www/tests/codeception/_output
+    tests: tests/codeception
+    output: /var/www/tests/codeception/_output
+    data: tests/codeception/_data
+    support: tests/codeception/_support
+    envs: tests/codeception/_envs
+settings:
+    colors: true
+    memory_limit: 4096M
+    strict_xml: true
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed

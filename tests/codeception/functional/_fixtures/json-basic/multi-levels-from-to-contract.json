@@ -1,0 +1,27 @@
+{
+  "parsers": ["json"],
+  "formatters": ["json"],
+  "options": [],
+  "fields": [
+    {
+      "from": "id",
+      "to": "id"
+    },
+    {
+      "from": "firstname",
+      "to": "firstname"
+    },
+    {
+      "from": "lastname",
+      "to": "lastname"
+    },
+    {
+      "from": "extra_data.email",
+      "to": "contact_info.email"
+    },
+    {
+      "from": "extra_data.phone",
+      "to": "contact_info.phone"
+    }
+  ]
+}

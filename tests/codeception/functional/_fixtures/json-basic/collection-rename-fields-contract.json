@@ -1,0 +1,28 @@
+{
+  "parsers": ["json"],
+  "formatters": ["json"],
+  "options": [],
+  "type": "collection",
+  "fields": [
+    {
+      "from": "id",
+      "to": "id"
+    },
+    {
+      "from": "firstname",
+      "to": "firstname"
+    },
+    {
+      "from": "lastname",
+      "to": "lastname"
+    },
+    {
+      "from": "primary_email",
+      "to": "email"
+    },
+    {
+      "from": "primary_phone",
+      "to": "phone"
+    }
+  ]
+}

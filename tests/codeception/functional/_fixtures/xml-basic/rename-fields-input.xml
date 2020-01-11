@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <id>1</id>
+    <firstname>John</firstname>
+    <lastname>Smith</lastname>
+    <primary_email>j.smith@test.com</primary_email>
+    <primary_phone>+15140010001</primary_phone>
+</root>

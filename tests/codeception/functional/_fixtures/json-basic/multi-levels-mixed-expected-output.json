@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "firstname": "John",
+  "lastname": "Smith",
+  "user_data": {
+    "email": "j.smith@test.com",
+    "phone": "+15140010001",
+    "description": {
+      "title": "Desc Title",
+      "content": "Great description"
+    }
+  },
+  "description_title_copy": "Desc Title",
+  "meta": {
+    "level": {
+      "four": ["user", "admin"]
+    }
+  }
+}

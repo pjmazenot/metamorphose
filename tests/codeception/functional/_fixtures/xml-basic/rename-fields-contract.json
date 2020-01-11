@@ -1,0 +1,27 @@
+{
+  "parsers": ["xml"],
+  "formatters": ["xml"],
+  "options": [],
+  "fields": [
+    {
+      "from": "root.id",
+      "to": "root.id"
+    },
+    {
+      "from": "root.firstname",
+      "to": "root.firstname"
+    },
+    {
+      "from": "root.lastname",
+      "to": "root.lastname"
+    },
+    {
+      "from": "root.primary_email",
+      "to": "root.email"
+    },
+    {
+      "from": "root.primary_phone",
+      "to": "root.phone"
+    }
+  ]
+}

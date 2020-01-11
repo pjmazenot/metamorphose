@@ -1,0 +1,30 @@
+{
+  "parsers": ["csv"],
+  "formatters": ["csv"],
+  "options": {
+    "headers": ["id", "firstname", "lastname", "phone", "email"]
+  },
+  "type": "collection",
+  "fields": [
+    {
+      "from": 0,
+      "to": 0
+    },
+    {
+      "from": 1,
+      "to": 1
+    },
+    {
+      "from": 2,
+      "to": 2
+    },
+    {
+      "from": 3,
+      "to": 4
+    },
+    {
+      "from": 4,
+      "to": 3
+    }
+  ]
+}

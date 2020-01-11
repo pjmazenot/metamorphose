@@ -1,0 +1,39 @@
+{
+  "parsers": ["json"],
+  "formatters": ["json"],
+  "options": [],
+  "fields": [
+    {
+      "from": "id",
+      "to": "id"
+    },
+    {
+      "from": "firstname",
+      "to": "firstname"
+    },
+    {
+      "from": "lastname",
+      "to": "lastname"
+    },
+    {
+      "from": "extra_data.email",
+      "to": "user_data.email"
+    },
+    {
+      "from": "extra_data.phone",
+      "to": "user_data.phone"
+    },
+    {
+      "from": "metas.description",
+      "to": "user_data.description"
+    },
+    {
+      "from": "metas.description.title",
+      "to": "description_title_copy"
+    },
+    {
+      "from": "metas.permissions",
+      "to": "meta.level.four"
+    }
+  ]
+}

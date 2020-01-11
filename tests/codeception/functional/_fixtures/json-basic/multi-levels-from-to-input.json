@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "firstname": "John",
+  "lastname": "Smith",
+  "extra_data": {
+    "email": "j.smith@test.com",
+    "phone": "+15140010001"
+  }
+}

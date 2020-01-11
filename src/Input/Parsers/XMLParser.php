@@ -1,0 +1,60 @@
+<?php
+
+namespace Metamorphose\Input\Parsers;
+
+use Metamorphose\Data\DataSet;
+use Metamorphose\Input\Parser;
+
+class XMLParser extends Parser {
+
+    const NAME = 'xml';
+
+    // @TODO: Keep this?
+    public function parseArray(array $array): void {
+
+        $this->parsedData = new DataSet($array);
+
+    }
+
+    public function parseFile(string $filePath): void {
+
+        $fileContent = file_get_contents($filePath);
+
+        $this->parseString($fileContent);
+
+    }
+
+    public function parseString(string $string): void {
+
+        // @link: https://stackoverflow.com/questions/6578832/how-to-convert-xml-into-array-in-php
+
+
+
+        $xml   = simplexml_load_string($string);
+        $array = $this->XML2Array($xml);
+        $array = array($xml->getName() => $array);
+
+        $this->parseArray($array);
+
+//        $xml   = simplexml_load_string($string);
+//        $array = json_decode(json_encode((array) $xml), true);
+//        $array = array($xml->getName() => $array);
+
+    }
+
+    function XML2Array(\SimpleXMLElement $parent)
+    {
+        $array = array();
+
+        foreach ($parent as $name => $element) {
+            ($node = & $array[$name])
+            && (1 === count($node) ? $node = array($node) : 1)
+            && $node = & $node[];
+
+            $node = $element->count() ? $this->XML2Array($element) : trim($element);
+        }
+
+        return $array;
+    }
+
+}

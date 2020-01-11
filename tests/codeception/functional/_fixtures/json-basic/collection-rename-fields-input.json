@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "firstname": "John",
+    "lastname": "Smith",
+    "primary_email": "j.smith@test.com",
+    "primary_phone": "+15140010001"
+  },
+  {
+    "id": 2,
+    "firstname": "Mark",
+    "lastname": "Jones",
+    "primary_email": "m.jones@test.com",
+    "primary_phone": "+15140010002"
+  }
+]
