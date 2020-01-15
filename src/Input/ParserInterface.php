@@ -6,6 +6,8 @@ use Metamorphose\Data\DataSet;
 
 interface ParserInterface {
 
+    public function getName(): string;
+
     public function getParsedData(): DataSet;
 
     public function parseArray(array $array);

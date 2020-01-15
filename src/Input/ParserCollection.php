@@ -14,15 +14,15 @@ class ParserCollection {
     public function __construct() {
 
         // Register default parsers
-        $this->registerParser(CSVParser::NAME, new CSVParser());
-        $this->registerParser(JSONParser::NAME, new JSONParser());
-        $this->registerParser(XMLParser::NAME, new XMLParser());
+        $this->registerParser(new CSVParser());
+        $this->registerParser(new JSONParser());
+        $this->registerParser(new XMLParser());
 
     }
 
-    public function registerParser(string $name, ParserInterface $parser): void {
+    public function registerParser(ParserInterface $parser): void {
 
-        $this->parsers[$name] = $parser;
+        $this->parsers[$parser->getName()] = $parser;
 
     }
 

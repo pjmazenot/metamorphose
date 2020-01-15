@@ -2,27 +2,11 @@
 
 namespace Metamorphose\Input\Parsers;
 
-use Metamorphose\Data\DataSet;
 use Metamorphose\Input\Parser;
 
 class XMLParser extends Parser {
 
     const NAME = 'xml';
-
-    // @TODO: Keep this?
-    public function parseArray(array $array): void {
-
-        $this->parsedData = new DataSet($array);
-
-    }
-
-    public function parseFile(string $filePath): void {
-
-        $fileContent = file_get_contents($filePath);
-
-        $this->parseString($fileContent);
-
-    }
 
     public function parseString(string $string): void {
 
