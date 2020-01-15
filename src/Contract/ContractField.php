@@ -10,10 +10,15 @@ class ContractField {
     const TYPE_NUMBER = 'number';
     const TYPE_STRING = 'string';
 
+    /** @var string $from */
     protected $from;
+
     protected $inputType;
     protected $dataProcessor;
+
+    /** @var string $to */
     protected $to;
+
     protected $outputType;
 
     public function __construct(array $fieldData) {
@@ -25,9 +30,10 @@ class ContractField {
     /**
      * @return mixed
      */
-    public function getInputKey() {
+    public function getFrom() {
 
         return $this->from;
+
     }
 
     /**
@@ -49,9 +55,10 @@ class ContractField {
     /**
      * @return mixed
      */
-    public function getOutputKey() {
+    public function getTo() {
 
         return $this->to;
+
     }
 
     /**
@@ -60,6 +67,7 @@ class ContractField {
     public function getOutputType() {
 
         return $this->outputType;
+
     }
 
     protected function parseFieldData(array $fieldData): void {

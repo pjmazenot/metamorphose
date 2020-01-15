@@ -82,30 +82,34 @@ class Contract implements ContractInterface {
 
     }
 
-    public function validate(ContractValidator $contractValidator) {
-
-
-
-    }
-
-    public function parseFile(string $filePath): void {
+    protected function parseFile(string $filePath): void {
 
         $contractData = json_decode(file_get_contents($filePath), true);
 
         if(isset($contractData['parsers'])) {
+
             $this->parsers = $contractData['parsers'];
+
         } else {
+
             throw new \Exception('The contract needs to have at least one parser');
+
         }
 
         if(isset($contractData['formatters'])) {
+
             $this->formatters = $contractData['formatters'];
+
         } else {
+
             throw new \Exception('The contract needs to have at least one formatter');
+
         }
 
         if(isset($contractData['options'])) {
+
             $this->options = $contractData['options'];
+
         }
 
         if(isset($contractData['type'])) {
@@ -124,9 +128,13 @@ class Contract implements ContractInterface {
         }
 
         if(isset($contractData['fields'])) {
+
             foreach($contractData['fields'] as $fieldData) {
+
                 $this->fields[] = new ContractField($fieldData);
+
             }
+
         }
 
     }
