@@ -77,6 +77,15 @@ class BaseFunctionalTest {
 
     }
 
+    protected function checkTxtOutput(FunctionalTester $I, string $expectedOutputPath, string $output) {
+
+        $I->assertSame(
+            file_get_contents($expectedOutputPath),
+            $output
+        );
+
+    }
+
     protected function checkCsvOutput(FunctionalTester $I, string $expectedOutputPath, string $output) {
 
         $I->assertSame(

@@ -1,0 +1,29 @@
+{
+  "parsers": ["json"],
+  "formatters": ["json"],
+  "options": [],
+  "fields": [
+    {
+      "from": "id",
+      "to": "id"
+    },
+    {
+      "from": "firstname",
+      "to": "firstname",
+      "processors": ["custom-processor"]
+    },
+    {
+      "from": "lastname",
+      "to": "lastname",
+      "processors": ["custom-processor"]
+    },
+    {
+      "from": "email",
+      "to": "email"
+    },
+    {
+      "from": "phone",
+      "to": "phone"
+    }
+  ]
+}

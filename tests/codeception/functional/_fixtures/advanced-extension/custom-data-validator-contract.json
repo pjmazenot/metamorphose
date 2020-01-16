@@ -1,0 +1,29 @@
+{
+  "parsers": ["json"],
+  "formatters": ["json"],
+  "options": [],
+  "fields": [
+    {
+      "from": "id",
+      "to": "id"
+    },
+    {
+      "from": "firstname",
+      "to": "firstname",
+      "validators": ["custom-validator"]
+    },
+    {
+      "from": "lastname",
+      "to": "lastname",
+      "validators": ["custom-validator"]
+    },
+    {
+      "from": "email",
+      "to": "email"
+    },
+    {
+      "from": "phone",
+      "to": "phone"
+    }
+  ]
+}
