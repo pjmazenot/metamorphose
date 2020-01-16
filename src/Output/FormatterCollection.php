@@ -13,15 +13,15 @@ class FormatterCollection {
     public function __construct() {
 
         // Register default formatters
-        $this->registerFormatter(CSVFormatter::NAME, new CSVFormatter());
-        $this->registerFormatter(JSONFormatter::NAME, new JSONFormatter());
-        $this->registerFormatter(XMLFormatter::NAME, new XMLFormatter());
+        $this->registerFormatter(new CSVFormatter());
+        $this->registerFormatter(new JSONFormatter());
+        $this->registerFormatter(new XMLFormatter());
 
     }
 
-    public function registerFormatter(string $name, FormatterInterface $formatter): void {
+    public function registerFormatter(FormatterInterface $formatter): void {
 
-        $this->formatters[$name] = $formatter;
+        $this->formatters[$formatter->getName()] = $formatter;
 
     }
 
