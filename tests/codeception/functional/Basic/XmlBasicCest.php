@@ -1,14 +1,15 @@
 <?php
 
-namespace Tests\Codeception\TestCase;
+namespace Tests\Codeception\Functional\Basic;
 
 use Tests\Codeception\FunctionalTester;
+use Tests\Codeception\TestCase\BaseFunctionalTest;
 
 class XmlBasicCest extends BaseFunctionalTest {
 
     public function testRenameFields(FunctionalTester $I) {
 
-        $this->runXmlTest($I, 'xml-basic/rename-fields');
+        $this->runXmlTest($I, 'basic-xml/rename-fields');
 
     }
 
