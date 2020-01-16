@@ -65,24 +65,6 @@ class Metamorphose {
 
         }
 
-        // Load the default parser if none have been specified yet
-        if (!isset($this->parser)) {
-
-            $parserName = $this->contract->getDefaultParserName();
-
-            $this->parser = $this->parserCollection->getParser($parserName);
-
-        }
-
-        // Load the default formatter if none have been specified yet
-        if (!isset($this->formatter)) {
-
-            $formatterName = $this->contract->getDefaultFormatterName();
-
-            $this->formatter = $this->formatterCollection->getFormatter($formatterName);
-
-        }
-
     }
 
     public function registerParser(ParserInterface $parser): void {
@@ -135,6 +117,24 @@ class Metamorphose {
     // @TODO: Buffer (nbItem) - for CSV for example or JSON/XML collections
 
     public function convert() {
+
+        // Load the default parser if none have been specified yet
+        if (!isset($this->parser)) {
+
+            $parserName = $this->contract->getDefaultParserName();
+
+            $this->parser = $this->parserCollection->getParser($parserName);
+
+        }
+
+        // Load the default formatter if none have been specified yet
+        if (!isset($this->formatter)) {
+
+            $formatterName = $this->contract->getDefaultFormatterName();
+
+            $this->formatter = $this->formatterCollection->getFormatter($formatterName);
+
+        }
 
         // Create the data set from the input data
         switch ($this->sourceType) {
