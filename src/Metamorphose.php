@@ -169,7 +169,7 @@ class Metamorphose {
 
         if(!empty($this->contractValidator)) {
 
-            $this->contractValidator->validate($this->contract);
+            $this->contractValidator->validate($this->contract, $this->formatterCollection);
 
         } else {
 

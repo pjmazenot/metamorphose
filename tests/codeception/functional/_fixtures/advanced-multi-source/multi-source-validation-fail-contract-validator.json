@@ -1,5 +1,5 @@
 {
-  "formatters": ["json"],
+  "formats": ["application/json"],
   "fields": [
     {
       "mandatory": true,

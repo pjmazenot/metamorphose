@@ -7,6 +7,7 @@ use Metamorphose\Output\Formatter;
 class XMLFormatter extends Formatter {
 
     const NAME = 'xml';
+    const FORMAT = 'application/xml';
 
     public function format(array $data, array $options = []): string {
 

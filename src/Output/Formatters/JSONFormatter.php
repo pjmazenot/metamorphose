@@ -7,6 +7,7 @@ use Metamorphose\Output\Formatter;
 class JSONFormatter extends Formatter {
 
     const NAME = 'json';
+    const FORMAT = 'application/json';
 
     public function format(array $data, array $options = []): string {
 

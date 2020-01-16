@@ -7,6 +7,7 @@ use Metamorphose\Output\Formatter;
 class CSVFormatter extends Formatter {
 
     const NAME = 'csv';
+    const FORMAT = 'text/csv';
 
     public function format(array $data, array $options = []): string {
 

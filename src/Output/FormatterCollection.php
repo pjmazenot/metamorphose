@@ -8,6 +8,7 @@ use Metamorphose\Output\Formatters\XMLFormatter;
 
 class FormatterCollection {
 
+    /** @var FormatterInterface[] $formatters */
     protected $formatters = [];
 
     public function __construct() {
@@ -32,6 +33,15 @@ class FormatterCollection {
         }
 
         return $this->formatters[$name];
+
+    }
+
+    /**
+     * @return FormatterInterface[]
+     */
+    public function getFormatters(): array {
+
+        return $this->formatters;
 
     }
 

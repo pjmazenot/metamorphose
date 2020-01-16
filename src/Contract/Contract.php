@@ -64,6 +64,12 @@ class Contract implements ContractInterface {
 
     }
 
+    public function getFormatters() {
+
+        return $this->formatters;
+
+    }
+
     public function getOptions() {
 
         return $this->options;
