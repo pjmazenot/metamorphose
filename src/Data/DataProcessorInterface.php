@@ -6,6 +6,6 @@ interface DataProcessorInterface {
 
     public function getName(): string;
 
-    public function process($data);
+    public function process($data, array $params = []);
 
 }

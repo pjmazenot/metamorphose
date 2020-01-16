@@ -218,9 +218,13 @@ class Metamorphose {
 
             // Process the value
             $processedValue = $value;
-            foreach($field->getProcessors() as $processorName) {
+            foreach($field->getProcessors() as $processorData) {
 
-                $processor = $this->dataProcessorCollection->getDataProcessor($processorName);
+                $processorDataParts = explode(':', $processorData);
+                $processorName = $processorDataParts[0];
+                $processorParams = !empty($processorDataParts[1]) ? explode('|', str_replace(['{', '}'], '', $processorDataParts[1])) : [];
+
+                $processor = $this->dataProcessorCollection->getDataProcessor($processorName, $processorParams);
 
                 $processedValue = $processor->process($value);
 
