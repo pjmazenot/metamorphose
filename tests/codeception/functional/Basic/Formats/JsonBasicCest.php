@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Codeception\Functional\Basic;
+namespace Tests\Codeception\Functional\Basic\Formats;
 
 use Tests\Codeception\FunctionalTester;
 use Tests\Codeception\TestCase\BaseFunctionalTest;

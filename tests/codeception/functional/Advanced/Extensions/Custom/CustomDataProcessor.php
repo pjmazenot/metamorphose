@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Codeception\Functional\Extension\Custom;
+namespace Tests\Codeception\Functional\Advanced\Extensions\Custom;
 
 use Metamorphose\Data\DataProcessor;
 
