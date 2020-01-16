@@ -165,6 +165,19 @@ class Metamorphose {
 
     }
 
+    public function validateContract() {
+
+        if(!empty($this->contractValidator)) {
+
+            $this->contractValidator->validate($this->contract);
+
+        } else {
+
+            throw new \Exception('No contract validator configuration');
+
+        }
+
+    }
 
     public function applyContract() {
 
