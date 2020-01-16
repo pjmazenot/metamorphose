@@ -1,0 +1,25 @@
+{
+  "formatters": ["json"],
+  "fields": [
+    {
+      "mandatory": true,
+      "to": "id"
+    },
+    {
+      "mandatory": true,
+      "to": "firstname"
+    },
+    {
+      "mandatory": true,
+      "to": "lastname"
+    },
+    {
+      "mandatory": false,
+      "to": "contact.email"
+    },
+    {
+      "mandatory": false,
+      "to": "contact.phone"
+    }
+  ]
+}
