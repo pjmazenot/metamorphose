@@ -14,7 +14,12 @@ class ContractField {
     protected $from;
 
     protected $inputType;
-    protected $dataProcessor;
+
+    /** @var array $processors */
+    protected $processors = [];
+
+    /** @var array $validators */
+    protected $validators = [];
 
     /** @var string $to */
     protected $to;
@@ -42,14 +47,25 @@ class ContractField {
     public function getInputType() {
 
         return $this->inputType;
+
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getDataProcessor() {
+    public function getProcessors(): array {
 
-        return $this->dataProcessor;
+        return $this->processors;
+
+    }
+
+    /**
+     * @return array
+     */
+    public function getValidators(): array {
+
+        return $this->validators;
+
     }
 
     /**
@@ -80,8 +96,12 @@ class ContractField {
             $this->inputType = $fieldData['input_type'];
         }
 
-        if(isset($fieldData['data_processor'])) {
-            $this->dataProcessor = $fieldData['data_processor'];
+        if(isset($fieldData['processors'])) {
+            $this->processors = $fieldData['processors'];
+        }
+
+        if(isset($fieldData['validators'])) {
+            $this->validators = $fieldData['validators'];
         }
 
         if(isset($fieldData['to'])) {

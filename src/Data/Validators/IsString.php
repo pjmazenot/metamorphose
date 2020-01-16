@@ -2,9 +2,9 @@
 
 namespace Metamorphose\Data\Validators;
 
-use Metamorphose\Data\DataValidatorInterface;
+use Metamorphose\Data\DataValidator;
 
-class IsString implements DataValidatorInterface {
+class IsString extends DataValidator {
 
     const NAME = 'type:string';
 

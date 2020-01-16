@@ -2,9 +2,9 @@
 
 namespace Metamorphose\Data\Processors;
 
-use Metamorphose\Data\DataProcessorInterface;
+use Metamorphose\Data\DataProcessor;
 
-class CastString implements DataProcessorInterface {
+class CastString extends DataProcessor {
 
     const NAME = 'cast:string';
 

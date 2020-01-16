@@ -7,6 +7,8 @@ use Metamorphose\Contract\ContractValidator;
 use Metamorphose\Data\DataProcessorCollection;
 use Metamorphose\Data\DataProcessorInterface;
 use Metamorphose\Data\DataSet;
+use Metamorphose\Data\DataValidatorCollection;
+use Metamorphose\Data\DataValidatorInterface;
 use Metamorphose\Input\ParserCollection;
 use Metamorphose\Input\ParserInterface;
 use Metamorphose\Output\FormatterCollection;
@@ -30,6 +32,9 @@ class Metamorphose {
     /** @var DataProcessorCollection $dataProcessorCollection */
     protected $dataProcessorCollection;
 
+    /** @var DataValidatorCollection $dataValidatorCollection */
+    protected $dataValidatorCollection;
+
     /** @var FormatterCollection $outputFormatter */
     protected $formatterCollection;
 
@@ -49,73 +54,110 @@ class Metamorphose {
 
         $this->parserCollection = new ParserCollection();
         $this->dataProcessorCollection = new DataProcessorCollection();
+        $this->dataValidatorCollection = new DataValidatorCollection();
         $this->formatterCollection = new FormatterCollection();
 
         $this->contract = new Contract($inputContractFilePath);
 
         if(isset($outputContractFilePath)) {
+
             $this->contractValidator = new ContractValidator($outputContractFilePath);
+
+        }
+
+        // Load the default parser if none have been specified yet
+        if (!isset($this->parser)) {
+
+            $parserName = $this->contract->getDefaultParserName();
+
+            $this->parser = $this->parserCollection->getParser($parserName);
+
+        }
+
+        // Load the default formatter if none have been specified yet
+        if (!isset($this->formatter)) {
+
+            $formatterName = $this->contract->getDefaultFormatterName();
+
+            $this->formatter = $this->formatterCollection->getFormatter($formatterName);
+
         }
 
     }
 
-    public function registerParser(string $name, ParserInterface $parser): void {
+    public function registerParser(ParserInterface $parser): void {
 
-        $this->parserCollection->registerParser($name, $parser);
-
-    }
-
-    public function registerDataProcessor(string $name, DataProcessorInterface $dataProcessor): void {
-
-        $this->dataProcessorCollection->registerDataProcessor($name, $dataProcessor);
+        $this->parserCollection->registerParser($parser);
 
     }
 
-    public function registerFormatter(string $name, FormatterInterface $formatter): void {
+    public function registerDataProcessor(DataProcessorInterface $dataProcessor): void {
 
-        $this->formatterCollection->registerFormatter($name, $formatter);
+        $this->dataProcessorCollection->registerDataProcessor($dataProcessor);
 
     }
 
-    public function load(string $sourceType, string $source, string $parserName = null) {
+    public function registerDataValidator(DataValidatorInterface $dataValidator): void {
+
+        $this->dataValidatorCollection->registerDataValidator($dataValidator);
+
+    }
+
+    public function registerFormatter(FormatterInterface $formatter): void {
+
+        $this->formatterCollection->registerFormatter($formatter);
+
+    }
+
+    public function load(string $sourceType, string $source) {
 
         $this->sourceType = $sourceType;
         $this->source = $source;
 
-        if (!isset($parserName)) {
-            $parserName = $this->contract->getDefaultParserName();
-        } else {
-            $this->contract->isParserAuthorizedOrThrow($parserName);
-        }
+    }
+
+    public function useParser(string $parserName) {
+
+        $this->contract->isParserAuthorizedOrThrow($parserName);
 
         $this->parser = $this->parserCollection->getParser($parserName);
 
     }
 
-    // @TODO: Buffer (nbItem) - for CSV for example or JSON/XML collections
+    public function useFormatter(string $formatterName) {
 
-    public function convert(string $formatterName = null) {
-
-        if (!isset($formatterName)) {
-            $formatterName = $this->contract->getDefaultFormatterName();
-        } else {
-            $this->contract->isFormatterAuthorizedOrThrow($formatterName);
-        }
+        $this->contract->isFormatterAuthorizedOrThrow($formatterName);
 
         $this->formatter = $this->formatterCollection->getFormatter($formatterName);
 
+    }
+
+    // @TODO: Buffer (nbItem) - for CSV for example or JSON/XML collections
+
+    public function convert() {
+
+        // Create the data set from the input data
         switch ($this->sourceType) {
+
             case self::SOURCE_TYPE_ARRAY:
+
                 $this->parser->parseArray($this->source);
                 break;
+
             case self::SOURCE_TYPE_FILE:
+
                 $this->parser->parseFile($this->source);
                 break;
+
             case self::SOURCE_TYPE_STRING:
             default:
+
                 $this->parser->parseString($this->source);
                 break;
+
         }
+
+        // @TODO: Validate automatically from options?
 
         $convertedData = $this->applyContract();
 
@@ -149,7 +191,7 @@ class Metamorphose {
 
     }
 
-    public function processObject(?int $key = null) {
+    protected function processObject(?int $key = null) {
 
         $dataHolder = new DataSet();
 
@@ -159,12 +201,33 @@ class Metamorphose {
         foreach($this->contract->getFields() as $field) {
 
             // Grab the content from the source data
-            $value = $this->parser->getParsedData()->get($prefix . $field->getInputKey());
+            $value = $this->parser->getParsedData()->get($prefix . $field->getFrom());
 
-            // @TODO: Data processor
-            // @TODO: Data validator
+            // Process the value
+            $processedValue = $value;
+            foreach($field->getProcessors() as $processorName) {
 
-            $dataHolder->set($field->getOutputKey(), $value);
+                $processor = $this->dataProcessorCollection->getDataProcessor($processorName);
+
+                $processedValue = $processor->process($value);
+
+            }
+
+            // Validate the value
+            foreach($field->getValidators() as $validatorName) {
+
+                $validator = $this->dataValidatorCollection->getDataValidator($validatorName);
+
+                $isValid = $validator->validate($value);
+
+                if(!$isValid) {
+                    throw new \Exception('Invalid value for the target field ' . $field->getTo());
+                }
+
+            }
+
+            // Set the final value
+            $dataHolder->set($field->getTo(), $processedValue);
 
         }
 

@@ -12,13 +12,13 @@ class DataProcessorCollection {
     public function __construct() {
 
         // Register default processors
-        $this->registerDataProcessor(CastString::NAME, new CastString());
+        $this->registerDataProcessor(new CastString());
 
     }
 
-    public function registerDataProcessor(string $name, DataProcessorInterface $dataProcessor): void {
+    public function registerDataProcessor(DataProcessorInterface $dataProcessor): void {
 
-        $this->dataProcessors[$name] = $dataProcessor;
+        $this->dataProcessors[$dataProcessor->getName()] = $dataProcessor;
 
     }
 

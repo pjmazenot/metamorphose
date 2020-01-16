@@ -12,13 +12,13 @@ class DataValidatorCollection {
     public function __construct() {
 
         // Register default validators
-        $this->registerDataValidator(IsString::class, new IsString());
+        $this->registerDataValidator(new IsString());
 
     }
 
-    public function registerDataValidator(string $name, DataValidatorInterface $dataValidator): void {
+    public function registerDataValidator(DataValidatorInterface $dataValidator): void {
 
-        $this->dataValidators[$name] = $dataValidator;
+        $this->dataValidators[$dataValidator->getName()] = $dataValidator;
 
     }
 
