@@ -18,10 +18,10 @@ interface ParserInterface {
 
     public function getParsedData(): DataSet;
 
-    public function parseArray(array $array);
+    public function parseArray(array $array): void;
 
-    public function parseFile(string $filePath);
+    public function parseFile(string $filePath): void;
 
-    public function parseString(string $string);
+    public function parseString(string $string): void;
 
 }

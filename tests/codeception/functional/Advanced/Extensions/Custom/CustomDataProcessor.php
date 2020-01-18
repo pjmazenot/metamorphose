@@ -16,7 +16,7 @@ class CustomDataProcessor extends DataProcessor {
 
     const NAME = 'custom-processor';
 
-    public function process($data): string {
+    public function process($data, array $params = []) {
 
         if(is_string($data)) {
 

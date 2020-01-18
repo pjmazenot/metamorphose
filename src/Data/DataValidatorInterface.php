@@ -14,6 +14,6 @@ interface DataValidatorInterface {
 
     public function getName(): string;
 
-    public function validate($data): bool;
+    public function validate($data, array $params = []): bool;
 
 }

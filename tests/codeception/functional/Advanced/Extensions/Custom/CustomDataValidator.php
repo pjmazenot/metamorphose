@@ -16,7 +16,7 @@ class CustomDataValidator extends DataValidator {
 
     const NAME = 'custom-validator';
 
-    public function validate($data): bool {
+    public function validate($data, array $params = []): bool {
 
         return preg_match('/^[a-zA-Z]+$/', $data);
 
