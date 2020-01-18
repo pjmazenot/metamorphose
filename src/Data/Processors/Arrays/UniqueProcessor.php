@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Metamorphose\Data\Processors\String;
+namespace Metamorphose\Data\Processors\Arrays;
 
 use Metamorphose\Data\DataProcessor;
 

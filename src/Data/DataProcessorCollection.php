@@ -11,9 +11,9 @@
 namespace Metamorphose\Data;
 
 use Metamorphose\Data\Processors\Arrays\ImplodeProcessor;
+use Metamorphose\Data\Processors\Arrays\UniqueProcessor;
 use Metamorphose\Data\Processors\Json\JsonDecodeProcessor;
 use Metamorphose\Data\Processors\Json\JsonEncodeProcessor;
-use Metamorphose\Data\Processors\String\UniqueProcessor;
 use Metamorphose\Data\Processors\Strings\ExplodeProcessor;
 use Metamorphose\Data\Processors\Strings\HashProcessor;
 use Metamorphose\Data\Processors\Strings\HtmlentitiesProcessor;
