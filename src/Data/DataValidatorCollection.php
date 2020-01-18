@@ -10,7 +10,23 @@
 
 namespace Metamorphose\Data;
 
-use Metamorphose\Data\Validators\IsString;
+use Metamorphose\Data\Validators\Advanced\DateValidator;
+use Metamorphose\Data\Validators\Advanced\EmptyValidator;
+use Metamorphose\Data\Validators\Advanced\EnumValidator;
+use Metamorphose\Data\Validators\Advanced\RegexValidator;
+use Metamorphose\Data\Validators\Operators\BetweenValidator;
+use Metamorphose\Data\Validators\Operators\EqualValidator;
+use Metamorphose\Data\Validators\Operators\GreaterThanOrEqualValidator;
+use Metamorphose\Data\Validators\Operators\GreaterThanValidator;
+use Metamorphose\Data\Validators\Operators\LessThanOrEqualValidator;
+use Metamorphose\Data\Validators\Operators\LessThanValidator;
+use Metamorphose\Data\Validators\Operators\NotEqualValidator;
+use Metamorphose\Data\Validators\Types\ArrayValidator;
+use Metamorphose\Data\Validators\Types\BoolValidator;
+use Metamorphose\Data\Validators\Types\FloatValidator;
+use Metamorphose\Data\Validators\Types\IntValidator;
+use Metamorphose\Data\Validators\Types\NullValidator;
+use Metamorphose\Data\Validators\Types\StringValidator;
 
 class DataValidatorCollection {
 
@@ -20,7 +36,28 @@ class DataValidatorCollection {
     public function __construct() {
 
         // Register default validators
-        $this->registerDataValidator(new IsString());
+        // Advanced
+        $this->registerDataValidator(new EmptyValidator());
+        $this->registerDataValidator(new EnumValidator());
+        $this->registerDataValidator(new DateValidator());
+        $this->registerDataValidator(new RegexValidator());
+
+        // Operators
+        $this->registerDataValidator(new BetweenValidator());
+        $this->registerDataValidator(new EqualValidator());
+        $this->registerDataValidator(new GreaterThanOrEqualValidator());
+        $this->registerDataValidator(new GreaterThanValidator());
+        $this->registerDataValidator(new LessThanOrEqualValidator());
+        $this->registerDataValidator(new LessThanValidator());
+        $this->registerDataValidator(new NotEqualValidator());
+
+        // Types
+        $this->registerDataValidator(new ArrayValidator());
+        $this->registerDataValidator(new BoolValidator());
+        $this->registerDataValidator(new FloatValidator());
+        $this->registerDataValidator(new IntValidator());
+        $this->registerDataValidator(new NullValidator());
+        $this->registerDataValidator(new StringValidator());
 
     }
 
