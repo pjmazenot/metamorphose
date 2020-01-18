@@ -8,19 +8,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Metamorphose\Input\Parsers;
+namespace Metamorphose\Output\Formatters;
 
-use Metamorphose\Input\Parser;
+use Metamorphose\Output\Formatter;
 
-class JSONParser extends Parser {
+class JsonFormatter extends Formatter {
 
     const NAME = 'json';
+    const FORMAT = 'application/json';
 
-    public function parseString(string $string): void {
+    public function format(array $data, array $options = []): string {
 
-        $dataArray = json_decode($string, true);
-
-        $this->parseArray($dataArray);
+        return json_encode($data);
 
     }
 

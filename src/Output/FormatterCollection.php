@@ -11,9 +11,9 @@
 namespace Metamorphose\Output;
 
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
-use Metamorphose\Output\Formatters\CSVFormatter;
-use Metamorphose\Output\Formatters\JSONFormatter;
-use Metamorphose\Output\Formatters\XMLFormatter;
+use Metamorphose\Output\Formatters\CsvFormatter;
+use Metamorphose\Output\Formatters\JsonFormatter;
+use Metamorphose\Output\Formatters\XmlFormatter;
 
 class FormatterCollection {
 
@@ -23,9 +23,9 @@ class FormatterCollection {
     public function __construct() {
 
         // Register default formatters
-        $this->registerFormatter(new CSVFormatter());
-        $this->registerFormatter(new JSONFormatter());
-        $this->registerFormatter(new XMLFormatter());
+        $this->registerFormatter(new CsvFormatter());
+        $this->registerFormatter(new JsonFormatter());
+        $this->registerFormatter(new XmlFormatter());
 
     }
 

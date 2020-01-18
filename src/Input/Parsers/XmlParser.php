@@ -12,7 +12,7 @@ namespace Metamorphose\Input\Parsers;
 
 use Metamorphose\Input\Parser;
 
-class XMLParser extends Parser {
+class XmlParser extends Parser {
 
     const NAME = 'xml';
 

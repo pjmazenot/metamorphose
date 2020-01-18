@@ -13,7 +13,7 @@ namespace Metamorphose\Output\Formatters;
 use Metamorphose\Exceptions\MetamorphoseException;
 use Metamorphose\Output\Formatter;
 
-class XMLFormatter extends Formatter {
+class XmlFormatter extends Formatter {
 
     const NAME = 'xml';
     const FORMAT = 'application/xml';

@@ -11,9 +11,9 @@
 namespace Metamorphose\Input;
 
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
-use Metamorphose\Input\Parsers\CSVParser;
-use Metamorphose\Input\Parsers\JSONParser;
-use Metamorphose\Input\Parsers\XMLParser;
+use Metamorphose\Input\Parsers\CsvParser;
+use Metamorphose\Input\Parsers\JsonParser;
+use Metamorphose\Input\Parsers\XmlParser;
 
 class ParserCollection {
 
@@ -23,9 +23,9 @@ class ParserCollection {
     public function __construct() {
 
         // Register default parsers
-        $this->registerParser(new CSVParser());
-        $this->registerParser(new JSONParser());
-        $this->registerParser(new XMLParser());
+        $this->registerParser(new CsvParser());
+        $this->registerParser(new JsonParser());
+        $this->registerParser(new XmlParser());
 
     }
 

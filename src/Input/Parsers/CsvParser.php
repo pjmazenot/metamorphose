@@ -12,7 +12,7 @@ namespace Metamorphose\Input\Parsers;
 
 use Metamorphose\Input\Parser;
 
-class CSVParser extends Parser {
+class CsvParser extends Parser {
 
     const NAME = 'csv';
 

@@ -12,7 +12,7 @@ namespace Metamorphose\Output\Formatters;
 
 use Metamorphose\Output\Formatter;
 
-class CSVFormatter extends Formatter {
+class CsvFormatter extends Formatter {
 
     const NAME = 'csv';
     const FORMAT = 'text/csv';
