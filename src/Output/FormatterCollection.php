@@ -14,6 +14,7 @@ use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Output\Formatters\CsvFormatter;
 use Metamorphose\Output\Formatters\JsonFormatter;
 use Metamorphose\Output\Formatters\XmlFormatter;
+use Metamorphose\Output\Formatters\YamlFormatter;
 
 class FormatterCollection {
 
@@ -26,6 +27,7 @@ class FormatterCollection {
         $this->registerFormatter(new CsvFormatter());
         $this->registerFormatter(new JsonFormatter());
         $this->registerFormatter(new XmlFormatter());
+        $this->registerFormatter(new YamlFormatter());
 
     }
 

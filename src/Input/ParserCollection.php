@@ -14,6 +14,7 @@ use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Input\Parsers\CsvParser;
 use Metamorphose\Input\Parsers\JsonParser;
 use Metamorphose\Input\Parsers\XmlParser;
+use Metamorphose\Input\Parsers\YamlParser;
 
 class ParserCollection {
 
@@ -26,6 +27,7 @@ class ParserCollection {
         $this->registerParser(new CsvParser());
         $this->registerParser(new JsonParser());
         $this->registerParser(new XmlParser());
+        $this->registerParser(new YamlParser());
 
     }
 
