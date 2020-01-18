@@ -17,6 +17,8 @@ use Metamorphose\Data\DataProcessorInterface;
 use Metamorphose\Data\DataSet;
 use Metamorphose\Data\DataValidatorCollection;
 use Metamorphose\Data\DataValidatorInterface;
+use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
+use Metamorphose\Exceptions\MetamorphoseValidateException;
 use Metamorphose\Input\ParserCollection;
 use Metamorphose\Input\ParserInterface;
 use Metamorphose\Output\FormatterCollection;
@@ -181,7 +183,7 @@ class Metamorphose {
 
         } else {
 
-            throw new \Exception('No contract validator configuration');
+            throw new MetamorphoseUndefinedServiceException('No contract validator defined');
 
         }
 
@@ -246,7 +248,7 @@ class Metamorphose {
                 $isValid = $validator->validate($value);
 
                 if(!$isValid) {
-                    throw new \Exception('Invalid value for the target field ' . $field->getTo());
+                    throw new MetamorphoseValidateException('Invalid value for the target field ' . $field->getTo());
                 }
 
             }

@@ -27,6 +27,7 @@ use Metamorphose\Data\Validators\Types\FloatValidator;
 use Metamorphose\Data\Validators\Types\IntValidator;
 use Metamorphose\Data\Validators\Types\NullValidator;
 use Metamorphose\Data\Validators\Types\StringValidator;
+use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 
 class DataValidatorCollection {
 
@@ -70,7 +71,7 @@ class DataValidatorCollection {
     public function getDataValidator(string $name): DataValidatorInterface {
 
         if(!isset($this->dataValidators[$name])) {
-            throw new \Exception('Data processor "' . $name . '" is not defined');
+            throw new MetamorphoseUndefinedServiceException('Data processor "' . $name . '" is not defined');
         }
 
         return $this->dataValidators[$name];

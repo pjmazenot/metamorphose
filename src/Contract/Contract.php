@@ -10,6 +10,8 @@
 
 namespace Metamorphose\Contract;
 
+use Metamorphose\Exceptions\MetamorphoseContractException;
+
 class Contract implements ContractInterface {
 
     const TYPE_COLLECTION = 'collection';
@@ -50,7 +52,7 @@ class Contract implements ContractInterface {
 
         }
 
-        throw new \Exception('The parser "' . $parserName . '" is not available for this contract');
+        throw new MetamorphoseContractException('The parser "' . $parserName . '" is not available for this contract');
 
     }
 
@@ -68,7 +70,7 @@ class Contract implements ContractInterface {
 
         }
 
-        throw new \Exception('The formatter "' . $formatterName . '" is not available for this contract');
+        throw new MetamorphoseContractException('The formatter "' . $formatterName . '" is not available for this contract');
 
     }
 
@@ -106,7 +108,7 @@ class Contract implements ContractInterface {
 
         } else {
 
-            throw new \Exception('The contract needs to have at least one parser');
+            throw new MetamorphoseContractException('The contract needs to have at least one parser');
 
         }
 
@@ -116,7 +118,7 @@ class Contract implements ContractInterface {
 
         } else {
 
-            throw new \Exception('The contract needs to have at least one formatter');
+            throw new MetamorphoseContractException('The contract needs to have at least one formatter');
 
         }
 
@@ -137,7 +139,7 @@ class Contract implements ContractInterface {
                 $this->type = $contractData['type'];
 
             } else {
-                throw new \Exception('The contract needs to have a valid type defined');
+                throw new MetamorphoseContractException('The contract needs to have a valid type defined');
             }
         }
 

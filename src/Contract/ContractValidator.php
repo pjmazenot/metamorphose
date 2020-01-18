@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Contract;
 
+use Metamorphose\Exceptions\MetamorphoseContractException;
 use Metamorphose\Output\FormatterCollection;
 
 class ContractValidator {
@@ -35,7 +36,7 @@ class ContractValidator {
      * @param ContractInterface $contract
      * @param FormatterCollection $loadedFormatters
      *
-     * @throws \Exception
+     * @throws MetamorphoseContractException
      */
     public function validate(ContractInterface $contract, FormatterCollection $loadedFormatters) {
 
@@ -74,7 +75,7 @@ class ContractValidator {
 
         if (!$validOutputFormat) {
 
-            throw new \Exception('The contract is not valid. It should at least support one of the expected output format: ' . implode(', ', $this->formats));
+            throw new MetamorphoseContractException('The contract is not valid. It should at least support one of the expected output format: ' . implode(', ', $this->formats));
 
         }
 
@@ -117,7 +118,7 @@ class ContractValidator {
 
         if(!empty($missingFields)) {
 
-            throw new \Exception('The contract is not valid. Missing fields: ' . implode(', ', $missingFields));
+            throw new MetamorphoseContractException('The contract is not valid. Missing fields: ' . implode(', ', $missingFields));
 
         }
 
@@ -146,7 +147,7 @@ class ContractValidator {
 
         if(!empty($missingFields)) {
 
-            throw new \Exception('The contract is not valid. Missing fields: ' . implode(', ', $missingFields));
+            throw new MetamorphoseContractException('The contract is not valid. Missing fields: ' . implode(', ', $missingFields));
 
         }
 
@@ -174,7 +175,7 @@ class ContractValidator {
 
                     if(!empty($missingFields)) {
 
-                        throw new \Exception('The contract is not valid. Wrong fields order, starting with: ' . $validatorField->getTo());
+                        throw new MetamorphoseContractException('The contract is not valid. Wrong fields order, starting with: ' . $validatorField->getTo());
 
                     }
 
@@ -202,7 +203,7 @@ class ContractValidator {
 
         } else {
 
-            throw new \Exception('The contract needs to have at least one output formats');
+            throw new MetamorphoseContractException('The contract needs to have at least one output formats');
 
         }
 

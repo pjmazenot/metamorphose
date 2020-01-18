@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Output;
 
+use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Output\Formatters\CSVFormatter;
 use Metamorphose\Output\Formatters\JSONFormatter;
 use Metamorphose\Output\Formatters\XMLFormatter;
@@ -37,7 +38,7 @@ class FormatterCollection {
     public function getFormatter(string $name): FormatterInterface {
 
         if(!isset($this->formatters[$name])) {
-            throw new \Exception('Formatter "' . $name . '" is not defined');
+            throw new MetamorphoseUndefinedServiceException('Formatter "' . $name . '" is not defined');
         }
 
         return $this->formatters[$name];

@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Output\Formatters;
 
+use Metamorphose\Exceptions\MetamorphoseException;
 use Metamorphose\Output\Formatter;
 
 class XMLFormatter extends Formatter {
@@ -26,7 +27,7 @@ class XMLFormatter extends Formatter {
 
         // Check that there is only one root
         if(count($data) > 1) {
-            throw new \Exception('Only one XML root should be defined.');
+            throw new MetamorphoseException('Only one XML root should be defined.');
         }
 
         $rootName = array_key_first($data);

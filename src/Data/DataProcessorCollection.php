@@ -24,6 +24,7 @@ use Metamorphose\Data\Processors\TypeCasting\ToBoolProcessor;
 use Metamorphose\Data\Processors\TypeCasting\ToFloatProcessor;
 use Metamorphose\Data\Processors\TypeCasting\ToIntProcessor;
 use Metamorphose\Data\Processors\TypeCasting\ToStringProcessor;
+use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 
 class DataProcessorCollection {
 
@@ -66,7 +67,7 @@ class DataProcessorCollection {
     public function getDataProcessor(string $name): DataProcessorInterface {
 
         if(!isset($this->dataProcessors[$name])) {
-            throw new \Exception('Data processor "' . $name . '" is not defined');
+            throw new MetamorphoseUndefinedServiceException('Data processor "' . $name . '" is not defined');
         }
 
         return $this->dataProcessors[$name];

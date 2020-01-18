@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Input;
 
+use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Input\Parsers\CSVParser;
 use Metamorphose\Input\Parsers\JSONParser;
 use Metamorphose\Input\Parsers\XMLParser;
@@ -37,7 +38,7 @@ class ParserCollection {
     public function getParser(string $name): ParserInterface {
 
         if(!isset($this->parsers[$name])) {
-            throw new \Exception('Parser "' . $name . '" is not defined');
+            throw new MetamorphoseUndefinedServiceException('Parser "' . $name . '" is not defined');
         }
 
         return $this->parsers[$name];
