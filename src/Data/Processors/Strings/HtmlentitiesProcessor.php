@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Metamorphose\Data\Processors;
+namespace Metamorphose\Data\Processors\Strings;
 
 use Metamorphose\Data\DataProcessor;
 
-class JsonEncode extends DataProcessor {
+class HtmlentitiesProcessor extends DataProcessor {
 
-    const NAME = 'json_encode';
+    const NAME = 'htmlentities';
 
     public function process($data, array $params = []) {
 
-        return json_encode($data);
+        return htmlentities($data);
 
     }
 

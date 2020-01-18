@@ -10,7 +10,20 @@
 
 namespace Metamorphose\Data;
 
-use Metamorphose\Data\Processors\CastString;
+use Metamorphose\Data\Processors\Arrays\ImplodeProcessor;
+use Metamorphose\Data\Processors\Json\JsonDecodeProcessor;
+use Metamorphose\Data\Processors\Json\JsonEncodeProcessor;
+use Metamorphose\Data\Processors\String\UniqueProcessor;
+use Metamorphose\Data\Processors\Strings\ExplodeProcessor;
+use Metamorphose\Data\Processors\Strings\HashProcessor;
+use Metamorphose\Data\Processors\Strings\HtmlentitiesProcessor;
+use Metamorphose\Data\Processors\Strings\ReplaceProcessor;
+use Metamorphose\Data\Processors\Strings\StripslashesProcessor;
+use Metamorphose\Data\Processors\Strings\StripTagProcessor;
+use Metamorphose\Data\Processors\TypeCasting\ToBoolProcessor;
+use Metamorphose\Data\Processors\TypeCasting\ToFloatProcessor;
+use Metamorphose\Data\Processors\TypeCasting\ToIntProcessor;
+use Metamorphose\Data\Processors\TypeCasting\ToStringProcessor;
 
 class DataProcessorCollection {
 
@@ -20,7 +33,27 @@ class DataProcessorCollection {
     public function __construct() {
 
         // Register default processors
-        $this->registerDataProcessor(new CastString());
+        // Arrays
+        $this->registerDataProcessor(new ImplodeProcessor());
+        $this->registerDataProcessor(new UniqueProcessor());
+
+        // Json
+        $this->registerDataProcessor(new JsonDecodeProcessor());
+        $this->registerDataProcessor(new JsonEncodeProcessor());
+
+        // Strings
+        $this->registerDataProcessor(new ExplodeProcessor());
+        $this->registerDataProcessor(new HashProcessor());
+        $this->registerDataProcessor(new HtmlentitiesProcessor());
+        $this->registerDataProcessor(new ReplaceProcessor());
+        $this->registerDataProcessor(new StripslashesProcessor());
+        $this->registerDataProcessor(new StripTagProcessor());
+
+        // TypeCasting
+        $this->registerDataProcessor(new ToBoolProcessor());
+        $this->registerDataProcessor(new ToFloatProcessor());
+        $this->registerDataProcessor(new ToIntProcessor());
+        $this->registerDataProcessor(new ToStringProcessor());
 
     }
 

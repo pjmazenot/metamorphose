@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Metamorphose\Data\Processors;
+namespace Metamorphose\Data\Processors\TypeCasting;
 
 use Metamorphose\Data\DataProcessor;
 
-class CastString extends DataProcessor {
+class ToFloatProcessor extends DataProcessor {
 
-    const NAME = 'cast:string';
+    const NAME = 'to_float';
 
-    public function process($data) {
+    public function process($data, array $params = []) {
 
-        return (string) $data;
+        return (float) $data;
 
     }
 

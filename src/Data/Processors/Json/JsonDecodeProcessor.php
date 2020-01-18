@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Metamorphose\Data\Processors;
+namespace Metamorphose\Data\Processors\Json;
 
 use Metamorphose\Data\DataProcessor;
 
-class JsonDecode extends DataProcessor {
+class JsonDecodeProcessor extends DataProcessor {
 
     const NAME = 'json_decode';
 
@@ -23,7 +23,9 @@ class JsonDecode extends DataProcessor {
 
         if(is_string($data)) {
 
-            if (!empty($params[0]) && $params[0] === self::TO_ARRAY) {
+            $toType = array_shift($params);
+
+            if (!empty($toType) && $toType === self::TO_ARRAY) {
 
                 return json_decode($data, true);
 
