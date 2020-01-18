@@ -1,0 +1,27 @@
+{
+  "parsers": ["yaml"],
+  "formatters": ["yaml"],
+  "options": [],
+  "fields": [
+    {
+      "from": "user.id",
+      "to": "user.id"
+    },
+    {
+      "from": "user.firstname",
+      "to": "user.firstname"
+    },
+    {
+      "from": "user.lastname",
+      "to": "user.lastname"
+    },
+    {
+      "from": "user.primary_email",
+      "to": "user.email"
+    },
+    {
+      "from": "user.primary_phone",
+      "to": "user.phone"
+    }
+  ]
+}

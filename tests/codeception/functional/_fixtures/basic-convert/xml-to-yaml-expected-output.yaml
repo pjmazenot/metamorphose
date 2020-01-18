@@ -1,0 +1,8 @@
+---
+user:
+  id: "1"
+  firstname: John
+  lastname: Smith
+  email: j.smith@test.com
+  phone: "+15140010001"
+...

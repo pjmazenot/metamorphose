@@ -1,0 +1,27 @@
+{
+  "parsers": ["xml"],
+  "formatters": ["yaml"],
+  "options": [],
+  "fields": [
+    {
+      "from": "user.id",
+      "to": "user.id"
+    },
+    {
+      "from": "user.firstname",
+      "to": "user.firstname"
+    },
+    {
+      "from": "user.lastname",
+      "to": "user.lastname"
+    },
+    {
+      "from": "user.email",
+      "to": "user.email"
+    },
+    {
+      "from": "user.phone",
+      "to": "user.phone"
+    }
+  ]
+}

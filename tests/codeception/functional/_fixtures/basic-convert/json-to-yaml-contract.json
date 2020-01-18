@@ -1,0 +1,27 @@
+{
+  "parsers": ["json"],
+  "formatters": ["yaml"],
+  "options": [],
+  "fields": [
+    {
+      "from": "id",
+      "to": "user.id"
+    },
+    {
+      "from": "firstname",
+      "to": "user.firstname"
+    },
+    {
+      "from": "lastname",
+      "to": "user.lastname"
+    },
+    {
+      "from": "email",
+      "to": "user.email"
+    },
+    {
+      "from": "phone",
+      "to": "user.phone"
+    }
+  ]
+}

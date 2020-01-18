@@ -60,6 +60,21 @@ class BaseFunctionalTest {
 
     }
 
+    protected function runYamlTest(FunctionalTester $I, string $testName) {
+
+        $fixturesPath = __DIR__ . '/../../functional/_fixtures/';
+        $contractPath = $fixturesPath . $testName . '-contract.json';
+        $inputDataPath = $fixturesPath . $testName . '-input.yaml';
+        $expectedOutputPath = $fixturesPath . $testName . '-expected-output.yaml';
+
+        $metamorphose = new Metamorphose($contractPath);
+        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
+        $output = $metamorphose->convert();
+
+        $this->checkYamlOutput($I, $expectedOutputPath, $output);
+
+    }
+
     protected function runConvertTest(FunctionalTester $I, string $testName, string $from, string $to) {
 
         $fixturesPath = __DIR__ . '/../../functional/_fixtures/';
@@ -80,6 +95,9 @@ class BaseFunctionalTest {
                 break;
             case 'xml':
                 $this->checkXmlOutput($I, $expectedOutputPath, $output);
+                break;
+            case 'yaml':
+                $this->checkYamlOutput($I, $expectedOutputPath, $output);
                 break;
         }
 
@@ -113,6 +131,15 @@ class BaseFunctionalTest {
     }
 
     protected function checkXmlOutput(FunctionalTester $I, string $expectedOutputPath, string $output) {
+
+        $I->assertSame(
+            file_get_contents($expectedOutputPath),
+            $output
+        );
+
+    }
+
+    protected function checkYamlOutput(FunctionalTester $I, string $expectedOutputPath, string $output) {
 
         $I->assertSame(
             file_get_contents($expectedOutputPath),

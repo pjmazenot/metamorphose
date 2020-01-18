@@ -21,9 +21,33 @@ class ConvertCest extends BaseFunctionalTest {
 
     }
 
+    public function testConvertJsonToYaml(FunctionalTester $I) {
+
+        $this->runConvertTest($I, 'basic-convert/json-to-yaml', 'json', 'yaml');
+
+    }
+
     public function testConvertXmlToJson(FunctionalTester $I) {
 
         $this->runConvertTest($I, 'basic-convert/xml-to-json', 'xml', 'json');
+
+    }
+
+    public function testConvertXmlToYaml(FunctionalTester $I) {
+
+        $this->runConvertTest($I, 'basic-convert/xml-to-yaml', 'xml', 'yaml');
+
+    }
+
+    public function testConvertYamlToJson(FunctionalTester $I) {
+
+        $this->runConvertTest($I, 'basic-convert/yaml-to-json', 'yaml', 'json');
+
+    }
+
+    public function testConvertYamlToXml(FunctionalTester $I) {
+
+        $this->runConvertTest($I, 'basic-convert/yaml-to-xml', 'yaml', 'xml');
 
     }
 
