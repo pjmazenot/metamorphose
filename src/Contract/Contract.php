@@ -193,19 +193,18 @@ class Contract implements ContractInterface {
 
         }
 
-        if(isset($contractData['type'])) {
+        if(empty($contractData['type'])) {
 
-            if(empty($contractData['type'])) {
+            $this->type = self::TYPE_OBJECT;
 
-                $this->type = self::TYPE_OBJECT;
+        } elseif(in_array($contractData['type'], [self::TYPE_COLLECTION, self::TYPE_OBJECT])) {
 
-            } elseif(in_array($contractData['type'], [self::TYPE_COLLECTION, self::TYPE_OBJECT])) {
+            $this->type = $contractData['type'];
 
-                $this->type = $contractData['type'];
+        } else {
 
-            } else {
-                throw new MetamorphoseContractException('The contract needs to have a valid type defined');
-            }
+            throw new MetamorphoseContractException('The contract needs to have a valid type defined');
+
         }
 
         if(isset($contractData['fields'])) {

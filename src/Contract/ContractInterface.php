@@ -29,6 +29,6 @@ interface ContractInterface {
      *
      * @return ContractField[]
      */
-    public function getFields();
+    public function getFields(): array;
 
 }
