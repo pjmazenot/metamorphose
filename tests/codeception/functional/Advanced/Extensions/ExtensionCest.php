@@ -11,6 +11,7 @@
 namespace Tests\Codeception\Functional\Advanced\Extensions;
 
 use Metamorphose\Metamorphose;
+use Metamorphose\Morph\MorphEngine;
 use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomDataProcessor;
 use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomDataValidator;
 use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomFormatter;
@@ -28,9 +29,10 @@ class ExtensionCest extends BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . 'custom-parser-expected-output.json';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->registerParser(new CustomParser());
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->customize()->registerParser(new CustomParser());
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkJsonOutput($I, $expectedOutputPath, $output);
 
@@ -44,9 +46,10 @@ class ExtensionCest extends BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . 'custom-formatter-expected-output.txt';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->registerFormatter(new CustomFormatter());
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->customize()->registerFormatter(new CustomFormatter());
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkTxtOutput($I, $expectedOutputPath, $output);
 
@@ -60,9 +63,10 @@ class ExtensionCest extends BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . 'custom-data-processor-expected-output.json';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->registerDataProcessor(new CustomDataProcessor());
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->customize()->registerDataProcessor(new CustomDataProcessor());
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkJsonOutput($I, $expectedOutputPath, $output);
 
@@ -77,9 +81,9 @@ class ExtensionCest extends BaseFunctionalTest {
         try {
 
             $metamorphose = new Metamorphose($contractPath);
-            $metamorphose->registerDataValidator(new CustomDataValidator());
-            $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-            $metamorphose->convert();
+            $metamorphose->customize()->registerDataValidator(new CustomDataValidator());
+            $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+            $metamorphose->morph();
 
             // Fail the test if the validator didn't catch the error
             $I->assertTrue(false);

@@ -11,6 +11,7 @@
 namespace Tests\Codeception\TestCase;
 
 use Metamorphose\Metamorphose;
+use Metamorphose\Morph\MorphEngine;
 use Tests\Codeception\FunctionalTester;
 
 class BaseFunctionalTest {
@@ -23,8 +24,9 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.csv';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkCsvOutput($I, $expectedOutputPath, $output);
 
@@ -38,8 +40,9 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.json';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkJsonOutput($I, $expectedOutputPath, $output);
 
@@ -53,8 +56,9 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.xml';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkXmlOutput($I, $expectedOutputPath, $output);
 
@@ -68,8 +72,9 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.yaml';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkYamlOutput($I, $expectedOutputPath, $output);
 
@@ -83,8 +88,9 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.' . $to;
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputDataPath);
-        $output = $metamorphose->convert();
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         switch ($to) {
             case 'csv':

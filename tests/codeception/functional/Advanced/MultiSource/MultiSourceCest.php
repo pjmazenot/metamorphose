@@ -11,6 +11,7 @@
 namespace Tests\Codeception\Functional\Advanced\MultiSource;
 
 use Metamorphose\Metamorphose;
+use Metamorphose\Morph\MorphEngine;
 use Tests\Codeception\FunctionalTester;
 use Tests\Codeception\TestCase\BaseFunctionalTest;
 
@@ -27,9 +28,9 @@ class MultiSourceCest extends BaseFunctionalTest {
         $expectedOutput1Path = $fixturesPath . 'multi-source-validation-success-expected-output-1.json';
 
         $metamorphose = new Metamorphose($contract1Path, $contractValidatorPath);
-        $metamorphose->validateContract();
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputData1Path);
-        $output = $metamorphose->convert();
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputData1Path);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkJsonOutput($I, $expectedOutput1Path, $output);
 
@@ -39,9 +40,9 @@ class MultiSourceCest extends BaseFunctionalTest {
         $expectedOutput2Path = $fixturesPath . 'multi-source-validation-success-expected-output-2.json';
 
         $metamorphose = new Metamorphose($contract2Path, $contractValidatorPath);
-        $metamorphose->validateContract();
-        $metamorphose->load(Metamorphose::SOURCE_TYPE_FILE, $inputData2Path);
-        $output = $metamorphose->convert();
+        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputData2Path);
+        $metamorphose->morph();
+        $output = $metamorphose->export();
 
         $this->checkJsonOutput($I, $expectedOutput2Path, $output);
 
@@ -57,14 +58,12 @@ class MultiSourceCest extends BaseFunctionalTest {
             // Scenario 1 - success
             $contract1Path = $fixturesPath . 'multi-source-validation-fail-contract-1.json';
 
-            $metamorphose = new Metamorphose($contract1Path, $contractValidatorPath);
-            $metamorphose->validateContract();
+            new Metamorphose($contract1Path, $contractValidatorPath);
 
             // Scenario 2 - fail
             $contract2Path = $fixturesPath . 'multi-source-validation-fail-contract-2.json';
 
-            $metamorphose = new Metamorphose($contract2Path, $contractValidatorPath);
-            $metamorphose->validateContract();
+            new Metamorphose($contract2Path, $contractValidatorPath);
 
             // Fail the test if the validator didn't catch the error
             $I->assertTrue(false);
