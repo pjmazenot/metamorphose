@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Types;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class NullValidator
+ *
+ * @package Metamorphose\Data\Validators\Types
+ */
 class NullValidator extends DataValidator {
 
     const NAME = 'null';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         return is_null($data);

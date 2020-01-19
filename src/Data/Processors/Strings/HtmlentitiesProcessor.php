@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Strings;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class HtmlentitiesProcessor
+ *
+ * @package Metamorphose\Data\Processors\Strings
+ */
 class HtmlentitiesProcessor extends DataProcessor {
 
     const NAME = 'htmlentities';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         return htmlentities($data);

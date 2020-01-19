@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Advanced;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class EmptyValidator
+ *
+ * @package Metamorphose\Data\Validators\Advanced
+ */
 class EmptyValidator extends DataValidator {
 
     const NAME = 'empty';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         return empty($data);

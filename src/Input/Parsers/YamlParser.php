@@ -12,10 +12,18 @@ namespace Metamorphose\Input\Parsers;
 
 use Metamorphose\Input\Parser;
 
+/**
+ * Class YamlParser
+ *
+ * @package Metamorphose\Input\Parsers
+ */
 class YamlParser extends Parser {
 
     const NAME = 'yaml';
 
+    /**
+     * @inheritDoc
+     */
     public function parseString(string $string): void {
 
         $dataArray = yaml_parse($string);

@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Operators;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class GreaterThanOrEqualValidator
+ *
+ * @package Metamorphose\Data\Validators\Operators
+ */
 class GreaterThanOrEqualValidator extends DataValidator {
 
     const NAME = 'gte';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         if(empty($params)) {

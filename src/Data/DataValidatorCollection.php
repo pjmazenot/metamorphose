@@ -29,11 +29,19 @@ use Metamorphose\Data\Validators\Types\NullValidator;
 use Metamorphose\Data\Validators\Types\StringValidator;
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 
+/**
+ * Class DataValidatorCollection
+ *
+ * @package Metamorphose\Data
+ */
 class DataValidatorCollection {
 
     /** @var DataValidatorInterface[] $dataValidators */
     protected $dataValidators = [];
 
+    /**
+     * DataValidatorCollection constructor.
+     */
     public function __construct() {
 
         // Register default validators
@@ -62,16 +70,31 @@ class DataValidatorCollection {
 
     }
 
+    /**
+     * Register a data validator in the collection
+     *
+     * @param DataValidatorInterface $dataValidator
+     */
     public function registerDataValidator(DataValidatorInterface $dataValidator): void {
 
         $this->dataValidators[$dataValidator->getName()] = $dataValidator;
 
     }
 
+    /**
+     * Get a data validator from the collection
+     *
+     * @param string $name
+     *
+     * @return DataValidatorInterface
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function getDataValidator(string $name): DataValidatorInterface {
 
         if(!isset($this->dataValidators[$name])) {
+
             throw new MetamorphoseUndefinedServiceException('Data processor "' . $name . '" is not defined');
+
         }
 
         return $this->dataValidators[$name];

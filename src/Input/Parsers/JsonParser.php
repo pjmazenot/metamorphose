@@ -12,10 +12,18 @@ namespace Metamorphose\Input\Parsers;
 
 use Metamorphose\Input\Parser;
 
+/**
+ * Class JsonParser
+ *
+ * @package Metamorphose\Input\Parsers
+ */
 class JsonParser extends Parser {
 
     const NAME = 'json';
 
+    /**
+     * @inheritDoc
+     */
     public function parseString(string $string): void {
 
         $dataArray = json_decode($string, true);

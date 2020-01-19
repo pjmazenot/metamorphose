@@ -10,6 +10,11 @@
 
 namespace Metamorphose\Exceptions;
 
+/**
+ * Class MetamorphoseValidateException
+ *
+ * @package Metamorphose\Exceptions
+ */
 class MetamorphoseValidateException extends MetamorphoseException {
 
 

@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Types;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class StringValidator
+ *
+ * @package Metamorphose\Data\Validators\Types
+ */
 class StringValidator extends DataValidator {
 
     const NAME = 'string';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         return is_string($data);

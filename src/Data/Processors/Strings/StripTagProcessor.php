@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Strings;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class StripTagProcessor
+ *
+ * @package Metamorphose\Data\Processors\Strings
+ */
 class StripTagProcessor extends DataProcessor {
 
     const NAME = 'strip_tags';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         $allowedTag = array_shift($params);

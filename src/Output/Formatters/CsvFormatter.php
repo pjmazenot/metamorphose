@@ -12,11 +12,19 @@ namespace Metamorphose\Output\Formatters;
 
 use Metamorphose\Output\Formatter;
 
+/**
+ * Class CsvFormatter
+ *
+ * @package Metamorphose\Output\Formatters
+ */
 class CsvFormatter extends Formatter {
 
     const NAME = 'csv';
     const FORMAT = 'text/csv';
 
+    /**
+     * @inheritDoc
+     */
     public function format(array $data, array $options = []): string {
 
         if(!empty($options['headers'])) {
@@ -33,7 +41,7 @@ class CsvFormatter extends Formatter {
 
             $line = '';
             foreach($lineData as &$value) {
-                $value = $this->cleanValue($value);
+                $value = $this->cleanValue((string) $value);
             }
             $line .= '"' . implode('","', $lineData) . '"';
             $lines .= $line . ($i + 1 < $totalLines ? PHP_EOL : '');
@@ -44,7 +52,14 @@ class CsvFormatter extends Formatter {
 
     }
 
-    protected function cleanValue($value) {
+    /**
+     * Clean the value
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    protected function cleanValue(string $value): string {
 
         return str_replace('"', '\"', $value);
 

@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\TypeCasting;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class ToBoolProcessor
+ *
+ * @package Metamorphose\Data\Processors\TypeCasting
+ */
 class ToBoolProcessor extends DataProcessor {
 
     const NAME = 'to_bool';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         return (bool) $data;

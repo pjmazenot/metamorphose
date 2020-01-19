@@ -10,6 +10,11 @@
 
 namespace Metamorphose\Exceptions;
 
+/**
+ * Class MetamorphoseUndefinedServiceException
+ *
+ * @package Metamorphose\Exceptions
+ */
 class MetamorphoseUndefinedServiceException extends MetamorphoseException {
 
 

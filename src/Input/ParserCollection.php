@@ -16,11 +16,19 @@ use Metamorphose\Input\Parsers\JsonParser;
 use Metamorphose\Input\Parsers\XmlParser;
 use Metamorphose\Input\Parsers\YamlParser;
 
+/**
+ * Class ParserCollection
+ *
+ * @package Metamorphose\Input
+ */
 class ParserCollection {
 
     /** @var ParserInterface[] $parsers */
     protected $parsers = [];
 
+    /**
+     * ParserCollection constructor.
+     */
     public function __construct() {
 
         // Register default parsers
@@ -31,16 +39,31 @@ class ParserCollection {
 
     }
 
+    /**
+     * Register a parser in the collection
+     *
+     * @param ParserInterface $parser
+     */
     public function registerParser(ParserInterface $parser): void {
 
         $this->parsers[$parser->getName()] = $parser;
 
     }
 
+    /**
+     * Get a parser from the collection
+     *
+     * @param string $name
+     *
+     * @return ParserInterface
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function getParser(string $name): ParserInterface {
 
         if(!isset($this->parsers[$name])) {
+
             throw new MetamorphoseUndefinedServiceException('Parser "' . $name . '" is not defined');
+
         }
 
         return $this->parsers[$name];

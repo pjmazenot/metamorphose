@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Operators;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class BetweenValidator
+ *
+ * @package Metamorphose\Data\Validators\Operators
+ */
 class BetweenValidator extends DataValidator {
 
     const NAME = 'between';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         if(count($params) < 2) {

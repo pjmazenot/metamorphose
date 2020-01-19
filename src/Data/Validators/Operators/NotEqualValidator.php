@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Operators;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class NotEqualValidator
+ *
+ * @package Metamorphose\Data\Validators\Operators
+ */
 class NotEqualValidator extends DataValidator {
 
     const NAME = 'neq';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         if(empty($params)) {

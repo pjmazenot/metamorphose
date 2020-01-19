@@ -10,18 +10,29 @@
 
 namespace Metamorphose\Output;
 
+/**
+ * Class Formatter
+ *
+ * @package Metamorphose\Output
+ */
 abstract class Formatter implements FormatterInterface {
 
     /** Constants to override */
     const NAME = '';
     const FORMAT = '';
 
+    /**
+     * @inheritDoc
+     */
     public function getName(): string {
 
         return static::NAME;
 
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getFormat(): string {
 
         return static::FORMAT;

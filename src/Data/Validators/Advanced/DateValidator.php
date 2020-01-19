@@ -12,6 +12,9 @@ namespace Metamorphose\Data\Validators\Advanced;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * @inheritDoc
+ */
 class DateValidator extends DataValidator {
 
     const NAME = 'date';
@@ -19,6 +22,13 @@ class DateValidator extends DataValidator {
     const TYPE_COMPARE = 'compare';
     const TYPE_FORMAT = 'format';
 
+    /**
+     * @param mixed $data
+     * @param array $params
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function validate($data, array $params = []): bool {
 
         if(count($params) < 2) {

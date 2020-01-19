@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\TypeCasting;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class ToStringProcessor
+ *
+ * @package Metamorphose\Data\Processors\TypeCasting
+ */
 class ToStringProcessor extends DataProcessor {
 
     const NAME = 'to_string';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         return (string) $data;

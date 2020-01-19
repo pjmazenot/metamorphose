@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Strings;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class HashProcessor
+ *
+ * @package Metamorphose\Data\Processors\Strings
+ */
 class HashProcessor extends DataProcessor {
 
     const NAME = 'hash';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         if(empty($params)) {

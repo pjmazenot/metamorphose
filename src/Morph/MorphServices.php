@@ -16,11 +16,18 @@ use Metamorphose\Data\DataProcessorCollection;
 use Metamorphose\Data\DataProcessorInterface;
 use Metamorphose\Data\DataValidatorCollection;
 use Metamorphose\Data\DataValidatorInterface;
+use Metamorphose\Exceptions\MetamorphoseContractException;
+use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Input\ParserCollection;
 use Metamorphose\Input\ParserInterface;
 use Metamorphose\Output\FormatterCollection;
 use Metamorphose\Output\FormatterInterface;
 
+/**
+ * Class MorphServices
+ *
+ * @package Metamorphose\Morph
+ */
 class MorphServices {
 
     /** @var Contract $contract */
@@ -47,6 +54,15 @@ class MorphServices {
     /** @var FormatterInterface $parser */
     protected $formatter;
 
+    /**
+     * MorphServices constructor.
+     *
+     * @param string      $inputContractFilePath
+     * @param string|null $outputContractFilePath
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function __construct(string $inputContractFilePath, string $outputContractFilePath = null) {
 
         $this->parserCollection = new ParserCollection();
@@ -67,6 +83,8 @@ class MorphServices {
     }
 
     /**
+     * Get the contract
+     *
      * @return Contract
      */
     public function getContract(): Contract {
@@ -76,6 +94,8 @@ class MorphServices {
     }
 
     /**
+     * Get the contract validator
+     *
      * @return ContractValidator
      */
     public function getContractValidator(): ContractValidator {
@@ -85,6 +105,8 @@ class MorphServices {
     }
 
     /**
+     * Get the parser collection
+     *
      * @return ParserCollection
      */
     public function getParserCollection(): ParserCollection {
@@ -94,6 +116,8 @@ class MorphServices {
     }
 
     /**
+     * Get the data processor collection
+     *
      * @return DataProcessorCollection
      */
     public function getDataProcessorCollection(): DataProcessorCollection {
@@ -103,6 +127,8 @@ class MorphServices {
     }
 
     /**
+     * Get the data validator collection
+     *
      * @return DataValidatorCollection
      */
     public function getDataValidatorCollection(): DataValidatorCollection {
@@ -112,6 +138,8 @@ class MorphServices {
     }
 
     /**
+     * Get the formatter collection
+     *
      * @return FormatterCollection
      */
     public function getFormatterCollection(): FormatterCollection {
@@ -121,7 +149,11 @@ class MorphServices {
     }
 
     /**
+     * Get the selected parser
+     *
      * @return ParserInterface
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
      */
     public function getParser(): ParserInterface {
 
@@ -138,7 +170,11 @@ class MorphServices {
     }
 
     /**
+     * Get the selected formatter
+     *
      * @return FormatterInterface
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
      */
     public function getFormatter(): FormatterInterface {
 
@@ -154,30 +190,58 @@ class MorphServices {
 
     }
 
+    /**
+     * Register a parser
+     *
+     * @param ParserInterface $parser
+     */
     public function registerParser(ParserInterface $parser): void {
 
         $this->parserCollection->registerParser($parser);
 
     }
 
+    /**
+     * Register a data processor
+     *
+     * @param DataProcessorInterface $dataProcessor
+     */
     public function registerDataProcessor(DataProcessorInterface $dataProcessor): void {
 
         $this->dataProcessorCollection->registerDataProcessor($dataProcessor);
 
     }
 
+    /**
+     * Register a data validator
+     *
+     * @param DataValidatorInterface $dataValidator
+     */
     public function registerDataValidator(DataValidatorInterface $dataValidator): void {
 
         $this->dataValidatorCollection->registerDataValidator($dataValidator);
 
     }
 
+    /**
+     * Register a formatter
+     *
+     * @param FormatterInterface $formatter
+     */
     public function registerFormatter(FormatterInterface $formatter): void {
 
         $this->formatterCollection->registerFormatter($formatter);
 
     }
 
+    /**
+     * Specify the parser to use
+     *
+     * @param string $name
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function useParser(string $name) {
 
         $this->contract->isParserAuthorizedOrThrow($name);
@@ -186,6 +250,14 @@ class MorphServices {
 
     }
 
+    /**
+     * Specify the formatter tu use
+     *
+     * @param string $name
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function useFormatter(string $name) {
 
         $this->contract->isFormatterAuthorizedOrThrow($name);

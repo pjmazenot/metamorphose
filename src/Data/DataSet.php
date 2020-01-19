@@ -10,23 +10,43 @@
 
 namespace Metamorphose\Data;
 
+/**
+ * Class DataSet
+ *
+ * @package Metamorphose\Data
+ */
 class DataSet {
 
     /** @var DataPoint $data */
     protected $data;
 
+    /**
+     * DataSet constructor.
+     *
+     * @param array $data
+     */
     public function __construct(array $data = []) {
 
         $this->data = new DataPoint($data);
 
     }
 
+    /**
+     * Get the data
+     *
+     * @return DataPoint
+     */
     public function getData(): DataPoint {
 
         return $this->data;
 
     }
 
+    /**
+     * Get the count of elements
+     *
+     * @return int
+     */
     public function getCount(): int {
 
         return $this->data->getCount();

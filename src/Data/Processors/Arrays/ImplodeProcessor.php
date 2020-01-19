@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Arrays;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class ImplodeProcessor
+ *
+ * @package Metamorphose\Data\Processors\Arrays
+ */
 class ImplodeProcessor extends DataProcessor {
 
     const NAME = 'implode';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         if(empty($params)) {

@@ -12,11 +12,19 @@ namespace Metamorphose\Output\Formatters;
 
 use Metamorphose\Output\Formatter;
 
+/**
+ * Class JsonFormatter
+ *
+ * @package Metamorphose\Output\Formatters
+ */
 class JsonFormatter extends Formatter {
 
     const NAME = 'json';
     const FORMAT = 'application/json';
 
+    /**
+     * @inheritDoc
+     */
     public function format(array $data, array $options = []): string {
 
         return json_encode($data);

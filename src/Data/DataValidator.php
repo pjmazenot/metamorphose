@@ -10,11 +10,19 @@
 
 namespace Metamorphose\Data;
 
+/**
+ * Class DataValidator
+ *
+ * @package Metamorphose\Data
+ */
 abstract class DataValidator implements DataValidatorInterface {
 
     /** Constant to override with the real name */
     const NAME = '';
 
+    /**
+     * @inheritDoc
+     */
     public function getName(): string {
 
         return static::NAME;

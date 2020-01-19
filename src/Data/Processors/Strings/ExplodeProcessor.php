@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Strings;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class ExplodeProcessor
+ *
+ * @package Metamorphose\Data\Processors\Strings
+ */
 class ExplodeProcessor extends DataProcessor {
 
     const NAME = 'explode';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         if(empty($params)) {

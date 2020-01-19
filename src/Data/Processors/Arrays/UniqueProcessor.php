@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Arrays;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class UniqueProcessor
+ *
+ * @package Metamorphose\Data\Processors\Arrays
+ */
 class UniqueProcessor extends DataProcessor {
 
     const NAME = 'array_unique';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         return array_unique($data);

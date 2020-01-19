@@ -12,6 +12,11 @@ namespace Metamorphose\Data\Processors\Json;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class JsonDecodeProcessor
+ *
+ * @package Metamorphose\Data\Processors\Json
+ */
 class JsonDecodeProcessor extends DataProcessor {
 
     const NAME = 'json_decode';
@@ -19,6 +24,9 @@ class JsonDecodeProcessor extends DataProcessor {
     const TO_ARRAY = 'array';
     const TO_OBJECT = 'object';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         if(is_string($data)) {

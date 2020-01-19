@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\TypeCasting;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class ToFloatProcessor
+ *
+ * @package Metamorphose\Data\Processors\TypeCasting
+ */
 class ToFloatProcessor extends DataProcessor {
 
     const NAME = 'to_float';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         return (float) $data;

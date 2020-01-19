@@ -26,11 +26,19 @@ use Metamorphose\Data\Processors\TypeCasting\ToIntProcessor;
 use Metamorphose\Data\Processors\TypeCasting\ToStringProcessor;
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 
+/**
+ * Class DataProcessorCollection
+ *
+ * @package Metamorphose\Data
+ */
 class DataProcessorCollection {
 
     /** @var DataProcessorInterface[] $dataProcessors */
     protected $dataProcessors = [];
 
+    /**
+     * DataProcessorCollection constructor.
+     */
     public function __construct() {
 
         // Register default processors
@@ -58,16 +66,31 @@ class DataProcessorCollection {
 
     }
 
+    /**
+     * Register a data processor in the collection
+     *
+     * @param DataProcessorInterface $dataProcessor
+     */
     public function registerDataProcessor(DataProcessorInterface $dataProcessor): void {
 
         $this->dataProcessors[$dataProcessor->getName()] = $dataProcessor;
 
     }
 
+    /**
+     * Get a data processor from the collection
+     *
+     * @param string $name
+     *
+     * @return DataProcessorInterface
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function getDataProcessor(string $name): DataProcessorInterface {
 
         if(!isset($this->dataProcessors[$name])) {
+
             throw new MetamorphoseUndefinedServiceException('Data processor "' . $name . '" is not defined');
+
         }
 
         return $this->dataProcessors[$name];

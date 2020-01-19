@@ -10,11 +10,21 @@
 
 namespace Metamorphose\Data;
 
+/**
+ * Class DataPoint
+ *
+ * @package Metamorphose\Data
+ */
 class DataPoint {
 
     /** @var DataPoint|mixed $value */
     protected $value;
 
+    /**
+     * DataPoint constructor.
+     *
+     * @param DataPoint|mixed $value
+     */
     public function __construct($value) {
 
         if(is_array($value)) {
@@ -36,6 +46,8 @@ class DataPoint {
     }
 
     /**
+     * Get the value
+     *
      * @return DataPoint|mixed
      */
     public function getValue() {
@@ -45,6 +57,8 @@ class DataPoint {
     }
 
     /**
+     * Set the value
+     *
      * @param DataPoint|mixed $value
      */
     public function setValue($value): void {
@@ -53,6 +67,11 @@ class DataPoint {
 
     }
 
+    /**
+     * Get the count of elements
+     *
+     * @return int
+     */
     public function getCount(): int {
 
         if(is_array($this->value)) {
@@ -67,6 +86,11 @@ class DataPoint {
 
     }
 
+    /**
+     * Get the data as an array
+     *
+     * @return array
+     */
     public function toArray(): array {
 
         if(is_a($this->value, self::class)) {
@@ -98,7 +122,9 @@ class DataPoint {
             return $valueArray;
 
         } else {
+
             return $this->value;
+
         }
 
     }

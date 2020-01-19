@@ -12,11 +12,19 @@ namespace Metamorphose\Output\Formatters;
 
 use Metamorphose\Output\Formatter;
 
+/**
+ * Class YamlFormatter
+ *
+ * @package Metamorphose\Output\Formatters
+ */
 class YamlFormatter extends Formatter {
 
     const NAME = 'yaml';
     const FORMAT = 'application/x-yaml';
 
+    /**
+     * @inheritDoc
+     */
     public function format(array $data, array $options = []): string {
 
         return yaml_emit($data);

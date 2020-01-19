@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Strings;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class StripslashesProcessor
+ *
+ * @package Metamorphose\Data\Processors\Strings
+ */
 class StripslashesProcessor extends DataProcessor {
 
     const NAME = 'stripcslashes';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         return stripcslashes($data);

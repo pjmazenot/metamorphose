@@ -16,11 +16,19 @@ use Metamorphose\Output\Formatters\JsonFormatter;
 use Metamorphose\Output\Formatters\XmlFormatter;
 use Metamorphose\Output\Formatters\YamlFormatter;
 
+/**
+ * Class FormatterCollection
+ *
+ * @package Metamorphose\Output
+ */
 class FormatterCollection {
 
     /** @var FormatterInterface[] $formatters */
     protected $formatters = [];
 
+    /**
+     * FormatterCollection constructor.
+     */
     public function __construct() {
 
         // Register default formatters
@@ -31,12 +39,36 @@ class FormatterCollection {
 
     }
 
+    /**
+     * Get the formatters in the collection
+     *
+     * @return FormatterInterface[]
+     */
+    public function getFormatters(): array {
+
+        return $this->formatters;
+
+    }
+
+    /**
+     * Register a formatter in the collection
+     *
+     * @param FormatterInterface $formatter
+     */
     public function registerFormatter(FormatterInterface $formatter): void {
 
         $this->formatters[$formatter->getName()] = $formatter;
 
     }
 
+    /**
+     * Get a formatter from the collection
+     *
+     * @param string $name
+     *
+     * @return FormatterInterface
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function getFormatter(string $name): FormatterInterface {
 
         if(!isset($this->formatters[$name])) {
@@ -44,15 +76,6 @@ class FormatterCollection {
         }
 
         return $this->formatters[$name];
-
-    }
-
-    /**
-     * @return FormatterInterface[]
-     */
-    public function getFormatters(): array {
-
-        return $this->formatters;
 
     }
 

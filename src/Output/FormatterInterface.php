@@ -10,12 +10,35 @@
 
 namespace Metamorphose\Output;
 
+/**
+ * Interface FormatterInterface
+ *
+ * @package Metamorphose\Output
+ */
 interface FormatterInterface {
 
+    /**
+     * Get the name
+     *
+     * @return string
+     */
     public function getName(): string;
 
+    /**
+     * Get the supported output format
+     *
+     * @return string
+     */
     public function getFormat(): string;
 
+    /**
+     * Format the data
+     *
+     * @param array $data
+     * @param array $options
+     *
+     * @return string
+     */
     public function format(array $data, array $options = []): string;
 
 }

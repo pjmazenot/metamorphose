@@ -10,6 +10,11 @@
 
 namespace Metamorphose\Contract;
 
+/**
+ * Class ContractField
+ *
+ * @package Metamorphose\Contract
+ */
 class ContractField {
 
     const TYPE_ARRAY = 'array';
@@ -21,8 +26,6 @@ class ContractField {
     /** @var string $from */
     protected $from;
 
-    protected $inputType;
-
     /** @var array $processors */
     protected $processors = [];
 
@@ -32,8 +35,6 @@ class ContractField {
     /** @var string $to */
     protected $to;
 
-    protected $outputType;
-
     public function __construct(array $fieldData) {
 
         $this->parseFieldData($fieldData);
@@ -41,24 +42,19 @@ class ContractField {
     }
 
     /**
-     * @return mixed
+     * Get the field source name
+     *
+     * @return string
      */
-    public function getFrom() {
+    public function getFrom(): string {
 
         return $this->from;
 
     }
 
     /**
-     * @return mixed
-     */
-    public function getInputType() {
-
-        return $this->inputType;
-
-    }
-
-    /**
+     * Get the list of data processors to apply
+     *
      * @return array
      */
     public function getProcessors(): array {
@@ -68,6 +64,8 @@ class ContractField {
     }
 
     /**
+     * Get the list of data validators to apply
+     *
      * @return array
      */
     public function getValidators(): array {
@@ -77,47 +75,45 @@ class ContractField {
     }
 
     /**
-     * @return mixed
+     * Get the field destination name
+     *
+     * @return string
      */
-    public function getTo() {
+    public function getTo(): string {
 
         return $this->to;
 
     }
 
     /**
-     * @return mixed
+     * Parse the field definition
+     *
+     * @param array $fieldData
      */
-    public function getOutputType() {
-
-        return $this->outputType;
-
-    }
-
     protected function parseFieldData(array $fieldData): void {
 
         if(isset($fieldData['from'])) {
-            $this->from = $fieldData['from'];
-        }
 
-        if(isset($fieldData['input_type'])) {
-            $this->inputType = $fieldData['input_type'];
+            $this->from = $fieldData['from'];
+
         }
 
         if(isset($fieldData['processors'])) {
+
             $this->processors = $fieldData['processors'];
+
         }
 
         if(isset($fieldData['validators'])) {
+
             $this->validators = $fieldData['validators'];
+
         }
 
         if(isset($fieldData['to'])) {
-            $this->to = $fieldData['to'];
-        }
 
-        if(isset($fieldData['output_type'])) {
-            $this->outputType = $fieldData['output_type'];
+            $this->to = $fieldData['to'];
+
         }
 
     }

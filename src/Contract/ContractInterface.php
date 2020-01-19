@@ -10,14 +10,23 @@
 
 namespace Metamorphose\Contract;
 
+/**
+ * Interface ContractInterface
+ *
+ * @package Metamorphose\Contract
+ */
 interface ContractInterface {
 
     /**
+     * Get the contract formatters
+     *
      * @return array
      */
-    public function getFormatters();
+    public function getFormatters(): array;
 
     /**
+     * Get the contract fields
+     *
      * @return ContractField[]
      */
     public function getFields();

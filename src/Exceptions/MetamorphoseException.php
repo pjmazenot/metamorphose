@@ -10,6 +10,11 @@
 
 namespace Metamorphose\Exceptions;
 
+/**
+ * Class MetamorphoseException
+ *
+ * @package Metamorphose\Exceptions
+ */
 class MetamorphoseException extends \Exception {
 
 

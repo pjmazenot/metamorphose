@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\TypeCasting;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class ToIntProcessor
+ *
+ * @package Metamorphose\Data\Processors\TypeCasting
+ */
 class ToIntProcessor extends DataProcessor {
 
     const NAME = 'to_int';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         return (int) $data;

@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Operators;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class LessThanValidator
+ *
+ * @package Metamorphose\Data\Validators\Operators
+ */
 class LessThanValidator extends DataValidator {
 
     const NAME = 'lt';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         if(empty($params)) {

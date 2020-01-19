@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Advanced;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class RegexValidator
+ *
+ * @package Metamorphose\Data\Validators\Advanced
+ */
 class RegexValidator extends DataValidator {
 
     const NAME = 'regex';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         if(empty($params)) {

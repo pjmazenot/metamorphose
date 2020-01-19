@@ -12,15 +12,21 @@ namespace Metamorphose\Input\Parsers;
 
 use Metamorphose\Input\Parser;
 
+/**
+ * Class XmlParser
+ *
+ * @package Metamorphose\Input\Parsers
+ */
 class XmlParser extends Parser {
 
     const NAME = 'xml';
 
+    /**
+     * @inheritDoc
+     */
     public function parseString(string $string): void {
 
         // @link: https://stackoverflow.com/questions/6578832/how-to-convert-xml-into-array-in-php
-
-
 
         $xml   = simplexml_load_string($string);
         $array = $this->XML2Array($xml);

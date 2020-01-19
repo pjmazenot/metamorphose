@@ -11,20 +11,17 @@
 namespace Metamorphose\Morph;
 
 use Metamorphose\Contract\Contract;
-use Metamorphose\Contract\ContractValidator;
-use Metamorphose\Data\DataProcessorCollection;
-use Metamorphose\Data\DataProcessorInterface;
 use Metamorphose\Data\DataSet;
-use Metamorphose\Data\DataValidatorCollection;
-use Metamorphose\Data\DataValidatorInterface;
+use Metamorphose\Exceptions\MetamorphoseContractException;
 use Metamorphose\Exceptions\MetamorphoseException;
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Exceptions\MetamorphoseValidateException;
-use Metamorphose\Input\ParserCollection;
-use Metamorphose\Input\ParserInterface;
-use Metamorphose\Output\FormatterCollection;
-use Metamorphose\Output\FormatterInterface;
 
+/**
+ * Class MorphEngine
+ *
+ * @package Metamorphose\Morph
+ */
 class MorphEngine {
 
     const SOURCE_TYPE_ARRAY = 'array';
@@ -43,18 +40,37 @@ class MorphEngine {
     /** @var DataSet $convertedData */
     protected $convertedData;
 
-    public function __construct(string $inputContractFilePath, string $outputContractFilePath = null) {
+    /**
+     * MorphEngine constructor.
+     *
+     * @param string      $inputContractFilePath
+     * @param string|null $outputContractFilePath
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     */
+    public function __construct(string $inputContractFilePath, ?string $outputContractFilePath = null) {
 
         $this->services = new MorphServices($inputContractFilePath, $outputContractFilePath);
 
     }
 
+    /**
+     * Get the service container
+     *
+     * @return MorphServices
+     */
     public function getServices() {
 
         return $this->services;
 
     }
-
+    /**
+     * Set the source data
+     *
+     * @param string $sourceType
+     * @param string $source
+     */
     public function load(string $sourceType, string $source) {
 
         $this->sourceType = $sourceType;
@@ -64,8 +80,17 @@ class MorphEngine {
 
     // @TODO: Buffer (nbItem) - for CSV for example or JSON/XML collections
 
+    /**
+     * Main transform function
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseException
+     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseValidateException
+     */
     public function convert() {
 
+        // Check that the source is set
         if(empty($this->sourceType) || empty($this->source)) {
 
             throw new MetamorphoseException('Missing source');
@@ -93,18 +118,31 @@ class MorphEngine {
 
         }
 
-        // @TODO: Validate automatically from options?
-
+        // Transform using the contract
         $this->applyContract();
 
     }
 
+    /**
+     * Get the transformed and formatted data
+     *
+     * @return string
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     */
     public function getOutput() {
 
         return $this->services->getFormatter()->format($this->convertedData->getData()->toArray(), $this->services->getContract()->getOptions());
 
     }
 
+    /**
+     * Transform the data based on the provided contract
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseValidateException
+     */
     public function applyContract() {
 
         if($this->services->getContract()->getType() === Contract::TYPE_COLLECTION) {
@@ -128,6 +166,16 @@ class MorphEngine {
 
     }
 
+    /**
+     * Transform one item
+     *
+     * @param int|null $key
+     *
+     * @return array
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseValidateException
+     */
     protected function processObject(?int $key = null) {
 
         $dataHolder = new DataSet();

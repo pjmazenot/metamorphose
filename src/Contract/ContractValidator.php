@@ -11,8 +11,14 @@
 namespace Metamorphose\Contract;
 
 use Metamorphose\Exceptions\MetamorphoseContractException;
+use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Output\FormatterCollection;
 
+/**
+ * Class ContractValidator
+ *
+ * @package Metamorphose\Contract
+ */
 class ContractValidator {
 
     /** @var bool $strict */
@@ -24,6 +30,13 @@ class ContractValidator {
     /** @var ContractValidatorField[] $fields */
     protected $fields = [];
 
+    /**
+     * ContractValidator constructor.
+     *
+     * @param string $filePath
+     *
+     * @throws MetamorphoseContractException
+     */
     public function __construct(string $filePath) {
 
         $this->parseFile($filePath);
@@ -31,14 +44,16 @@ class ContractValidator {
     }
 
     /**
-     * This only validate the output structure. Not the fields types or values. For that use DataValidators
+     * Validate the contract
+     * This only validate the output structure. Not the fields types or values. For those we need to use DataValidators.
      *
-     * @param ContractInterface $contract
+     * @param ContractInterface   $contract
      * @param FormatterCollection $loadedFormatters
      *
      * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
      */
-    public function validate(ContractInterface $contract, FormatterCollection $loadedFormatters) {
+    public function validate(ContractInterface $contract, FormatterCollection $loadedFormatters): void {
 
         if($this->strict) {
 
@@ -56,7 +71,16 @@ class ContractValidator {
 
     }
 
-    protected function checkExpectedFormat(ContractInterface $contract, FormatterCollection $loadedFormatters) {
+    /**
+     * Check that the target formatter supports the right format
+     *
+     * @param ContractInterface   $contract
+     * @param FormatterCollection $loadedFormatters
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     */
+    protected function checkExpectedFormat(ContractInterface $contract, FormatterCollection $loadedFormatters): void {
 
         // Validate that the expected output format is available
         $validOutputFormat = false;
@@ -81,7 +105,14 @@ class ContractValidator {
 
     }
 
-    protected function checkForMissingFields(ContractInterface $contract) {
+    /**
+     * Check for missing fields
+     *
+     * @param ContractInterface $contract
+     *
+     * @throws MetamorphoseContractException
+     */
+    protected function checkForMissingFields(ContractInterface $contract): void {
 
         // Validate the final structure
         $contractFields = $contract->getFields();
@@ -124,7 +155,14 @@ class ContractValidator {
 
     }
 
-    protected function checkForAddedFields(ContractInterface $contract) {
+    /**
+     * Check for extra fields
+     *
+     * @param ContractInterface $contract
+     *
+     * @throws MetamorphoseContractException
+     */
+    protected function checkForAddedFields(ContractInterface $contract): void {
 
         // Validate the final structure
         $contractFields = $contract->getFields();
@@ -153,7 +191,14 @@ class ContractValidator {
 
     }
 
-    protected function checkFieldsOrder(ContractInterface $contract) {
+    /**
+     * Check that the fields are defined in the right order
+     *
+     * @param ContractInterface $contract
+     *
+     * @throws MetamorphoseContractException
+     */
+    protected function checkFieldsOrder(ContractInterface $contract): void {
 
         // Validate the final structure
         $contractFields = $contract->getFields();
@@ -187,6 +232,13 @@ class ContractValidator {
 
     }
 
+    /**
+     * Parse the contract validator definition file
+     *
+     * @param string $filePath
+     *
+     * @throws MetamorphoseContractException
+     */
     protected function parseFile(string $filePath): void {
 
         $contractData = json_decode(file_get_contents($filePath), true);

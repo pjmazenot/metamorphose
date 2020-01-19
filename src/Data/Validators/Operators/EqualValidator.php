@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Operators;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class EqualValidator
+ *
+ * @package Metamorphose\Data\Validators\Operators
+ */
 class EqualValidator extends DataValidator {
 
     const NAME = 'eq';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         if(empty($params)) {

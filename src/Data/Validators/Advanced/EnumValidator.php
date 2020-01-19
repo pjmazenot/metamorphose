@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Validators\Advanced;
 
 use Metamorphose\Data\DataValidator;
 
+/**
+ * Class EnumValidator
+ *
+ * @package Metamorphose\Data\Validators\Advanced
+ */
 class EnumValidator extends DataValidator {
 
     const NAME = 'enum';
 
+    /**
+     * @inheritDoc
+     */
     public function validate($data, array $params = []): bool {
 
         if(empty($params)) {

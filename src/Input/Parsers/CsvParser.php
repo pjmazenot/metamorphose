@@ -12,10 +12,18 @@ namespace Metamorphose\Input\Parsers;
 
 use Metamorphose\Input\Parser;
 
+/**
+ * Class CsvParser
+ *
+ * @package Metamorphose\Input\Parsers
+ */
 class CsvParser extends Parser {
 
     const NAME = 'csv';
 
+    /**
+     * @inheritDoc
+     */
     public function parseString(string $string): void {
 
         // @TODO: Improve with https://stackoverflow.com/questions/5249279/file-get-contents-php-fatal-error-allowed-memory-exhausted

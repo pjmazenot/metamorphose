@@ -13,11 +13,19 @@ namespace Metamorphose\Output\Formatters;
 use Metamorphose\Exceptions\MetamorphoseException;
 use Metamorphose\Output\Formatter;
 
+/**
+ * Class XmlFormatter
+ *
+ * @package Metamorphose\Output\Formatters
+ */
 class XmlFormatter extends Formatter {
 
     const NAME = 'xml';
     const FORMAT = 'application/xml';
 
+    /**
+     * @inheritDoc
+     */
     public function format(array $data, array $options = []): string {
 
         // @link: https://stackoverflow.com/questions/1397036/how-to-convert-array-to-simplexml
@@ -27,7 +35,9 @@ class XmlFormatter extends Formatter {
 
         // Check that there is only one root
         if(count($data) > 1) {
+
             throw new MetamorphoseException('Only one XML root should be defined.');
+
         }
 
         $rootName = array_key_first($data);
@@ -41,6 +51,12 @@ class XmlFormatter extends Formatter {
 
     }
 
+    /**
+     * Transform an array into xml
+     *
+     * @param $student_info
+     * @param $xmlObject
+     */
     protected function array_to_xml($student_info, &$xmlObject) {
         foreach($student_info as $key => $value) {
             if(is_array($value)) {

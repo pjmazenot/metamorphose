@@ -12,10 +12,18 @@ namespace Metamorphose\Data\Processors\Strings;
 
 use Metamorphose\Data\DataProcessor;
 
+/**
+ * Class ReplaceProcessor
+ *
+ * @package Metamorphose\Data\Processors\Strings
+ */
 class ReplaceProcessor extends DataProcessor {
 
     const NAME = 'replace';
 
+    /**
+     * @inheritDoc
+     */
     public function process($data, array $params = []) {
 
         if(count($params) < 2) {

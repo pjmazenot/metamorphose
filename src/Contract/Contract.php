@@ -12,6 +12,11 @@ namespace Metamorphose\Contract;
 
 use Metamorphose\Exceptions\MetamorphoseContractException;
 
+/**
+ * Class Contract
+ *
+ * @package Metamorphose\Contract
+ */
 class Contract implements ContractInterface {
 
     const TYPE_COLLECTION = 'collection';
@@ -32,18 +37,38 @@ class Contract implements ContractInterface {
     /** @var ContractField[] $fields */
     protected $fields = [];
 
+    /**
+     * Contract constructor.
+     *
+     * @param string $filePath
+     *
+     * @throws MetamorphoseContractException
+     */
     public function __construct(string $filePath) {
 
         $this->parseFile($filePath);
 
     }
 
+    /**
+     * Get the default parser name
+     *
+     * @return string
+     */
     public function getDefaultParserName(): string {
 
         return $this->parsers[0];
 
     }
 
+    /**
+     * Check if a parser is defined
+     *
+     * @param string $parserName
+     *
+     * @return bool
+     * @throws MetamorphoseContractException
+     */
     public function isParserAuthorizedOrThrow(string $parserName): bool {
 
         if(in_array($parserName, $this->parsers)) {
@@ -56,12 +81,25 @@ class Contract implements ContractInterface {
 
     }
 
+    /**
+     * Get the default formatter name
+     *
+     * @return string
+     */
     public function getDefaultFormatterName(): string {
 
         return $this->formatters[0];
 
     }
 
+    /**
+     * Check if a formatter is defined
+     *
+     * @param string $formatterName
+     *
+     * @return bool
+     * @throws MetamorphoseContractException
+     */
     public function isFormatterAuthorizedOrThrow(string $formatterName): bool {
 
         if(in_array($formatterName, $this->formatters)) {
@@ -74,30 +112,57 @@ class Contract implements ContractInterface {
 
     }
 
-    public function getFormatters() {
+    /**
+     * Get the contract formatters
+     *
+     * @return array
+     */
+    public function getFormatters(): array {
 
         return $this->formatters;
 
     }
 
-    public function getOptions() {
+    /**
+     * Get the contract options
+     *
+     * @return array
+     */
+    public function getOptions(): array {
 
         return $this->options;
 
     }
 
-    public function getType() {
+    /**
+     * Get the contract type
+     *
+     * @return string
+     */
+    public function getType(): string {
 
         return $this->type;
 
     }
 
-    public function getFields() {
+    /**
+     * Get the contract fields
+     *
+     * @return ContractField[]
+     */
+    public function getFields(): array {
 
         return $this->fields;
 
     }
 
+    /**
+     * Parse the contract definition file
+     *
+     * @param string $filePath
+     *
+     * @throws MetamorphoseContractException
+     */
     protected function parseFile(string $filePath): void {
 
         $contractData = json_decode(file_get_contents($filePath), true);
