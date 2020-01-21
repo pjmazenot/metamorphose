@@ -10,8 +10,6 @@
 
 namespace Metamorphose\Contract\Definitions;
 
-use Metamorphose\Exceptions\MetamorphoseContractException;
-
 /**
  * Class ContractDestinationDefinition
  *

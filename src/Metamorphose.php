@@ -40,7 +40,6 @@ class Metamorphose {
      * @throws MetamorphoseContractException
      * @throws MetamorphoseDataDestinationException
      * @throws MetamorphoseDataSourceException
-     * @throws MetamorphoseUndefinedServiceException
      */
     public function __construct(string $inputContractFilePath, ?string $outputContractFilePath = null) {
 
@@ -64,7 +63,7 @@ class Metamorphose {
      *
      * @param array $sources
      *
-     * @throws Exceptions\MetamorphoseDataSourceException
+     * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseException
      * @throws MetamorphoseUndefinedServiceException
      */
