@@ -1,27 +1,67 @@
 {
-  "parsers": ["xml"],
-  "formatters": ["yaml"],
-  "options": [],
-  "fields": [
+  "sources": [
     {
-      "from": "user.id",
-      "to": "user.id"
-    },
+      "name": "source",
+      "type": "file",
+      "parser": "xml",
+      "structure": "object",
+      "options": {},
+      "fields": []
+    }
+  ],
+  "destinations": [
     {
-      "from": "user.firstname",
-      "to": "user.firstname"
-    },
-    {
-      "from": "user.lastname",
-      "to": "user.lastname"
-    },
-    {
-      "from": "user.email",
-      "to": "user.email"
-    },
-    {
-      "from": "user.phone",
-      "to": "user.phone"
+      "name": "dest",
+      "type": "string",
+      "formatter": "yaml",
+      "structure": "object",
+      "fields": [
+        {
+          "name": "user.id",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.user.id"
+            }
+          ]
+        },
+        {
+          "name": "user.firstname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.user.firstname"
+            }
+          ]
+        },
+        {
+          "name": "user.lastname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.user.lastname"
+            }
+          ]
+        },
+        {
+          "name": "user.email",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.user.email"
+            }
+          ]
+        },
+        {
+          "name": "user.phone",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.user.phone"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

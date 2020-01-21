@@ -1,7 +1,7 @@
 {
   "parsers": ["xml"],
   "formatters": ["json"],
-  "options": [],
+  "options": {},
   "fields": [
     {
       "from": "root.id",
@@ -9,11 +9,11 @@
     },
     {
       "from": "root.firstname",
-      "to": "firstname"
+      "to": "person.firstname"
     },
     {
       "from": "root.lastname",
-      "to": "lastname"
+      "to": "person.lastname"
     },
     {
       "from": "root.phone",

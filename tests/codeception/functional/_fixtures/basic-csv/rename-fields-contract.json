@@ -1,30 +1,70 @@
 {
-  "parsers": ["csv"],
-  "formatters": ["csv"],
-  "options": {
-    "headers": ["id", "firstname", "lastname", "phone", "email"]
-  },
-  "type": "collection",
-  "fields": [
+  "sources": [
     {
-      "from": 0,
-      "to": 0
-    },
+      "name": "source",
+      "type": "file",
+      "parser": "csv",
+      "structure": "collection",
+      "options": {},
+      "fields": []
+    }
+  ],
+  "destinations": [
     {
-      "from": 1,
-      "to": 1
-    },
-    {
-      "from": 2,
-      "to": 2
-    },
-    {
-      "from": 3,
-      "to": 4
-    },
-    {
-      "from": 4,
-      "to": 3
+      "name": "dest",
+      "type": "string",
+      "formatter": "csv",
+      "structure": "collection",
+      "options": {
+        "headers": ["id", "firstname", "lastname", "phone", "email"]
+      },
+      "fields": [
+        {
+          "name": "0",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.0"
+            }
+          ]
+        },
+        {
+          "name": "1",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.1"
+            }
+          ]
+        },
+        {
+          "name": "2",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.2"
+            }
+          ]
+        },
+        {
+          "name": "3",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.4"
+            }
+          ]
+        },
+        {
+          "name": "4",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.3"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,113 @@
+{
+  "sources": [
+    {
+      "name": "source1",
+      "type": "file",
+      "parser": "json",
+      "structure": "object",
+      "options": {},
+      "fields": [
+        {
+          "name": "firstname",
+          "apply": [
+            {
+              "type": "validator",
+              "name": "not_empty",
+              "args": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "source2",
+      "type": "file",
+      "parser": "xml",
+      "structure": "object",
+      "options": {},
+      "fields": [
+        {
+          "name": "root.lastname",
+          "apply": [
+            {
+              "type": "validator",
+              "name": "not_empty",
+              "args": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "destinations": [
+    {
+      "name": "dest",
+      "type": "string",
+      "formatter": "json",
+      "structure": "object",
+      "fields": [
+        {
+          "name": "id",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source1.id"
+            }
+          ]
+        },
+        {
+          "name": "firstname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source1.firstname"
+            },
+            {
+              "type": "validator",
+              "name": "str_length",
+              "args": [2, 30]
+            }
+          ]
+        },
+        {
+          "name": "lastname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source2.root.lastname"
+            },
+            {
+              "type": "validator",
+              "name": "str_length",
+              "args": [2, 30]
+            }
+          ]
+        },
+        {
+          "name": "contact.full_name",
+          "apply": [
+            {
+              "type": "processor",
+              "name": "concat",
+              "args": ["$ref:source1.firstname", " ", "$ref:source2.root.lastname"]
+            },
+            {
+              "type": "validator",
+              "name": "str_length",
+              "args": [5, 60]
+            }
+          ]
+        },
+        {
+          "name": "flag",
+          "apply": [
+            {
+              "type": "value",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

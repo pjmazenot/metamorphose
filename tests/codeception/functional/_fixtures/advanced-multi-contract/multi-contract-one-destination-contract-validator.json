@@ -1,0 +1,32 @@
+{
+  "strict": false,
+  "destinations": [
+    {
+      "type": "string",
+      "formats": ["application/json"],
+      "structure": "object",
+      "fields": [
+        {
+          "mandatory": true,
+          "name": "id"
+        },
+        {
+          "mandatory": true,
+          "name": "firstname"
+        },
+        {
+          "mandatory": true,
+          "name": "lastname"
+        },
+        {
+          "mandatory": true,
+          "name": "contact.full_name"
+        },
+        {
+          "mandatory": true,
+          "name": "flag"
+        }
+      ]
+    }
+  ]
+}

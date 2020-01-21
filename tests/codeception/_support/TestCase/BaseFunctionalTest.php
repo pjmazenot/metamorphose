@@ -24,11 +24,15 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.csv';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
-        $metamorphose->morph();
-        $output = $metamorphose->export();
+        $metamorphose->extract([
+            'source' => $inputDataPath
+        ]);
+        $metamorphose->transform();
+        $output = $metamorphose->load();
 
-        $this->checkCsvOutput($I, $expectedOutputPath, $output);
+        $I->debug($output);
+
+        $this->checkCsvOutput($I, $expectedOutputPath, $output['dest']);
 
     }
 
@@ -40,11 +44,15 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.json';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
-        $metamorphose->morph();
-        $output = $metamorphose->export();
+        $metamorphose->extract([
+            'source' => $inputDataPath
+        ]);
+        $metamorphose->transform();
+        $output = $metamorphose->load();
 
-        $this->checkJsonOutput($I, $expectedOutputPath, $output);
+        $I->debug($output);
+
+        $this->checkJsonOutput($I, $expectedOutputPath, $output['dest']);
 
     }
 
@@ -56,11 +64,15 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.xml';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
-        $metamorphose->morph();
-        $output = $metamorphose->export();
+        $metamorphose->extract([
+            'source' => $inputDataPath
+        ]);
+        $metamorphose->transform();
+        $output = $metamorphose->load();
 
-        $this->checkXmlOutput($I, $expectedOutputPath, $output);
+        $I->debug($output);
+
+        $this->checkXmlOutput($I, $expectedOutputPath, $output['dest']);
 
     }
 
@@ -72,11 +84,15 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.yaml';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
-        $metamorphose->morph();
-        $output = $metamorphose->export();
+        $metamorphose->extract([
+            'source' => $inputDataPath
+        ]);
+        $metamorphose->transform();
+        $output = $metamorphose->load();
 
-        $this->checkYamlOutput($I, $expectedOutputPath, $output);
+        $I->debug($output);
+
+        $this->checkYamlOutput($I, $expectedOutputPath, $output['dest']);
 
     }
 
@@ -88,22 +104,26 @@ class BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . $testName . '-expected-output.' . $to;
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->source(MorphEngine::SOURCE_TYPE_FILE, $inputDataPath);
-        $metamorphose->morph();
-        $output = $metamorphose->export();
+        $metamorphose->extract([
+            'source' => $inputDataPath
+        ]);
+        $metamorphose->transform();
+        $output = $metamorphose->load();
+
+        $I->debug($output);
 
         switch ($to) {
             case 'csv':
-                $this->checkCsvOutput($I, $expectedOutputPath, $output);
+                $this->checkCsvOutput($I, $expectedOutputPath, $output['dest']);
                 break;
             case 'json':
-                $this->checkJsonOutput($I, $expectedOutputPath, $output);
+                $this->checkJsonOutput($I, $expectedOutputPath, $output['dest']);
                 break;
             case 'xml':
-                $this->checkXmlOutput($I, $expectedOutputPath, $output);
+                $this->checkXmlOutput($I, $expectedOutputPath, $output['dest']);
                 break;
             case 'yaml':
-                $this->checkYamlOutput($I, $expectedOutputPath, $output);
+                $this->checkYamlOutput($I, $expectedOutputPath, $output['dest']);
                 break;
         }
 

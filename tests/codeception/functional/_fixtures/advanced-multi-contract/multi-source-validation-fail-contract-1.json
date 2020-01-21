@@ -1,7 +1,7 @@
 {
   "parsers": ["json"],
   "formatters": ["json"],
-  "options": [],
+  "options": {},
   "fields": [
     {
       "from": "id",

@@ -1,0 +1,9 @@
+{
+  "id": "1",
+  "firstname": "John",
+  "lastname": "Smith",
+  "contact": {
+    "full_name": "John Smith"
+  },
+  "flag": "1"
+}

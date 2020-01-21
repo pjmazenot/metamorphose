@@ -1,27 +1,67 @@
 {
-  "parsers": ["json"],
-  "formatters": ["custom-formatter"],
-  "options": [],
-  "fields": [
+  "sources": [
     {
-      "from": "id",
-      "to": "id"
-    },
+      "name": "source",
+      "type": "file",
+      "parser": "json",
+      "structure": "object",
+      "options": {},
+      "fields": []
+    }
+  ],
+  "destinations": [
     {
-      "from": "firstname",
-      "to": "firstname"
-    },
-    {
-      "from": "lastname",
-      "to": "lastname"
-    },
-    {
-      "from": "email",
-      "to": "email"
-    },
-    {
-      "from": "phone",
-      "to": "phone"
+      "name": "dest",
+      "type": "string",
+      "formatter": "custom-formatter",
+      "structure": "object",
+      "fields": [
+        {
+          "name": "id",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.id"
+            }
+          ]
+        },
+        {
+          "name": "firstname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.firstname"
+            }
+          ]
+        },
+        {
+          "name": "lastname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.lastname"
+            }
+          ]
+        },
+        {
+          "name": "email",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.email"
+            }
+          ]
+        },
+        {
+          "name": "phone",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.phone"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

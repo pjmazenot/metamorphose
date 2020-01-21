@@ -1,39 +1,94 @@
 {
-  "parsers": ["json"],
-  "formatters": ["json"],
-  "options": [],
-  "fields": [
+  "sources": [
     {
-      "from": "id",
-      "to": "id"
-    },
+      "name": "source",
+      "type": "file",
+      "parser": "json",
+      "structure": "object",
+      "options": {},
+      "fields": []
+    }
+  ],
+  "destinations": [
     {
-      "from": "firstname",
-      "to": "firstname"
-    },
-    {
-      "from": "lastname",
-      "to": "lastname"
-    },
-    {
-      "from": "extra_data.email",
-      "to": "user_data.email"
-    },
-    {
-      "from": "extra_data.phone",
-      "to": "user_data.phone"
-    },
-    {
-      "from": "metas.description",
-      "to": "user_data.description"
-    },
-    {
-      "from": "metas.description.title",
-      "to": "description_title_copy"
-    },
-    {
-      "from": "metas.permissions",
-      "to": "meta.level.four"
+      "name": "dest",
+      "type": "string",
+      "formatter": "json",
+      "structure": "object",
+      "fields": [
+        {
+          "name": "id",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.id"
+            }
+          ]
+        },
+        {
+          "name": "firstname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.firstname"
+            }
+          ]
+        },
+        {
+          "name": "lastname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.lastname"
+            }
+          ]
+        },
+        {
+          "name": "user_data.email",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.extra_data.email"
+            }
+          ]
+        },
+        {
+          "name": "user_data.phone",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.extra_data.phone"
+            }
+          ]
+        },
+        {
+          "name": "user_data.description",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.metas.description"
+            }
+          ]
+        },
+        {
+          "name": "description_title_copy",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.metas.description.title"
+            }
+          ]
+        },
+        {
+          "name": "meta.level.four",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.metas.permissions"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -10,14 +10,16 @@
 
 namespace Tests\Codeception\Functional\Advanced\Extensions\Custom;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Output\Formatter;
 
 class CustomFormatter extends Formatter {
 
     const NAME = 'custom-formatter';
 
-    public function format(array $data, array $options = []): string {
+    public function format(DataSet $data, array $options = []): string {
 
+        $data = $data->getData()->toArray();
         $finalData = [];
         foreach($data as $property => $value) {
 

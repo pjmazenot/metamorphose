@@ -1,27 +1,67 @@
 {
-  "parsers": ["xml"],
-  "formatters": ["xml"],
-  "options": [],
-  "fields": [
+  "sources": [
     {
-      "from": "root.id",
-      "to": "root.id"
-    },
+      "name": "source",
+      "type": "file",
+      "parser": "xml",
+      "structure": "object",
+      "options": {},
+      "fields": []
+    }
+  ],
+  "destinations": [
     {
-      "from": "root.firstname",
-      "to": "root.firstname"
-    },
-    {
-      "from": "root.lastname",
-      "to": "root.lastname"
-    },
-    {
-      "from": "root.primary_email",
-      "to": "root.email"
-    },
-    {
-      "from": "root.primary_phone",
-      "to": "root.phone"
+      "name": "dest",
+      "type": "string",
+      "formatter": "xml",
+      "structure": "object",
+      "fields": [
+        {
+          "name": "root.id",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.id"
+            }
+          ]
+        },
+        {
+          "name": "root.firstname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.firstname"
+            }
+          ]
+        },
+        {
+          "name": "root.lastname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.lastname"
+            }
+          ]
+        },
+        {
+          "name": "root.email",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.primary_email"
+            }
+          ]
+        },
+        {
+          "name": "root.phone",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.primary_phone"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

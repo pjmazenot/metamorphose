@@ -10,13 +10,14 @@
 
 namespace Tests\Codeception\Functional\Advanced\Extensions\Custom;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Input\Parser;
 
 class CustomParser extends Parser {
 
     const NAME = 'custom-parser';
 
-    public function parseString(string $string): void {
+    public function parse($string): DataSet {
 
         $dataFinalArray = [];
         $dataArray = explode('|', $string);
@@ -29,7 +30,7 @@ class CustomParser extends Parser {
 
         }
 
-        $this->parseArray($dataFinalArray);
+        return parent::parse($dataFinalArray);
 
     }
 
