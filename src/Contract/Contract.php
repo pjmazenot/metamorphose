@@ -10,6 +10,8 @@
 
 namespace Metamorphose\Contract;
 
+use Metamorphose\Contract\Definitions\ContractDestinationDefinition;
+use Metamorphose\Contract\Definitions\ContractSourceDefinition;
 use Metamorphose\Exceptions\MetamorphoseContractException;
 
 /**
@@ -19,23 +21,11 @@ use Metamorphose\Exceptions\MetamorphoseContractException;
  */
 class Contract implements ContractInterface {
 
-    const TYPE_COLLECTION = 'collection';
-    const TYPE_OBJECT = 'object';
+    /** @var array $sources */
+    protected $sources = [];
 
-    /** @var array $parsers */
-    protected $parsers = [];
-
-    /** @var array $formatters */
-    protected $formatters = [];
-
-    /** @var array $options */
-    protected $options = [];
-
-    /** @var string $type */
-    protected $type;
-
-    /** @var ContractField[] $fields */
-    protected $fields = [];
+    /** @var array $destinations */
+    protected $destinations = [];
 
     /**
      * Contract constructor.
@@ -51,13 +41,79 @@ class Contract implements ContractInterface {
     }
 
     /**
+     * Get the contract sources
+     *
+     * @return ContractSourceDefinition[]
+     */
+    public function getSources(): array {
+
+        return $this->sources;
+
+    }
+
+    /**
+     * Get the contract destinations
+     *
+     * @return ContractDestinationDefinition[]
+     */
+    public function getDestinations(): array {
+
+        return $this->destinations;
+
+    }
+
+    /**
+     * Parse the contract definition file
+     *
+     * @param string $filePath
+     *
+     * @throws MetamorphoseContractException
+     */
+    protected function parseFile(string $filePath): void {
+
+        // Get the contract definition
+        $contractDefinition = json_decode(file_get_contents($filePath), true);
+
+        // Inspect the contract definition for errors
+        $contractInspector = new ContractInspector();
+        $contractInspector->inspect($contractDefinition);
+
+        // Set the source definitions
+        foreach($contractDefinition['sources'] as $sourceDefinitionData) {
+
+            $sourceDefinition = new ContractSourceDefinition($sourceDefinitionData);
+            $this->sources[$sourceDefinition->getName()] = $sourceDefinition;
+
+        }
+
+        // Set the destination definitions
+        foreach($contractDefinition['destinations'] as $destinationDefinitionData) {
+
+            $destinationDefinition = new ContractDestinationDefinition($destinationDefinitionData);
+            $this->destinations[$destinationDefinition->getName()] = $destinationDefinition;
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * Get the default parser name
      *
      * @return string
      */
     public function getDefaultParserName(): string {
 
-        return $this->parsers[0];
+        return $this->sources[0];
 
     }
 
@@ -71,7 +127,7 @@ class Contract implements ContractInterface {
      */
     public function isParserAuthorizedOrThrow(string $parserName): bool {
 
-        if(in_array($parserName, $this->parsers)) {
+        if(in_array($parserName, $this->sources)) {
 
             return true;
 
@@ -88,7 +144,7 @@ class Contract implements ContractInterface {
      */
     public function getDefaultFormatterName(): string {
 
-        return $this->formatters[0];
+        return $this->destinations[0];
 
     }
 
@@ -102,120 +158,13 @@ class Contract implements ContractInterface {
      */
     public function isFormatterAuthorizedOrThrow(string $formatterName): bool {
 
-        if(in_array($formatterName, $this->formatters)) {
+        if(in_array($formatterName, $this->destinations)) {
 
             return true;
 
         }
 
         throw new MetamorphoseContractException('The formatter "' . $formatterName . '" is not available for this contract');
-
-    }
-
-    /**
-     * Get the contract formatters
-     *
-     * @return array
-     */
-    public function getFormatters(): array {
-
-        return $this->formatters;
-
-    }
-
-    /**
-     * Get the contract options
-     *
-     * @return array
-     */
-    public function getOptions(): array {
-
-        return $this->options;
-
-    }
-
-    /**
-     * Get the contract type
-     *
-     * @return string
-     */
-    public function getType(): string {
-
-        return $this->type;
-
-    }
-
-    /**
-     * Get the contract fields
-     *
-     * @return ContractField[]
-     */
-    public function getFields(): array {
-
-        return $this->fields;
-
-    }
-
-    /**
-     * Parse the contract definition file
-     *
-     * @param string $filePath
-     *
-     * @throws MetamorphoseContractException
-     */
-    protected function parseFile(string $filePath): void {
-
-        $contractData = json_decode(file_get_contents($filePath), true);
-
-        if(isset($contractData['parsers'])) {
-
-            $this->parsers = $contractData['parsers'];
-
-        } else {
-
-            throw new MetamorphoseContractException('The contract needs to have at least one parser');
-
-        }
-
-        if(isset($contractData['formatters'])) {
-
-            $this->formatters = $contractData['formatters'];
-
-        } else {
-
-            throw new MetamorphoseContractException('The contract needs to have at least one formatter');
-
-        }
-
-        if(isset($contractData['options'])) {
-
-            $this->options = $contractData['options'];
-
-        }
-
-        if(empty($contractData['type'])) {
-
-            $this->type = self::TYPE_OBJECT;
-
-        } elseif(in_array($contractData['type'], [self::TYPE_COLLECTION, self::TYPE_OBJECT])) {
-
-            $this->type = $contractData['type'];
-
-        } else {
-
-            throw new MetamorphoseContractException('The contract needs to have a valid type defined');
-
-        }
-
-        if(isset($contractData['fields'])) {
-
-            foreach($contractData['fields'] as $fieldData) {
-
-                $this->fields[] = new ContractField($fieldData);
-
-            }
-
-        }
 
     }
 

@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Input\Parsers;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Input\Parser;
 
 /**
@@ -22,13 +23,17 @@ class CsvParser extends Parser {
     const NAME = 'csv';
 
     /**
-     * @inheritDoc
+     * Parse the data as CSV
+     *
+     * @param array|string $data
+     *
+     * @return DataSet
      */
-    public function parseString(string $string): void {
+    public function parse($data): DataSet {
 
         // @TODO: Improve with https://stackoverflow.com/questions/5249279/file-get-contents-php-fatal-error-allowed-memory-exhausted
 
-        $lines = explode(PHP_EOL, $string);
+        $lines = explode(PHP_EOL, $data);
         $header = str_getcsv(array_shift($lines));
         $columnCount = count($header);
         // TODO: Support line breaks (using the column count | guessing if there is no headers)
@@ -40,7 +45,7 @@ class CsvParser extends Parser {
 
         }
 
-        $this->parseArray($dataArray);
+        return parent::parse($dataArray);
 
     }
 

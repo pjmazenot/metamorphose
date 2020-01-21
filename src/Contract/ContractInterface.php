@@ -10,6 +10,9 @@
 
 namespace Metamorphose\Contract;
 
+use Metamorphose\Contract\Definitions\ContractDestinationDefinition;
+use Metamorphose\Contract\Definitions\ContractSourceDefinition;
+
 /**
  * Interface ContractInterface
  *
@@ -18,17 +21,17 @@ namespace Metamorphose\Contract;
 interface ContractInterface {
 
     /**
-     * Get the contract formatters
+     * Get the contract sources
      *
-     * @return array
+     * @return ContractSourceDefinition[]
      */
-    public function getFormatters(): array;
+    public function getSources(): array;
 
     /**
-     * Get the contract fields
+     * Get the contract destinations
      *
-     * @return ContractField[]
+     * @return ContractDestinationDefinition[]
      */
-    public function getFields(): array;
+    public function getDestinations(): array;
 
 }

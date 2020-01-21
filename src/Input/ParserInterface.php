@@ -11,6 +11,7 @@
 namespace Metamorphose\Input;
 
 use Metamorphose\Data\DataSet;
+use Metamorphose\Exceptions\MetamorphoseParserException;
 
 /**
  * Interface ParserInterface
@@ -27,31 +28,13 @@ interface ParserInterface {
     public function getName(): string;
 
     /**
-     * Get the parsed data
+     * Parse the data
+     *
+     * @param array|string $data
      *
      * @return DataSet
+     * @throws MetamorphoseParserException
      */
-    public function getParsedData(): DataSet;
-
-    /**
-     * Parse the data from an array
-     *
-     * @param array $array
-     */
-    public function parseArray(array $array): void;
-
-    /**
-     * Parse the data from a file
-     *
-     * @param string $filePath
-     */
-    public function parseFile(string $filePath): void;
-
-    /**
-     * Parse the data from a string
-     *
-     * @param string $string
-     */
-    public function parseString(string $string): void;
+    public function parse($data): DataSet;
 
 }

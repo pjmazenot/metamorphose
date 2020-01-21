@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Input\Parsers;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Input\Parser;
 
 /**
@@ -22,17 +23,21 @@ class XmlParser extends Parser {
     const NAME = 'xml';
 
     /**
-     * @inheritDoc
+     * Parse the data as XML
+     *
+     * @param array|string $data
+     *
+     * @return DataSet
      */
-    public function parseString(string $string): void {
+    public function parse($data): DataSet {
 
         // @link: https://stackoverflow.com/questions/6578832/how-to-convert-xml-into-array-in-php
 
-        $xml   = simplexml_load_string($string);
+        $xml   = simplexml_load_string($data);
         $array = $this->XML2Array($xml);
-        $array = array($xml->getName() => $array);
+        $dataArray = array($xml->getName() => $array);
 
-        $this->parseArray($array);
+        return parent::parse($dataArray);
 
 //        $xml   = simplexml_load_string($string);
 //        $array = json_decode(json_encode((array) $xml), true);

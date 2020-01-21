@@ -10,6 +10,9 @@
 
 namespace Metamorphose\Output;
 
+use Metamorphose\Data\DataSet;
+use Metamorphose\Exceptions\MetamorphoseFormatterException;
+
 /**
  * Interface FormatterInterface
  *
@@ -34,11 +37,12 @@ interface FormatterInterface {
     /**
      * Format the data
      *
-     * @param array $data
+     * @param DataSet $data
      * @param array $options
      *
      * @return string
+     * @throws MetamorphoseFormatterException
      */
-    public function format(array $data, array $options = []): string;
+    public function format(DataSet $data, array $options = []): string;
 
 }

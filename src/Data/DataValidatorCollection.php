@@ -13,7 +13,9 @@ namespace Metamorphose\Data;
 use Metamorphose\Data\Validators\Advanced\DateValidator;
 use Metamorphose\Data\Validators\Advanced\EmptyValidator;
 use Metamorphose\Data\Validators\Advanced\EnumValidator;
+use Metamorphose\Data\Validators\Advanced\NotEmptyValidator;
 use Metamorphose\Data\Validators\Advanced\RegexValidator;
+use Metamorphose\Data\Validators\Advanced\StrLengthValidator;
 use Metamorphose\Data\Validators\Operators\BetweenValidator;
 use Metamorphose\Data\Validators\Operators\EqualValidator;
 use Metamorphose\Data\Validators\Operators\GreaterThanOrEqualValidator;
@@ -49,7 +51,9 @@ class DataValidatorCollection {
         $this->registerDataValidator(new EmptyValidator());
         $this->registerDataValidator(new EnumValidator());
         $this->registerDataValidator(new DateValidator());
+        $this->registerDataValidator(new NotEmptyValidator());
         $this->registerDataValidator(new RegexValidator());
+        $this->registerDataValidator(new StrLengthValidator());
 
         // Operators
         $this->registerDataValidator(new BetweenValidator());
@@ -93,7 +97,7 @@ class DataValidatorCollection {
 
         if(!isset($this->dataValidators[$name])) {
 
-            throw new MetamorphoseUndefinedServiceException('Data processor "' . $name . '" is not defined');
+            throw new MetamorphoseUndefinedServiceException('Data validator "' . $name . '" is not defined');
 
         }
 

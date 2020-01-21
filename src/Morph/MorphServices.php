@@ -17,9 +17,15 @@ use Metamorphose\Data\DataProcessorInterface;
 use Metamorphose\Data\DataValidatorCollection;
 use Metamorphose\Data\DataValidatorInterface;
 use Metamorphose\Exceptions\MetamorphoseContractException;
+use Metamorphose\Exceptions\MetamorphoseDataDestinationException;
+use Metamorphose\Exceptions\MetamorphoseDataSourceException;
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
+use Metamorphose\Input\DataSourceCollection;
+use Metamorphose\Input\DataSourceInterface;
 use Metamorphose\Input\ParserCollection;
 use Metamorphose\Input\ParserInterface;
+use Metamorphose\Output\DataDestinationCollection;
+use Metamorphose\Output\DataDestinationInterface;
 use Metamorphose\Output\FormatterCollection;
 use Metamorphose\Output\FormatterInterface;
 
@@ -33,7 +39,7 @@ class MorphServices {
     /** @var Contract $contract */
     protected $contract;
 
-    /** @var ContractValidator $contractValidator */
+    /** @var ContractValidator|null $contractValidator */
     protected $contractValidator;
 
     /** @var ParserCollection $parserCollection */
@@ -48,11 +54,11 @@ class MorphServices {
     /** @var FormatterCollection $outputFormatter */
     protected $formatterCollection;
 
-    /** @var ParserInterface $parser */
-    protected $parser;
+    /** @var DataSourceCollection $dataSourceCollection */
+    protected $dataSourceCollection;
 
-    /** @var FormatterInterface $parser */
-    protected $formatter;
+    /** @var DataDestinationCollection $dataDestinationCollection */
+    protected $dataDestinationCollection;
 
     /**
      * MorphServices constructor.
@@ -61,7 +67,8 @@ class MorphServices {
      * @param string|null $outputContractFilePath
      *
      * @throws MetamorphoseContractException
-     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseDataDestinationException
+     * @throws MetamorphoseDataSourceException
      */
     public function __construct(string $inputContractFilePath, string $outputContractFilePath = null) {
 
@@ -70,15 +77,19 @@ class MorphServices {
         $this->dataValidatorCollection = new DataValidatorCollection();
         $this->formatterCollection = new FormatterCollection();
 
+        // Init the contract
         $this->contract = new Contract($inputContractFilePath);
 
+        // Init the contract validator and validate the contract right away
         if(isset($outputContractFilePath)) {
 
-            // Init the contract validator and validate the contract right away
             $this->contractValidator = new ContractValidator($outputContractFilePath);
-            $this->contractValidator->validate($this->contract, $this->formatterCollection);
 
         }
+
+        // Init data sources and destinations collections
+        $this->dataSourceCollection = new DataSourceCollection();
+        $this->dataDestinationCollection = new DataDestinationCollection();
 
     }
 
@@ -96,11 +107,29 @@ class MorphServices {
     /**
      * Get the contract validator
      *
-     * @return ContractValidator
+     * @return ContractValidator|null
      */
-    public function getContractValidator(): ContractValidator {
+    public function getContractValidator(): ?ContractValidator {
 
         return $this->contractValidator;
+
+    }
+
+    /**
+     * Validate the contract
+     *
+     * @throws MetamorphoseContractException
+     * @throws MetamorphoseUndefinedServiceException
+     */
+    public function validateContract(): void {
+
+        if(!isset($this->contractValidator)) {
+
+            throw new MetamorphoseUndefinedServiceException('The contract validator service is not defined');
+
+        }
+
+        $this->contractValidator->validate($this->contract, $this->formatterCollection);
 
     }
 
@@ -149,44 +178,24 @@ class MorphServices {
     }
 
     /**
-     * Get the selected parser
+     * Get the data source collection
      *
-     * @return ParserInterface
-     * @throws MetamorphoseContractException
-     * @throws MetamorphoseUndefinedServiceException
+     * @return DataSourceCollection
      */
-    public function getParser(): ParserInterface {
+    public function getDataSourceCollection(): DataSourceCollection {
 
-        if(!isset($this->parser)) {
-
-            // Load the default parser if none have been specified yet
-            $defaultParserName = $this->contract->getDefaultParserName();
-            $this->useParser($defaultParserName);
-
-        }
-
-        return $this->parser;
+        return $this->dataSourceCollection;
 
     }
 
     /**
-     * Get the selected formatter
+     * Get the data destination collection
      *
-     * @return FormatterInterface
-     * @throws MetamorphoseContractException
-     * @throws MetamorphoseUndefinedServiceException
+     * @return DataDestinationCollection
      */
-    public function getFormatter(): FormatterInterface {
+    public function getDataDestinationCollection(): DataDestinationCollection {
 
-        if(!isset($this->formatter)) {
-
-            // Load the default formatter if none have been specified yet
-            $defaultFormatterName = $this->contract->getDefaultFormatterName();
-            $this->useFormatter($defaultFormatterName);
-
-        }
-
-        return $this->formatter;
+        return $this->dataDestinationCollection;
 
     }
 
@@ -235,34 +244,26 @@ class MorphServices {
     }
 
     /**
-     * Specify the parser to use
+     * Register a data source
      *
      * @param string $name
-     *
-     * @throws MetamorphoseContractException
-     * @throws MetamorphoseUndefinedServiceException
+     * @param DataSourceInterface $dataSource
      */
-    public function useParser(string $name) {
+    public function registerDataSource(string $name, DataSourceInterface $dataSource): void {
 
-        $this->contract->isParserAuthorizedOrThrow($name);
-
-        $this->parser = $this->parserCollection->getParser($name);
+        $this->dataSourceCollection->registerDataSource($name, $dataSource);
 
     }
 
     /**
-     * Specify the formatter tu use
+     * Register a data destination
      *
      * @param string $name
-     *
-     * @throws MetamorphoseContractException
-     * @throws MetamorphoseUndefinedServiceException
+     * @param DataDestinationInterface $dataDestination
      */
-    public function useFormatter(string $name) {
+    public function registerDataDestination(string $name, DataDestinationInterface $dataDestination): void {
 
-        $this->contract->isFormatterAuthorizedOrThrow($name);
-
-        $this->formatter = $this->formatterCollection->getFormatter($name);
+        $this->dataDestinationCollection->registerDataDestination($name, $dataDestination);
 
     }
 

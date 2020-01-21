@@ -22,9 +22,6 @@ abstract class Parser implements ParserInterface {
     /** Constant to override with the real name */
     const NAME = '';
 
-    /** @var DataSet $parsedData */
-    protected $parsedData;
-
     /**
      * @inheritDoc
      */
@@ -35,31 +32,15 @@ abstract class Parser implements ParserInterface {
     }
 
     /**
-     * @inheritDoc
+     * Parse the data
+     *
+     * @param array|string $data
+     *
+     * @return DataSet
      */
-    public function getParsedData(): DataSet {
+    public function parse($data): DataSet {
 
-        return $this->parsedData;
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function parseArray(array $array): void {
-
-        $this->parsedData = new DataSet($array);
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function parseFile(string $filePath): void {
-
-        $fileContent = file_get_contents($filePath);
-
-        $this->parseString($fileContent);
+        return new DataSet($data);
 
     }
 

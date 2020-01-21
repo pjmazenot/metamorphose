@@ -24,11 +24,8 @@ class ContractValidator {
     /** @var bool $strict */
     protected $strict = false;
 
-    /** @var array $formats */
-    protected $formats = [];
-
-    /** @var ContractValidatorField[] $fields */
-    protected $fields = [];
+    /** @var ContractValidatorDestination[] $destinations */
+    protected $destinations = [];
 
     /**
      * ContractValidator constructor.
@@ -82,24 +79,33 @@ class ContractValidator {
      */
     protected function checkExpectedFormat(ContractInterface $contract, FormatterCollection $loadedFormatters): void {
 
-        // Validate that the expected output format is available
-        $validOutputFormat = false;
-        foreach ($contract->getFormatters() as $formatterName) {
+        $contractDestinations = $contract->getDestinations();
+        $invalidDestinations = [];
+        foreach ($this->destinations as $key => $validatorDestination) {
 
-            $formatter = $loadedFormatters->getFormatter($formatterName);
+            if(empty($contractDestinations[$key])) {
 
-            if (in_array($formatter->getFormat(), $this->formats)) {
-
-                $validOutputFormat = true;
-                break;
+                throw new MetamorphoseContractException('Contract destinations don\'t match the validator');
 
             }
 
+            $contractDestination = $contractDestinations[$key];
+
+            $formatter = $loadedFormatters->getFormatter($contractDestination->getFormatter());
+
+            if (in_array($formatter->getFormat(), $validatorDestination->getFormats())) {
+
+                continue;
+
+            }
+
+            $invalidDestinations[] = $key;
+
         }
 
-        if (!$validOutputFormat) {
+        if (!empty($invalidDestinations)) {
 
-            throw new MetamorphoseContractException('The contract is not valid. It should at least support one of the expected output format: ' . implode(', ', $this->formats));
+            throw new MetamorphoseContractException('The contract is not valid. The following destinations (index) don\'t provide the right data type: ' . implode(', ', $invalidDestinations));
 
         }
 
@@ -114,34 +120,45 @@ class ContractValidator {
      */
     protected function checkForMissingFields(ContractInterface $contract): void {
 
-        // Validate the final structure
-        $contractFields = $contract->getFields();
-        $validatorFields = $this->fields;
+        $contractDestinations = $contract->getDestinations();
         $missingFields = [];
+        foreach ($this->destinations as $key => $validatorDestination) {
 
-        foreach($validatorFields as $validatorField) {
+            if(empty($contractDestinations[$key])) {
 
-            $fieldIsPresent = false;
+                throw new MetamorphoseContractException('Contract destinations don\'t match the validator');
 
-            if(!$validatorField->isMandatory()) {
-                continue;
             }
 
-            foreach($contractFields as $contractField) {
+            $contractDestination = $contractDestinations[$key];
+            $contractFields = $contractDestination->getFields();
+            $validatorFields = $validatorDestination->getFields();
 
-                if($contractField->getTo() === $validatorField->getTo()) {
+            foreach($validatorFields as $validatorField) {
 
-                    $fieldIsPresent = true;
+                $fieldIsPresent = false;
 
-                    break;
+                if(!$validatorField->isMandatory()) {
+                    continue;
+                }
+
+                foreach($contractFields as $contractField) {
+
+                    if($contractField->getName() === $validatorField->getName()) {
+
+                        $fieldIsPresent = true;
+
+                        break;
+
+                    }
 
                 }
 
-            }
+                if(!$fieldIsPresent) {
 
-            if(!$fieldIsPresent) {
+                    $missingFields[] = $key . '.' . $validatorField->getName();
 
-                $missingFields[] = $validatorField->getTo();
+                }
 
             }
 
@@ -164,28 +181,43 @@ class ContractValidator {
      */
     protected function checkForAddedFields(ContractInterface $contract): void {
 
-        // Validate the final structure
-        $contractFields = $contract->getFields();
-        $validatorFields = $this->fields;
-        $missingFields = [];
+        $contractDestinations = $contract->getDestinations();
+        $addedFields = [];
+        foreach ($this->destinations as $key => $validatorDestination) {
 
-        foreach($contractFields as $contractField) {
+            if(empty($contractDestinations[$key])) {
 
-            foreach($validatorFields as $validatorField) {
+                throw new MetamorphoseContractException('Contract destinations don\'t match the validator');
 
-                if($contractField->getTo() === $validatorField->getTo()) {
-                    continue 2;
+            }
+
+            $contractDestination = $contractDestinations[$key];
+            $contractFields = $contractDestination->getFields();
+            $validatorFields = $validatorDestination->getFields();
+
+            foreach($contractFields as $contractField) {
+
+                foreach($validatorFields as $validatorField) {
+
+                    if($contractField->getName() === $validatorField->getName()) {
+
+                        continue 2;
+
+                    } else {
+
+                        $addedFields[] = $contractDestination->getName() . '.' . $contractField->getName();
+
+                    }
+
                 }
 
             }
 
-            $missingFields[] = $contractField->getTo();
-
         }
 
-        if(!empty($missingFields)) {
+        if(!empty($addedFields)) {
 
-            throw new MetamorphoseContractException('The contract is not valid. Missing fields: ' . implode(', ', $missingFields));
+            throw new MetamorphoseContractException('The contract is not valid. Added fields: ' . implode(', ', $addedFields));
 
         }
 
@@ -200,33 +232,47 @@ class ContractValidator {
      */
     protected function checkFieldsOrder(ContractInterface $contract): void {
 
-        // Validate the final structure
-        $contractFields = $contract->getFields();
-        $validatorFields = $this->fields;
+        $contractDestinations = $contract->getDestinations();
+        $missingFields = [];
+        foreach ($this->destinations as $key => $validatorDestination) {
 
-        foreach($validatorFields as $validatorFieldKey => $validatorField) {
+            if(empty($contractDestinations[$key])) {
 
-            // Will work properly only if the optional fields are at the end
-            if(!$validatorField->isMandatory()) {
-                continue;
+                throw new MetamorphoseContractException('Contract destinations don\'t match the validator');
+
             }
 
-            foreach($contractFields as $contractFieldKey => $contractField) {
+            $contractDestination = $contractDestinations[$key];
+            $contractFields = $contractDestination->getFields();
+            $validatorFields = $validatorDestination->getFields();
 
-                if(
-                    $validatorFieldKey === $contractFieldKey
-                    && $contractField->getTo() !== $validatorField->getTo()
-                ) {
+            foreach($validatorFields as $validatorFieldKey => $validatorField) {
 
-                    if(!empty($missingFields)) {
+                // Will work properly only if the optional fields are at the end
+                if(!$validatorField->isMandatory()) {
+                    continue;
+                }
 
-                        throw new MetamorphoseContractException('The contract is not valid. Wrong fields order, starting with: ' . $validatorField->getTo());
+                foreach($contractFields as $contractFieldKey => $contractField) {
+
+                    if(
+                        $validatorFieldKey === $contractFieldKey
+                        && $contractField->getTo() !== $validatorField->getName()
+                    ) {
+
+                        throw new MetamorphoseContractException('The contract is not valid. Wrong fields order, starting with: ' . $validatorField->getName());
 
                     }
 
                 }
 
             }
+
+        }
+
+        if(!empty($missingFields)) {
+
+            throw new MetamorphoseContractException('The contract is not valid. Missing fields: ' . implode(', ', $missingFields));
 
         }
 
@@ -249,21 +295,11 @@ class ContractValidator {
 
         }
 
-        if(isset($contractData['formats'])) {
+        if(isset($contractData['destinations'])) {
 
-            $this->formats = $contractData['formats'];
+            foreach($contractData['destinations'] as $destinationData) {
 
-        } else {
-
-            throw new MetamorphoseContractException('The contract needs to have at least one output formats');
-
-        }
-
-        if(isset($contractData['fields'])) {
-
-            foreach($contractData['fields'] as $fieldData) {
-
-                $this->fields[] = new ContractValidatorField($fieldData);
+                $this->destinations[] = new ContractValidatorDestination($destinationData);
 
             }
 

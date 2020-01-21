@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Output\Formatters;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Output\Formatter;
 
 /**
@@ -25,7 +26,9 @@ class CsvFormatter extends Formatter {
     /**
      * @inheritDoc
      */
-    public function format(array $data, array $options = []): string {
+    public function format(DataSet $data, array $options = []): string {
+
+        $data = $data->getData()->toArray();
 
         if(!empty($options['headers'])) {
             array_unshift($data, $options['headers']);

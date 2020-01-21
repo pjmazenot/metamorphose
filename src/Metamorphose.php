@@ -11,7 +11,10 @@
 namespace Metamorphose;
 
 use Metamorphose\Exceptions\MetamorphoseContractException;
+use Metamorphose\Exceptions\MetamorphoseDataDestinationException;
+use Metamorphose\Exceptions\MetamorphoseDataSourceException;
 use Metamorphose\Exceptions\MetamorphoseException;
+use Metamorphose\Exceptions\MetamorphoseFormatterException;
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Exceptions\MetamorphoseValidateException;
 use Metamorphose\Morph\MorphEngine;
@@ -35,6 +38,8 @@ class Metamorphose {
      * @param string|null $outputContractFilePath
      *
      * @throws MetamorphoseContractException
+     * @throws MetamorphoseDataDestinationException
+     * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseUndefinedServiceException
      */
     public function __construct(string $inputContractFilePath, ?string $outputContractFilePath = null) {
@@ -44,52 +49,58 @@ class Metamorphose {
     }
 
     /**
-     * Set the source data
-     *
-     * @param string $sourceType
-     * @param string $source
-     */
-    public function source(string $sourceType, string $source): void {
-
-        $this->engine->load($sourceType, $source);
-
-    }
-
-    /**
-     * Customize the services
+     * Get or customize the services
      *
      * @return MorphServices
      */
-    public function customize(): MorphServices {
+    public function services(): MorphServices {
 
         return $this->engine->getServices();
 
     }
 
     /**
-     * Main method of this package. This is when the data is transformed.
+     * Extract the data from the source
      *
-     * @throws MetamorphoseContractException
+     * @param array $sources
+     *
+     * @throws Exceptions\MetamorphoseDataSourceException
      * @throws MetamorphoseException
      * @throws MetamorphoseUndefinedServiceException
-     * @throws MetamorphoseValidateException
      */
-    public function morph(): void {
+    public function extract(array $sources = []): void {
 
-        $this->engine->convert();
+        $this->engine->extract($sources);
 
     }
 
     /**
-     * Get the final data
+     * Transform the data
      *
-     * @return string
-     * @throws MetamorphoseContractException
+     * @throws MetamorphoseException
+     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseValidateException
+     */
+    public function transform(): void {
+
+        $this->engine->transform();
+
+    }
+
+    /**
+     * Load the final data
+     *
+     * @param array $destinations
+     *
+     * @return array
+     * @throws MetamorphoseDataDestinationException
+     * @throws MetamorphoseException
+     * @throws MetamorphoseFormatterException
      * @throws MetamorphoseUndefinedServiceException
      */
-    public function export() {
+    public function load(array $destinations = []): array {
 
-        return $this->engine->getOutput();
+        return $this->engine->load($destinations);
 
     }
 

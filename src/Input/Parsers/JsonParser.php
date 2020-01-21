@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Input\Parsers;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Input\Parser;
 
 /**
@@ -22,13 +23,17 @@ class JsonParser extends Parser {
     const NAME = 'json';
 
     /**
-     * @inheritDoc
+     * Parse the data as JSON
+     *
+     * @param array|string $data
+     *
+     * @return DataSet
      */
-    public function parseString(string $string): void {
+    public function parse($data): DataSet {
 
-        $dataArray = json_decode($string, true);
+        $dataArray = json_decode($data, true);
 
-        $this->parseArray($dataArray);
+        return parent::parse($dataArray);
 
     }
 

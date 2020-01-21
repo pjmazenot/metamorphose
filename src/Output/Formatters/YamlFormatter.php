@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Output\Formatters;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Output\Formatter;
 
 /**
@@ -25,9 +26,9 @@ class YamlFormatter extends Formatter {
     /**
      * @inheritDoc
      */
-    public function format(array $data, array $options = []): string {
+    public function format(DataSet $data, array $options = []): string {
 
-        return yaml_emit($data);
+        return yaml_emit($data->getData()->toArray());
 
     }
 

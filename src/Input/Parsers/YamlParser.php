@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Input\Parsers;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Input\Parser;
 
 /**
@@ -22,13 +23,17 @@ class YamlParser extends Parser {
     const NAME = 'yaml';
 
     /**
-     * @inheritDoc
+     * Parse the data as YAML
+     *
+     * @param array|string $data
+     *
+     * @return DataSet
      */
-    public function parseString(string $string): void {
+    public function parse($data): DataSet {
 
-        $dataArray = yaml_parse($string);
+        $dataArray = yaml_parse($data);
 
-        $this->parseArray($dataArray);
+        return parent::parse($dataArray);
 
     }
 

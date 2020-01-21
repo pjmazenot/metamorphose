@@ -8,23 +8,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Metamorphose\Contract;
+namespace Metamorphose\Contract\Definitions;
 
 /**
- * Class ContractValidatorField
+ * Class ContractFieldDefinition
  *
- * @package Metamorphose\Contract
+ * @package Metamorphose\Contract\Definitions
  */
-class ContractValidatorField {
-
-    /** @var bool $mandatory */
-    protected $mandatory;
+class ContractFieldDefinition {
 
     /** @var string $name */
     protected $name;
 
+    /** @var array $apply */
+    protected $apply = [];
+
     /**
-     * ContractValidatorField constructor.
+     * ContractFieldDefinition constructor.
      *
      * @param array $fieldData
      */
@@ -35,18 +35,7 @@ class ContractValidatorField {
     }
 
     /**
-     * Get the mandatory flag
-     *
-     * @return bool
-     */
-    public function isMandatory(): bool {
-
-        return $this->mandatory;
-
-    }
-
-    /**
-     * Get the field destination name
+     * Get the field name
      *
      * @return string
      */
@@ -57,21 +46,32 @@ class ContractValidatorField {
     }
 
     /**
+     * Get the list of instructions to apply
+     *
+     * @return array
+     */
+    public function getApply(): array {
+
+        return $this->apply;
+
+    }
+
+    /**
      * Parse the field definition
      *
      * @param array $fieldData
      */
     protected function parseFieldData(array $fieldData): void {
 
-        if(isset($fieldData['mandatory'])) {
-
-            $this->mandatory = $fieldData['mandatory'];
-
-        }
-
         if(isset($fieldData['name'])) {
 
             $this->name = $fieldData['name'];
+
+        }
+
+        if(isset($fieldData['apply'])) {
+
+            $this->apply = $fieldData['apply'];
 
         }
 

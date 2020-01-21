@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Output\Formatters;
 
+use Metamorphose\Data\DataSet;
 use Metamorphose\Exceptions\MetamorphoseException;
 use Metamorphose\Output\Formatter;
 
@@ -26,9 +27,11 @@ class XmlFormatter extends Formatter {
     /**
      * @inheritDoc
      */
-    public function format(array $data, array $options = []): string {
+    public function format(DataSet $data, array $options = []): string {
 
         // @link: https://stackoverflow.com/questions/1397036/how-to-convert-array-to-simplexml
+
+        $data = $data->getData()->toArray();
 
         // creating object of SimpleXMLElement
         // @TODO: Get header from input/options

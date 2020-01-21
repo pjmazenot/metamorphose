@@ -14,6 +14,7 @@ use Metamorphose\Data\Processors\Arrays\ImplodeProcessor;
 use Metamorphose\Data\Processors\Arrays\UniqueProcessor;
 use Metamorphose\Data\Processors\Json\JsonDecodeProcessor;
 use Metamorphose\Data\Processors\Json\JsonEncodeProcessor;
+use Metamorphose\Data\Processors\Strings\ConcatProcessor;
 use Metamorphose\Data\Processors\Strings\ExplodeProcessor;
 use Metamorphose\Data\Processors\Strings\HashProcessor;
 use Metamorphose\Data\Processors\Strings\HtmlentitiesProcessor;
@@ -51,6 +52,7 @@ class DataProcessorCollection {
         $this->registerDataProcessor(new JsonEncodeProcessor());
 
         // Strings
+        $this->registerDataProcessor(new ConcatProcessor());
         $this->registerDataProcessor(new ExplodeProcessor());
         $this->registerDataProcessor(new HashProcessor());
         $this->registerDataProcessor(new HtmlentitiesProcessor());
