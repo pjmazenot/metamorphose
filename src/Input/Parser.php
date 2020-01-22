@@ -35,10 +35,11 @@ abstract class Parser implements ParserInterface {
      * Parse the data
      *
      * @param array|string $data
+     * @param array $options
      *
      * @return DataSet
      */
-    public function parse($data): DataSet {
+    public function parse($data, array $options = []): DataSet {
 
         return new DataSet($data);
 

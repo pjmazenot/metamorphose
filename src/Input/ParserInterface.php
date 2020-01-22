@@ -31,10 +31,11 @@ interface ParserInterface {
      * Parse the data
      *
      * @param array|string $data
+     * @param array $options
      *
      * @return DataSet
      * @throws MetamorphoseParserException
      */
-    public function parse($data): DataSet;
+    public function parse($data, array $options = []): DataSet;
 
 }

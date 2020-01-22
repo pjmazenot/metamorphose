@@ -26,10 +26,11 @@ class CsvParser extends Parser {
      * Parse the data as CSV
      *
      * @param array|string $data
+     * @param array $options
      *
      * @return DataSet
      */
-    public function parse($data): DataSet {
+    public function parse($data, array $options = []): DataSet {
 
         // @TODO: Improve with https://stackoverflow.com/questions/5249279/file-get-contents-php-fatal-error-allowed-memory-exhausted
 

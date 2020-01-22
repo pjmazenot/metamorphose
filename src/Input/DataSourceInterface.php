@@ -10,6 +10,7 @@
 
 namespace Metamorphose\Input;
 
+use Metamorphose\Contract\Definitions\ContractSourceDefinition;
 use Metamorphose\Data\DataSet;
 use Metamorphose\Exceptions\MetamorphoseDataSourceException;
 use Metamorphose\Exceptions\MetamorphoseParserException;
@@ -32,12 +33,13 @@ interface DataSourceInterface {
      * Extract the data from the data source
      *
      * @param array                $sourceData
+     * @param ContractSourceDefinition $sourceDefinition
      * @param ParserInterface|null $parser
      *
      * @throws MetamorphoseParserException
      * @throws MetamorphoseDataSourceException
      */
-    public function extract(array $sourceData, ?ParserInterface $parser): void;
+    public function extract(array $sourceData, ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser): void;
 
     /**
      * Get the type

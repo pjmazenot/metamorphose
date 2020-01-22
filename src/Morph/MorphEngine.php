@@ -135,7 +135,7 @@ class MorphEngine {
 
                 $this->services->getDataSourceCollection()->registerDataSourceFromModel($sourceDefinition->getType(), $sourceDefinition->getName());
                 $dataSource = $this->services->getDataSourceCollection()->getDataSource($sourceDefinition->getName());
-                $dataSource->extract($sourcesData[$sourceDefinition->getName()], $parser);
+                $dataSource->extract($sourcesData[$sourceDefinition->getName()], $sourceDefinition, $parser);
 
             }
 

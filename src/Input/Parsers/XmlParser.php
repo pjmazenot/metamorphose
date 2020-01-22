@@ -26,10 +26,11 @@ class XmlParser extends Parser {
      * Parse the data as XML
      *
      * @param array|string $data
+     * @param array $options
      *
      * @return DataSet
      */
-    public function parse($data): DataSet {
+    public function parse($data, array $options = []): DataSet {
 
         // @link: https://stackoverflow.com/questions/6578832/how-to-convert-xml-into-array-in-php
 

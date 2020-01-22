@@ -26,10 +26,11 @@ class YamlParser extends Parser {
      * Parse the data as YAML
      *
      * @param array|string $data
+     * @param array $options
      *
      * @return DataSet
      */
-    public function parse($data): DataSet {
+    public function parse($data, array $options = []): DataSet {
 
         $dataArray = yaml_parse($data);
 

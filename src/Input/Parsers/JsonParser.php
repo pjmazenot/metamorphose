@@ -26,10 +26,11 @@ class JsonParser extends Parser {
      * Parse the data as JSON
      *
      * @param array|string $data
+     * @param array $options
      *
      * @return DataSet
      */
-    public function parse($data): DataSet {
+    public function parse($data, array $options = []): DataSet {
 
         $dataArray = json_decode($data, true);
 
