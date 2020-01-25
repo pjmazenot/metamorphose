@@ -17,10 +17,10 @@ class CustomParser extends Parser {
 
     const NAME = 'custom-parser';
 
-    public function parse($string): DataSet {
+    public function parse($data, array $options = []): DataSet {
 
         $dataFinalArray = [];
-        $dataArray = explode('|', $string);
+        $dataArray = explode('|', $data);
 
         foreach($dataArray as $data) {
 
