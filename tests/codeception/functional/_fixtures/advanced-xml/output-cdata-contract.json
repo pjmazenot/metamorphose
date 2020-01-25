@@ -1,0 +1,77 @@
+{
+  "sources": [
+    {
+      "name": "source",
+      "type": "file",
+      "parser": "xml",
+      "structure": "object",
+      "options": {},
+      "fields": []
+    }
+  ],
+  "destinations": [
+    {
+      "name": "dest",
+      "type": "string",
+      "formatter": "xml",
+      "structure": "object",
+      "fields": [
+        {
+          "name": "root.id",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.id"
+            }
+          ]
+        },
+        {
+          "name": "root.firstname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.firstname"
+            }
+          ]
+        },
+        {
+          "name": "root.lastname",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.lastname"
+            }
+          ]
+        },
+        {
+          "name": "root.description",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.description"
+            },
+            {
+              "type": "processor",
+              "name": "str_wrapper",
+              "args": ["<![CDATA[<test>", "</test>]]>"]
+            }
+          ]
+        },
+        {
+          "name": "root.title",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.title"
+            },
+            {
+              "type": "processor",
+              "name": "str_wrapper",
+              "args": ["<![CDATA[<test>", "</test>]]>"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "sources": [
+    {
+      "name": "source",
+      "type": "file",
+      "parser": "xml",
+      "structure": "object",
+      "options": {},
+      "fields": []
+    }
+  ],
+  "destinations": [
+    {
+      "name": "dest",
+      "type": "string",
+      "formatter": "xml",
+      "structure": "object",
+      "options": {
+        "prolog": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+      },
+      "fields": [
+        {
+          "name": "root.id",
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.id"
+            }
+          ]
+        },
+        {
+          "name": "root.firstname",
+          "options": {
+            "attributes": {
+              "source": "crm"
+            }
+          },
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.firstname"
+            }
+          ]
+        },
+        {
+          "name": "root.lastname",
+          "options": {
+            "attributes": {
+              "source": "website"
+            }
+          },
+          "apply": [
+            {
+              "type": "value",
+              "value": "$ref:source.root.lastname"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

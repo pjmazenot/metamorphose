@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root><id>1</id><firstname>John</firstname><lastname>Smith</lastname><description><![CDATA[<test>cdata description</test>]]></description><title><![CDATA[<test>cdata title</test>]]></title></root>
