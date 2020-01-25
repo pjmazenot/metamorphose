@@ -11,6 +11,7 @@
 namespace Metamorphose\Output;
 
 use Metamorphose\Data\DataSet;
+use Metamorphose\Exceptions\MetamorphoseDataDestinationException;
 
 /**
  * Class DataDestination
@@ -63,6 +64,19 @@ abstract class DataDestination implements DataDestinationInterface {
     }
 
     // @TODO: Load buffer
+
+    /**
+     * Get a data destination exception
+     *
+     * @param string $message
+     *
+     * @return MetamorphoseDataDestinationException
+     */
+    public function getException(string $message): MetamorphoseDataDestinationException {
+
+        return new MetamorphoseDataDestinationException('Data destination error (' . $this->getName() . '): ' . $message);
+
+    }
 
     /**
      * @inheritDoc

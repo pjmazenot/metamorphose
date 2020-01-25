@@ -30,7 +30,9 @@ class ExtensionCest extends BaseFunctionalTest {
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->services()->registerParser(new CustomParser());
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();
@@ -49,7 +51,9 @@ class ExtensionCest extends BaseFunctionalTest {
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->services()->registerFormatter(new CustomFormatter());
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();
@@ -68,7 +72,9 @@ class ExtensionCest extends BaseFunctionalTest {
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->services()->registerDataProcessor(new CustomDataProcessor());
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();
@@ -88,7 +94,9 @@ class ExtensionCest extends BaseFunctionalTest {
             $metamorphose = new Metamorphose($contractPath);
             $metamorphose->services()->registerDataValidator(new CustomDataValidator());
             $metamorphose->extract([
-                'source' => $inputDataPath
+                'source' => [
+                    'file' => $inputDataPath
+                ],
             ]);
             $metamorphose->transform();
 

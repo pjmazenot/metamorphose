@@ -28,8 +28,12 @@ class MultiSourceCest extends BaseFunctionalTest {
 
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->extract([
-            'source1' => $inputData1Path,
-            'source2' => $inputData2Path,
+            'source1' => [
+                'file' => $inputData1Path
+            ],
+            'source2' => [
+                'file' => $inputData2Path
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();

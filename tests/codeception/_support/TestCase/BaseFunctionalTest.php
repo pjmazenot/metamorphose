@@ -25,7 +25,9 @@ class BaseFunctionalTest {
 
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();
@@ -45,7 +47,9 @@ class BaseFunctionalTest {
 
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();
@@ -65,7 +69,9 @@ class BaseFunctionalTest {
 
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();
@@ -85,7 +91,9 @@ class BaseFunctionalTest {
 
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();
@@ -105,7 +113,9 @@ class BaseFunctionalTest {
 
         $metamorphose = new Metamorphose($contractPath);
         $metamorphose->extract([
-            'source' => $inputDataPath
+            'source' => [
+                'file' => $inputDataPath
+            ],
         ]);
         $metamorphose->transform();
         $output = $metamorphose->load();

@@ -28,16 +28,16 @@ class FileDataSource extends DataSource {
     /**
      * Extract the content from a file
      *
-     * @param array|string         $sourceData File path to extract the content from
      * @param ContractSourceDefinition $sourceDefinition
      * @param ParserInterface|null $parser     Parser instance to parse the file content
      *
      * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseParserException
      */
-    public function extract($sourceData, ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): void {
+    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): void {
 
-        $filePath = $sourceData;
+        $options = $sourceDefinition->getOptions();
+        $filePath = isset($options['file']) ? $options['file'] : null;
 
         if(!isset($parser)) {
 

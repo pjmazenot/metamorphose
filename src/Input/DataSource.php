@@ -72,6 +72,13 @@ abstract class DataSource implements DataSourceInterface {
 
     // @TODO: Extract buffer
 
+    /**
+     * Get a data source exception
+     *
+     * @param string $message
+     *
+     * @return MetamorphoseDataSourceException
+     */
     public function getException(string $message): MetamorphoseDataSourceException {
 
         return new MetamorphoseDataSourceException('Data source error (' . $this->getName() . '): ' . $message);

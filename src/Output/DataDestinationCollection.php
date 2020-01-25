@@ -36,7 +36,7 @@ class DataDestinationCollection {
      */
     public function __construct() {
 
-        // Register default parsers
+        // Register default data destinations
         $this->registerDataDestinationModel(DatabaseDataDestination::class);
         $this->registerDataDestinationModel(FileDataDestination::class);
         $this->registerDataDestinationModel(StringDataDestination::class);

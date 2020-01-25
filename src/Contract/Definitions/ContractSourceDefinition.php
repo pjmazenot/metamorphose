@@ -107,6 +107,17 @@ class ContractSourceDefinition {
     }
 
     /**
+     * Set dynamic options (override any static value for a corresponding key)
+     *
+     * @param array $dynamicOptions
+     */
+    public function setDynamicOptions(array $dynamicOptions): void {
+
+        $this->options = array_merge($this->options, $dynamicOptions);
+
+    }
+
+    /**
      * Get the fields
      *
      * @return ContractFieldDefinition[]

@@ -36,7 +36,7 @@ class DataSourceCollection {
      */
     public function __construct() {
 
-        // Register default parsers
+        // Register default data sources
         $this->registerDataSourceModel(DatabaseDataSource::class);
         $this->registerDataSourceModel(FileDataSource::class);
         $this->registerDataSourceModel(StringDataSource::class);

@@ -28,16 +28,16 @@ class StringDataSource extends DataSource {
     /**
      * Extract the content from a string
      *
-     * @param array|string         $sourceData String to extract the content from
      * @param ContractSourceDefinition $sourceDefinition
      * @param ParserInterface|null $parser     Parser instance to parse the string
      *
      * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseParserException
      */
-    public function extract($sourceData, ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): void {
+    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): void {
 
-        $string = $sourceData;
+        $options = $sourceDefinition->getOptions();
+        $string = isset($options['string']) ? $options['string'] : null;
 
         if(!is_string($string)) {
 

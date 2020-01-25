@@ -59,17 +59,17 @@ class Metamorphose {
     }
 
     /**
-     * Extract the data from the source
+     * Extract the data from the source(s)
      *
-     * @param array $sources
+     * @param array $sourcesDynamicOptions
      *
      * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseException
      * @throws MetamorphoseUndefinedServiceException
      */
-    public function extract(array $sources = []): void {
+    public function extract(array $sourcesDynamicOptions = []): void {
 
-        $this->engine->extract($sources);
+        $this->engine->extract($sourcesDynamicOptions);
 
     }
 
@@ -87,9 +87,9 @@ class Metamorphose {
     }
 
     /**
-     * Load the final data
+     * Load the final data in the destination(s)
      *
-     * @param array $destinations
+     * @param array $destinationsDynamicOptions
      *
      * @return array
      * @throws MetamorphoseDataDestinationException
@@ -97,9 +97,9 @@ class Metamorphose {
      * @throws MetamorphoseFormatterException
      * @throws MetamorphoseUndefinedServiceException
      */
-    public function load(array $destinations = []): array {
+    public function load(array $destinationsDynamicOptions = []): array {
 
-        return $this->engine->load($destinations);
+        return $this->engine->load($destinationsDynamicOptions);
 
     }
 

@@ -95,14 +95,14 @@ class MorphEngine {
     /**
      * Extract the source data
      *
-     * @param array $sourcesData
+     * @param array $sourcesDynamicOptions
      *
      * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseException
      * @throws MetamorphoseParserException
      * @throws MetamorphoseUndefinedServiceException
      */
-    public function extract(array $sourcesData): void {
+    public function extract(array $sourcesDynamicOptions): void {
 
         // @TODO: $sourcesData --> $sourceDefinition['options'] ?
         // This would allow dynamic options vs contract
@@ -123,26 +123,33 @@ class MorphEngine {
         }
 
         // Check that the source is set
-        $sourcesToLoad = array_keys($sourcesData);
         foreach($this->services->getContract()->getSources() as $sourceDefinition) {
 
-            if(!in_array($sourceDefinition->getName(), $sourcesToLoad)) {
+            $sourceName = $sourceDefinition->getName();
+            $sourceType = $sourceDefinition->getType();
+            $parserName = $sourceDefinition->getParser();
 
-                throw new MetamorphoseException('Missing or unavailable source ' . $sourceDefinition->getName());
+            // Update the options if dynamic options are provided
+            if(!empty($sourcesDynamicOptions[$sourceName])) {
 
-            } else {
-
-                $parserName = $sourceDefinition->getParser();
-                $parser = null;
-                if(isset($parserName)) {
-                    $parser = $this->services->getParserCollection()->getParser($parserName);
-                }
-
-                $this->services->getDataSourceCollection()->registerDataSourceFromModel($sourceDefinition->getType(), $sourceDefinition->getName());
-                $dataSource = $this->services->getDataSourceCollection()->getDataSource($sourceDefinition->getName());
-                $dataSource->extract($sourcesData[$sourceDefinition->getName()], $sourceDefinition, $parser);
+                $sourceDefinition->setDynamicOptions($sourcesDynamicOptions[$sourceName]);
 
             }
+
+            // Get the parser if provided
+            $parser = null;
+            if(isset($parserName)) {
+
+                $parser = $this->services->getParserCollection()->getParser($parserName);
+
+            }
+
+            // Register the data source
+            $this->services->getDataSourceCollection()->registerDataSourceFromModel($sourceType, $sourceName);
+
+            // Extract the data
+            $dataSource = $this->services->getDataSourceCollection()->getDataSource($sourceName);
+            $dataSource->extract($sourceDefinition, $parser);
 
         }
 
@@ -257,7 +264,7 @@ class MorphEngine {
     /**
      * Get the transformed and formatted data
      *
-     * @param array $destinationsData
+     * @param array $destinationsDynamicOptions
      *
      * @return array
      * @throws MetamorphoseDataDestinationException
@@ -265,7 +272,7 @@ class MorphEngine {
      * @throws MetamorphoseFormatterException
      * @throws MetamorphoseUndefinedServiceException
      */
-    public function load(array $destinationsData): array {
+    public function load(array $destinationsDynamicOptions): array {
 
         if($this->nextStep === self::STEP_EXTRACT) {
 
@@ -280,15 +287,27 @@ class MorphEngine {
         $return = [];
         foreach($this->services->getContract()->getDestinations() as $destinationDefinition) {
 
+            $destinationName = $destinationDefinition->getName();
             $formatterName = $destinationDefinition->getFormatter();
-            $formatter = null;
-            if(isset($formatterName)) {
-                $formatter = $this->services->getFormatterCollection()->getFormatter($formatterName);
+
+            // Update the options if dynamic options are provided
+            if(!empty($destinationsDynamicOptions[$destinationName])) {
+
+                $destinationDefinition->setDynamicOptions($destinationsDynamicOptions[$destinationName]);
+
             }
 
-            $dataDestination = $this->services->getDataDestinationCollection()->getDataDestination($destinationDefinition->getName());
-            //$destinationsOptions = isset($destinationsData[$destinationDefinition->getName()]) ? $destinationsData[$destinationDefinition->getName()] : [];
-            $return[$destinationDefinition->getName()] = $dataDestination->load($dataDestination->getData(), $destinationDefinition, $formatter);
+            // Get the parser if provided
+            $formatter = null;
+            if(isset($formatterName)) {
+
+                $formatter = $this->services->getFormatterCollection()->getFormatter($formatterName);
+
+            }
+
+            // Load the data
+            $dataDestination = $this->services->getDataDestinationCollection()->getDataDestination($destinationName);
+            $return[$destinationName] = $dataDestination->load($dataDestination->getData(), $destinationDefinition, $formatter);
 
         }
 
