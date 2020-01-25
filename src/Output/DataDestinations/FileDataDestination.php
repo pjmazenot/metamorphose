@@ -24,20 +24,20 @@ use Metamorphose\Output\FormatterInterface;
  */
 class FileDataDestination extends DataDestination {
 
-    const NAME = 'file';
+    const TYPE = 'file';
 
     /**
      * Load the data into a string
      *
-     * @param DataSet                 $destinationData
+     * @param DataSet                       $finalDataSet
      * @param ContractDestinationDefinition $destinationDefinition
-     * @param FormatterInterface|null $formatter
+     * @param FormatterInterface|null       $formatter
      *
      * @return mixed|string
      * @throws MetamorphoseDataDestinationException
      * @throws MetamorphoseFormatterException
      */
-    public function load(DataSet $destinationData, ContractDestinationDefinition $destinationDefinition, ?FormatterInterface $formatter) {
+    public function load(DataSet $finalDataSet, ContractDestinationDefinition $destinationDefinition, ?FormatterInterface $formatter) {
 
         if(!isset($formatter)) {
 
@@ -45,7 +45,12 @@ class FileDataDestination extends DataDestination {
 
         } else {
 
-            return $formatter->format($destinationData, $destinationDefinition->getOptions());
+            $formattedData = $formatter->format($finalDataSet, $destinationDefinition->getOptions());
+
+            $write = file_put_contents('', $formattedData);
+
+            // Return the write status
+            return $write !== false ? true : false;
 
         }
 

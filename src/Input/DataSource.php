@@ -11,6 +11,7 @@
 namespace Metamorphose\Input;
 
 use Metamorphose\Data\DataSet;
+use Metamorphose\Exceptions\MetamorphoseDataSourceException;
 use Metamorphose\Exceptions\MetamorphoseException;
 
 /**
@@ -20,11 +21,36 @@ use Metamorphose\Exceptions\MetamorphoseException;
  */
 abstract class DataSource implements DataSourceInterface {
 
-    /** Constant to override with the real name */
+    /** Constant to override with the real type */
     const TYPE = '';
+
+    /** @var string $name */
+    protected $name;
 
     /** @var DataSet $data */
     protected $data;
+
+    /**
+     * DataSource constructor.
+     *
+     * @param string $name
+     */
+    public function __construct(string $name) {
+
+        $this->name = $name;
+
+    }
+
+    /**
+     * Get the data source name
+     *
+     * @return string
+     */
+    public function getName(): string {
+
+        return $this->name;
+
+    }
 
     /**
      * Get the raw data from a data source
@@ -45,6 +71,12 @@ abstract class DataSource implements DataSourceInterface {
     }
 
     // @TODO: Extract buffer
+
+    public function getException(string $message): MetamorphoseDataSourceException {
+
+        return new MetamorphoseDataSourceException('Data source error (' . $this->getName() . '): ' . $message);
+
+    }
 
     /**
      * @inheritDoc

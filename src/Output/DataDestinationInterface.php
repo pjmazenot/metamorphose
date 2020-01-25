@@ -23,6 +23,13 @@ use Metamorphose\Exceptions\MetamorphoseFormatterException;
 interface DataDestinationInterface {
 
     /**
+     * Get the name
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * Get the data
      *
      * @return DataSet
@@ -32,15 +39,15 @@ interface DataDestinationInterface {
     /**
      * Load the data
      *
-     * @param DataSet                 $destinationData
+     * @param DataSet                       $finalDataSet
      * @param ContractDestinationDefinition $destinationDefinition
-     * @param FormatterInterface|null $formatter
+     * @param FormatterInterface|null       $formatter
      *
      * @return mixed
      * @throws MetamorphoseDataDestinationException
      * @throws MetamorphoseFormatterException
      */
-    public function load(DataSet $destinationData, ContractDestinationDefinition $destinationDefinition, ?FormatterInterface $formatter);
+    public function load(DataSet $finalDataSet, ContractDestinationDefinition $destinationDefinition, ?FormatterInterface $formatter);
 
     /**
      * Get the type

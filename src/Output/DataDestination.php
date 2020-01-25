@@ -19,18 +19,35 @@ use Metamorphose\Data\DataSet;
  */
 abstract class DataDestination implements DataDestinationInterface {
 
-    /** Constant to override with the real name */
-    const NAME = '';
+    /** Constant to override with the real type */
+    const TYPE = '';
+
+    /** @var string $name */
+    protected $name;
 
     /** @var DataSet $data */
     protected $data;
 
     /**
      * DataDestination constructor.
+     *
+     * @param string $name
      */
-    public function __construct() {
+    public function __construct(string $name) {
 
+        $this->name = $name;
         $this->data = new DataSet();
+
+    }
+
+    /**
+     * Get the data source name
+     *
+     * @return string
+     */
+    public function getName(): string {
+
+        return $this->name;
 
     }
 
@@ -52,7 +69,7 @@ abstract class DataDestination implements DataDestinationInterface {
      */
     public static function getType(): string {
 
-        return static::NAME;
+        return static::TYPE;
 
     }
 

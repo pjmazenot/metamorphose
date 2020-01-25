@@ -45,7 +45,7 @@ class StringDataSource extends DataSource {
 
         } else {
 
-            $this->data = $parser->parse($string);
+            $this->data = $parser->parse($string, $sourceDefinition->getOptions());
 
         }
 

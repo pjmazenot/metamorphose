@@ -24,20 +24,20 @@ use Metamorphose\Output\FormatterInterface;
  */
 class DatabaseDataDestination extends DataDestination {
 
-    const NAME = 'database';
+    const TYPE = 'database';
 
     /**
      * Load the data into a string
      *
-     * @param DataSet                 $destinationData
+     * @param DataSet                       $finalDataSet
      * @param ContractDestinationDefinition $destinationDefinition
-     * @param FormatterInterface|null $formatter
+     * @param FormatterInterface|null       $formatter
      *
      * @return mixed|string
      * @throws MetamorphoseDataDestinationException
      * @throws MetamorphoseFormatterException
      */
-    public function load(DataSet $destinationData, ContractDestinationDefinition $destinationDefinition, ?FormatterInterface $formatter) {
+    public function load(DataSet $finalDataSet, ContractDestinationDefinition $destinationDefinition, ?FormatterInterface $formatter) {
 
         // @TODO: Handle PDO queries
 

@@ -92,7 +92,7 @@ class DataSourceCollection {
         }
 
         $sourceModelClass = $this->sourceModels[$modelType];
-        $this->sources[$sourceName] = new $sourceModelClass();
+        $this->sources[$sourceName] = new $sourceModelClass($sourceName);
 
     }
 

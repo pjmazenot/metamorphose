@@ -51,7 +51,7 @@ class FileDataSource extends DataSource {
 
             $fileContent = file_get_contents($filePath);
 
-            $this->data = $parser->parse($fileContent);
+            $this->data = $parser->parse($fileContent, $sourceDefinition->getOptions());
 
         }
 

@@ -23,6 +23,13 @@ use Metamorphose\Exceptions\MetamorphoseParserException;
 interface DataSourceInterface {
 
     /**
+     * Get the name
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * Get the data
      *
      * @return DataSet

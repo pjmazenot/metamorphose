@@ -92,7 +92,7 @@ class DataDestinationCollection {
         }
 
         $destinationModelClass = $this->destinationModels[$modelType];
-        $this->destinations[$destinationName] = new $destinationModelClass();
+        $this->destinations[$destinationName] = new $destinationModelClass($destinationName);
 
     }
 
