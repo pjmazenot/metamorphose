@@ -21,6 +21,7 @@ use Metamorphose\Data\Processors\Strings\HtmlentitiesProcessor;
 use Metamorphose\Data\Processors\Strings\ReplaceProcessor;
 use Metamorphose\Data\Processors\Strings\StripslashesProcessor;
 use Metamorphose\Data\Processors\Strings\StripTagProcessor;
+use Metamorphose\Data\Processors\Strings\WrapperProcessor;
 use Metamorphose\Data\Processors\TypeCasting\ToBoolProcessor;
 use Metamorphose\Data\Processors\TypeCasting\ToFloatProcessor;
 use Metamorphose\Data\Processors\TypeCasting\ToIntProcessor;
@@ -59,6 +60,7 @@ class DataProcessorCollection {
         $this->registerDataProcessor(new ReplaceProcessor());
         $this->registerDataProcessor(new StripslashesProcessor());
         $this->registerDataProcessor(new StripTagProcessor());
+        $this->registerDataProcessor(new WrapperProcessor());
 
         // TypeCasting
         $this->registerDataProcessor(new ToBoolProcessor());
