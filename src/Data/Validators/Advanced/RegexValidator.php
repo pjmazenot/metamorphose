@@ -11,6 +11,7 @@
 namespace Metamorphose\Data\Validators\Advanced;
 
 use Metamorphose\Data\DataValidator;
+use Metamorphose\Exceptions\MetamorphoseValidateException;
 
 /**
  * Class RegexValidator
@@ -30,10 +31,17 @@ class RegexValidator extends DataValidator {
             return false;
         }
 
-        // @TODO: Add try/catch in case of bad regex?
         $regex = array_shift($params);
 
-        return preg_match($regex, $data);
+        $match = preg_match($regex, $data);
+
+        if($match === false) {
+
+            throw new MetamorphoseValidateException('Error trying to match the regex' . $regex);
+
+        }
+
+        return (bool) $match;
 
     }
 
