@@ -199,8 +199,6 @@ class ContractInspector {
 
         if($type === 'source' && $fieldApplyDefinition['type'] === 'value') {
 
-            // @TODO: Check for references in source
-
             throw new MetamorphoseContractException('The ' . $type . ' field apply field is not supported for a source');
 
         }
@@ -211,11 +209,25 @@ class ContractInspector {
 
         }
 
-        if(!empty($fieldApplyDefinition['args']) && !is_array($fieldApplyDefinition['args'])) {
+        if(!empty($fieldApplyDefinition['args'])) {
 
-            // @TODO: Check for references in source
+            if(!is_array($fieldApplyDefinition['args'])) {
 
-            throw new MetamorphoseContractException('The ' . $type . ' args parameter should be an array');
+                throw new MetamorphoseContractException('The ' . $type . ' args parameter should be an array');
+
+            } else {
+
+                foreach ($fieldApplyDefinition['args'] as $arg) {
+
+                    if($type === 'source' && strpos($arg, '$ref:') === 0) {
+
+                        throw new MetamorphoseContractException('Arguments can\'t be references in a source definition');
+
+                    }
+
+                }
+
+            }
 
         }
 

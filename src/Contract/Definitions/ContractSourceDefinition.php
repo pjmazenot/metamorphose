@@ -13,6 +13,8 @@ namespace Metamorphose\Contract\Definitions;
 /**
  * Class ContractSourceDefinition
  *
+ * @TODO: Support joins between two collections with <> number of rows (ex: ci) / define a dataset to process (order)?
+ *
  * @package Metamorphose\Contract\Definitions
  */
 class ContractSourceDefinition {
@@ -146,17 +148,16 @@ class ContractSourceDefinition {
 
         }
 
-        if(isset($sourceData['options'])) {
+        if(!empty($sourceData['options'])) {
 
             $this->options = $sourceData['options'];
 
         }
 
-        if(isset($sourceData['fields'])) {
+        if(!empty($sourceData['fields'])) {
 
             foreach($sourceData['fields'] as $fieldData) {
 
-                // @TODO: Source fields can't have references
                 $this->fields[] = new ContractFieldDefinition($fieldData);
 
             }

@@ -48,7 +48,7 @@ class ContractFieldDefinition {
     /**
      * Get the list of instructions to apply
      *
-     * @return array
+     * @return ContractFieldApplyDefinition[]
      */
     public function getApply(): array {
 
@@ -69,9 +69,13 @@ class ContractFieldDefinition {
 
         }
 
-        if(isset($fieldData['apply'])) {
+        if(!empty($fieldData['apply'])) {
 
-            $this->apply = $fieldData['apply'];
+            foreach($fieldData['apply'] as $apply) {
+
+                $this->apply[] = new ContractFieldApplyDefinition($apply);
+
+            }
 
         }
 

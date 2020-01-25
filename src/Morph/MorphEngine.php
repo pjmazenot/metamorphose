@@ -11,6 +11,7 @@
 namespace Metamorphose\Morph;
 
 use Metamorphose\Contract\Definitions\ContractDestinationDefinition;
+use Metamorphose\Contract\Definitions\ContractFieldApplyDefinition;
 use Metamorphose\Contract\Definitions\ContractSourceDefinition;
 use Metamorphose\Data\DataPoint;
 use Metamorphose\Exceptions\MetamorphoseContractException;
@@ -102,6 +103,10 @@ class MorphEngine {
      * @throws MetamorphoseUndefinedServiceException
      */
     public function extract(array $sourcesData): void {
+
+        // @TODO: $sourcesData --> $sourceDefinition['options'] ?
+        // This would allow dynamic options vs contract
+        // E.g: filename
 
         if($this->nextStep !== self::STEP_EXTRACT) {
 
@@ -298,33 +303,33 @@ class MorphEngine {
      *
      * @param string $fieldName
      * @param mixed  $value
-     * @param array  $apply
+     * @param ContractFieldApplyDefinition[]  $apply
      * @param int    $index
      *
-     * @return mixed|string
+     * @return mixed
      * @throws MetamorphoseUndefinedServiceException
      * @throws MetamorphoseValidateException
      */
     protected function processField(string $fieldName, $value, array $apply, int $index = null) {
 
-        foreach($apply as $applyData) {
+        foreach($apply as $applyDefinition) {
 
-            switch ($applyData['type']) {
+            switch ($applyDefinition->getType()) {
 
-                case 'value':
+                case ContractFieldApplyDefinition::TYPE_VALUE:
 
-                    if(strpos($applyData['value'], '$ref:') === 0) {
-                        $value = $this->getReference($applyData['value'], $index);
+                    if(is_string($applyDefinition->getValue()) && strpos($applyDefinition->getValue(), '$ref:') === 0) {
+                        $value = $this->getReference($applyDefinition->getValue(), $index);
                     } else {
-                        $value = $applyData['value'];
+                        $value = $applyDefinition->getValue();
                     }
                     break;
 
-                case 'processor':
-                case 'validator':
+                case ContractFieldApplyDefinition::TYPE_PROCESSOR:
+                case ContractFieldApplyDefinition::TYPE_VALIDATOR:
 
-                    $name = $applyData['name'];
-                    $params = $applyData['args'];
+                    $name = $applyDefinition->getName();
+                    $params = $applyDefinition->getArgs();
 
                     foreach($params as &$param) {
 
@@ -334,7 +339,7 @@ class MorphEngine {
 
                     }
 
-                    if($applyData['type'] === 'processor') {
+                    if($applyDefinition->getType() === ContractFieldApplyDefinition::TYPE_PROCESSOR) {
 
                         $processor = $this->services->getDataProcessorCollection()->getDataProcessor($name);
 
