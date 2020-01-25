@@ -15,6 +15,12 @@ use Metamorphose\Data\DataProcessor;
 /**
  * Class ConcatProcessor
  *
+ * The concat processor "loses" the current value.
+ * To prevent this use one or more of these other processors:
+ * - str_before @TODO
+ * - str_after @TODO
+ * - str_wrapper
+ *
  * @package Metamorphose\Data\Processors\Strings
  */
 class ConcatProcessor extends DataProcessor {
@@ -29,8 +35,6 @@ class ConcatProcessor extends DataProcessor {
         if(empty($params)) {
             return $data;
         }
-
-        // @TODO: Do we really want to skip $data?
 
         return implode($params);
 

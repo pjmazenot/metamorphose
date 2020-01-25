@@ -17,6 +17,12 @@ namespace Metamorphose\Data;
  */
 class DataPoint {
 
+    // @TODO: Add support for attributes
+    // --> This could be a data processor since it's linked to the field name and not the field value
+    // That way we can even use the references
+    /** @var array $attributes */
+    protected $attributes;
+
     /** @var DataPoint|mixed $value */
     protected $value;
 

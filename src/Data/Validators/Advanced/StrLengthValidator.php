@@ -30,7 +30,6 @@ class StrLengthValidator extends DataValidator {
             return false;
         }
 
-        // @TODO: Add try/catch in case of bad regex?
         $min = array_shift($params);
         $max = array_shift($params);
 
