@@ -32,33 +32,49 @@ class XmlParser extends Parser {
      */
     public function parse($data, array $options = []): DataSet {
 
-        // @link: https://stackoverflow.com/questions/6578832/how-to-convert-xml-into-array-in-php
+        // Load the data into a SimpleXMLElement
+        $xml = new \SimpleXMLElement($data, LIBXML_NOCDATA);
 
-        $xml   = simplexml_load_string($data);
-        $array = $this->XML2Array($xml);
-        $dataArray = array($xml->getName() => $array);
+        // Transform the SimpleXMLElement to an array
+        $xmlArray = $this->xmlToArray($xml);
+
+        // Add the root level
+        $dataArray = [
+            $xml->getName() => $xmlArray
+        ];
 
         return parent::parse($dataArray);
 
-//        $xml   = simplexml_load_string($string);
-//        $array = json_decode(json_encode((array) $xml), true);
-//        $array = array($xml->getName() => $array);
-
     }
 
-    function XML2Array(\SimpleXMLElement $parent)
-    {
-        $array = array();
+    /**
+     * Transform a SimpleXMLElement object to an array
+     *
+     * @param \SimpleXMLElement $xml
+     *
+     * @return array
+     */
+    public function xmlToArray(\SimpleXMLElement $xml): array {
 
-        foreach ($parent as $name => $element) {
-            ($node = & $array[$name])
-            && (1 === count($node) ? $node = array($node) : 1)
-            && $node = & $node[];
+        $xmlArray = [];
+        $children = (array) $xml->children();
 
-            $node = $element->count() ? $this->XML2Array($element) : trim($element);
+        foreach($children as $childName => $childValue) {
+
+            if(is_a($childValue, \SimpleXMLElement::class)) {
+
+                $xmlArray[$childName] = $this->XmlToArray($childValue);
+
+            } else {
+
+                $xmlArray[$childName] = trim($childValue);
+
+            }
+
         }
 
-        return $array;
+        return $xmlArray;
+
     }
 
 }
