@@ -26,7 +26,7 @@ class XmlParser extends Parser {
      * Parse the data as XML
      *
      * @param array|string $data
-     * @param array $options
+     * @param array        $options
      *
      * @return DataSet
      */
@@ -40,7 +40,7 @@ class XmlParser extends Parser {
 
         // Add the root level
         $dataArray = [
-            $xml->getName() => $xmlArray
+            $xml->getName() => $xmlArray,
         ];
 
         return parent::parse($dataArray);
@@ -56,18 +56,34 @@ class XmlParser extends Parser {
      */
     public function xmlToArray(\SimpleXMLElement $xml): array {
 
-        $xmlArray = [];
-        $children = (array) $xml->children();
+        $xmlArray = [
+            '@attributes' => [],
+            'value' => null,
+        ];
 
-        foreach($children as $childName => $childValue) {
+        $attributes = $xml->attributes();
 
-            if(is_a($childValue, \SimpleXMLElement::class)) {
+        if ($attributes->count() > 0) {
 
-                $xmlArray[$childName] = $this->XmlToArray($childValue);
+            foreach ($attributes as $attributeName => $attributeValue) {
 
-            } else {
+                $xmlArray['@attributes'][$attributeName] = $attributeValue;
 
-                $xmlArray[$childName] = trim($childValue);
+            }
+
+        }
+
+        $children = $xml->children();
+
+        if ($children->count() === 0) {
+
+            $xmlArray['value'] = trim((string)$xml);
+
+        } else {
+
+            foreach ($children as $childName => $childValue) {
+
+                $xmlArray['value'][$childName] = $this->XmlToArray($childValue);
 
             }
 

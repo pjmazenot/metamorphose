@@ -15,11 +15,11 @@ use Tests\Codeception\TestCase\BaseFunctionalTest;
 
 class XmlAdvancedCest extends BaseFunctionalTest {
 
-//    public function testCustomAttributes(FunctionalTester $I) {
-//
-//        $this->runXmlTest($I, 'advanced-xml/custom-attributes');
-//
-//    }
+    public function testCustomAttributes(FunctionalTester $I) {
+
+        $this->runXmlTest($I, 'advanced-xml/custom-attributes');
+
+    }
 
     public function testCustomProlog(FunctionalTester $I) {
 

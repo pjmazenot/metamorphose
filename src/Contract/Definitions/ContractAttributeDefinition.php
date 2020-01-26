@@ -11,20 +11,17 @@
 namespace Metamorphose\Contract\Definitions;
 
 /**
- * Class ContractFieldDefinition
+ * Class ContractAttributeDefinition
  *
  * @package Metamorphose\Contract\Definitions
  */
-class ContractFieldDefinition {
+class ContractAttributeDefinition {
 
     /** @var string $name */
     protected $name;
 
     /** @var array $apply */
     protected $apply = [];
-
-    /** @var ContractAttributeDefinition[] $apply */
-    protected $attributes = [];
 
     /**
      * ContractFieldDefinition constructor.
@@ -60,17 +57,6 @@ class ContractFieldDefinition {
     }
 
     /**
-     * Get the list of attributes
-     *
-     * @return ContractAttributeDefinition[]
-     */
-    public function getAttributes(): array {
-
-        return $this->attributes;
-
-    }
-
-    /**
      * Parse the field definition
      *
      * @param array $fieldData
@@ -88,16 +74,6 @@ class ContractFieldDefinition {
             foreach ($fieldData['apply'] as $apply) {
 
                 $this->apply[] = new ContractApplyDefinition($apply);
-
-            }
-
-        }
-
-        if (!empty($fieldData['attributes'])) {
-
-            foreach ($fieldData['attributes'] as $attribute) {
-
-                $this->attributes[] = new ContractAttributeDefinition($attribute);
 
             }
 

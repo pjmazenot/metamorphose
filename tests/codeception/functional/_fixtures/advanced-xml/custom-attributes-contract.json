@@ -15,9 +15,7 @@
       "type": "string",
       "formatter": "xml",
       "structure": "object",
-      "options": {
-        "prolog": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
-      },
+      "options": {},
       "fields": [
         {
           "name": "root.id",
@@ -30,15 +28,21 @@
         },
         {
           "name": "root.firstname",
-          "options": {
-            "attributes": {
-              "source": "crm"
-            }
-          },
           "apply": [
             {
               "type": "value",
               "value": "$ref:source.root.firstname"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "verified",
+              "apply": [
+                {
+                  "type": "value",
+                  "value": "$ref:source.root.firstname@verified"
+                }
+              ]
             }
           ]
         },
@@ -53,6 +57,17 @@
             {
               "type": "value",
               "value": "$ref:source.root.lastname"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "verified",
+              "apply": [
+                {
+                  "type": "value",
+                  "value": "1"
+                }
+              ]
             }
           ]
         }

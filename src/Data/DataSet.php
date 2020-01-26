@@ -27,7 +27,15 @@ class DataSet {
      */
     public function __construct(array $data = []) {
 
-        $this->data = new DataPoint($data);
+        if (array_key_exists('@attribute', $data) && array_key_exists('value', $data)) {
+
+            $this->data = new DataPoint($data['value'], $data['@attribute']);
+
+        } else {
+
+            $this->data = new DataPoint($data);
+
+        }
 
     }
 
@@ -57,31 +65,54 @@ class DataSet {
      * Get a property in a section of the data
      * This supports recursive lookup, e.g: my_section.my_sub_section.my_key
      *
-     * @TODO: Key exists?
-     *
      * @param string $key Key name
      *
      * @return mixed
      */
     public function get($key) {
 
+        // Get the key parts
         $keyParts = explode('.', $key);
 
         /** @var DataPoint|DataPoint[]|mixed $section */
         $section = $this->data->getValue();
 
         $value = null;
-        foreach($keyParts as $keyIndex => $keyName) {
+        foreach ($keyParts as $keyIndex => $keyName) {
 
-            if(!isset($section[$keyName])) {
+            // If the key part contains an attribute name we grab this name an update the current key name
+            if (strpos($keyName, '@')) {
+
+                $keyNameParts = explode('@', $keyName);
+                $keyName = $keyNameParts[0];
+                $attributeName = $keyNameParts[1];
+
+            }
+
+            // If the next section is not set we are trying to access an undefined value
+            if (!isset($section[$keyName])) {
                 break;
             }
 
-            $section = $section[$keyName]->getValue();
+            if (isset($attributeName)) {
 
-            if($keyIndex + 1 >= count($keyParts)) {
-                $value = $section;
+                // Get the attribute and automatically return the value (there should never be a key name following the attribute)
+                $value = $section[$keyName]->getAttribute($attributeName);
                 break;
+
+            } else {
+
+                // Get the value
+                $section = $section[$keyName]->getValue();
+
+                if ($keyIndex + 1 >= count($keyParts)) {
+
+                    // If the key is the last part return the current value
+                    $value = $section;
+                    break;
+
+                }
+
             }
 
         }
@@ -95,8 +126,8 @@ class DataSet {
      * Set a property in a section of the data
      * This supports recursive property creation, e.g: my_section.my_sub_section.my_key
      *
-     * @param string $key Key name
-     * @param mixed $value Value
+     * @param string $key   Key name
+     * @param mixed  $value Value
      *
      * @return mixed
      */
@@ -107,11 +138,20 @@ class DataSet {
         /** @var DataPoint|DataPoint[]|mixed $section */
         $section = $this->data;
 
-        foreach($keyParts as $keyIndex => $keyName) {
+        foreach ($keyParts as $keyIndex => $keyName) {
+
+            // If the key part contains an attribute name we grab this name an update the current key name
+            if (strpos($keyName, '@')) {
+
+                $keyNameParts = explode('@', $keyName);
+                $keyName = $keyNameParts[0];
+                $attributeName = $keyNameParts[1];
+
+            }
 
             $sectionValue = $section->getValue();
 
-            if(!isset($sectionValue[$keyName])) {
+            if (!isset($sectionValue[$keyName])) {
 
                 $sectionValue[$keyName] = new DataPoint([]);
 
@@ -122,9 +162,19 @@ class DataSet {
 
             $section = $sectionValue[$keyName];
 
-            if($keyIndex + 1 >= count($keyParts)) {
-                $section->setValue($value);
+            if (isset($attributeName)) {
+
+                // Set the attribute
+                $section->setAttribute($attributeName, $value);
                 break;
+
+            } else {
+
+                if ($keyIndex + 1 >= count($keyParts)) {
+                    $section->setValue($value);
+                    break;
+                }
+
             }
 
         }

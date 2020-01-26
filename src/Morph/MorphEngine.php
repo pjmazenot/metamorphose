@@ -11,7 +11,7 @@
 namespace Metamorphose\Morph;
 
 use Metamorphose\Contract\Definitions\ContractDestinationDefinition;
-use Metamorphose\Contract\Definitions\ContractFieldApplyDefinition;
+use Metamorphose\Contract\Definitions\ContractApplyDefinition;
 use Metamorphose\Contract\Definitions\ContractSourceDefinition;
 use Metamorphose\Data\DataPoint;
 use Metamorphose\Exceptions\MetamorphoseContractException;
@@ -74,7 +74,7 @@ class MorphEngine {
      * Get the value by reference
      *
      * @param string $ref
-     * @param int  $index
+     * @param int    $index
      *
      * @return DataPoint|mixed
      * @throws MetamorphoseUndefinedServiceException
@@ -83,7 +83,7 @@ class MorphEngine {
 
         $fieldKeyParts = explode('.', $ref);
         $sourceName = str_replace('$ref:', '', array_shift($fieldKeyParts));
-        if(isset($index)) {
+        if (isset($index)) {
             array_unshift($fieldKeyParts, $index);
         }
         $fieldKey = implode('.', $fieldKeyParts);
@@ -104,11 +104,7 @@ class MorphEngine {
      */
     public function extract(array $sourcesDynamicOptions): void {
 
-        // @TODO: $sourcesData --> $sourceDefinition['options'] ?
-        // This would allow dynamic options vs contract
-        // E.g: filename
-
-        if($this->nextStep !== self::STEP_EXTRACT) {
+        if ($this->nextStep !== self::STEP_EXTRACT) {
 
             throw new MetamorphoseException('Data already loaded');
 
@@ -116,21 +112,21 @@ class MorphEngine {
 
         // First validate the contract if a validator is available
         $contractValidator = $this->services->getContractValidator();
-        if(!empty($contractValidator)) {
+        if (!empty($contractValidator)) {
 
             $this->services->validateContract();
 
         }
 
         // Check that the source is set
-        foreach($this->services->getContract()->getSources() as $sourceDefinition) {
+        foreach ($this->services->getContract()->getSources() as $sourceDefinition) {
 
             $sourceName = $sourceDefinition->getName();
             $sourceType = $sourceDefinition->getType();
             $parserName = $sourceDefinition->getParser();
 
             // Update the options if dynamic options are provided
-            if(!empty($sourcesDynamicOptions[$sourceName])) {
+            if (!empty($sourcesDynamicOptions[$sourceName])) {
 
                 $sourceDefinition->setDynamicOptions($sourcesDynamicOptions[$sourceName]);
 
@@ -138,7 +134,7 @@ class MorphEngine {
 
             // Get the parser if provided
             $parser = null;
-            if(isset($parserName)) {
+            if (isset($parserName)) {
 
                 $parser = $this->services->getParserCollection()->getParser($parserName);
 
@@ -168,11 +164,11 @@ class MorphEngine {
      */
     public function transform() {
 
-        if($this->nextStep === self::STEP_EXTRACT) {
+        if ($this->nextStep === self::STEP_EXTRACT) {
 
             throw new MetamorphoseException('Data not extracted');
 
-        } elseif($this->nextStep === self::STEP_LOAD) {
+        } elseif ($this->nextStep === self::STEP_LOAD) {
 
             throw new MetamorphoseException('Data already transformed');
 
@@ -181,38 +177,68 @@ class MorphEngine {
         $maxItemsCount = 1;
 
         // Pre-process the data directly at the source
-        foreach($this->services->getContract()->getSources() as $sourceDefinition) {
+        foreach ($this->services->getContract()->getSources() as $sourceDefinition) {
 
             $sourceName = $sourceDefinition->getName();
             $source = $this->services->getDataSourceCollection()->getDataSource($sourceName);
 
-            if($sourceDefinition->getStructure() === ContractSourceDefinition::STRUCTURE_COLLECTION) {
+            if ($sourceDefinition->getStructure() === ContractSourceDefinition::STRUCTURE_COLLECTION) {
+
                 $isCollection = true;
                 $itemCount = $source->getData()->getCount();
+
             } else {
+
                 $isCollection = false;
                 $itemCount = 1;
+
             }
 
-            if($itemCount > $maxItemsCount) {
+            if ($itemCount > $maxItemsCount) {
+
                 $maxItemsCount = $itemCount;
+
             }
 
-            for($i = 0; $i < $itemCount; $i++) {
+            for ($i = 0; $i < $itemCount; $i++) {
 
+                // Process fields
                 foreach ($sourceDefinition->getFields() as $sourceFieldDefinition) {
 
                     $collectionIndex = ($isCollection ? $i : null);
                     $fieldKey = ($isCollection ? $i . '.' : '') . $sourceFieldDefinition->getName();
-                    $apply = $sourceFieldDefinition->getApply();
+                    $fieldApply = $sourceFieldDefinition->getApply();
+                    $fieldAttributes = $sourceFieldDefinition->getAttributes();
 
-                    if (!empty($apply)) {
+                    if (!empty($fieldApply)) {
 
                         // Apply
                         $value = $source->getData()->get($fieldKey);
-                        $value = $this->processField($sourceFieldDefinition->getName(), $value, $apply, $collectionIndex);
+                        $value = $this->processApply($sourceFieldDefinition->getName(), $value, $fieldApply, $collectionIndex);
 
                         $source->getData()->set($fieldKey, $value);
+
+                    }
+
+                    // Process attributes
+                    if (!empty($fieldAttributes)) {
+
+                        foreach ($fieldAttributes as $attributeDefinition) {
+
+                            $attributeKey = $fieldKey . '@' . $attributeDefinition->getName();
+                            $attributeApply = $attributeDefinition->getApply();
+
+                            if (!empty($attributeApply)) {
+
+                                // Apply
+                                $value = $source->getData()->get($attributeKey);
+                                $value = $this->processApply($attributeDefinition->getName(), $value, $attributeApply, $collectionIndex);
+
+                                $source->getData()->set($attributeKey, $value);
+
+                            }
+
+                        }
 
                     }
 
@@ -223,31 +249,57 @@ class MorphEngine {
         }
 
         // Process the data to create the destinations
-        foreach($this->services->getContract()->getDestinations() as $destinationDefinition) {
+        foreach ($this->services->getContract()->getDestinations() as $destinationDefinition) {
 
             $this->services->getDataDestinationCollection()->registerDataDestinationFromModel($destinationDefinition->getType(), $destinationDefinition->getName());
             $dataDestination = $this->services->getDataDestinationCollection()->getDataDestination($destinationDefinition->getName());
 
-            if($destinationDefinition->getStructure() === ContractDestinationDefinition::STRUCTURE_COLLECTION) {
+            if ($destinationDefinition->getStructure() === ContractDestinationDefinition::STRUCTURE_COLLECTION) {
+
                 $isCollection = true;
+
             } else {
+
                 $isCollection = false;
+
             }
 
-            for($i = 0; $i < $maxItemsCount; $i++) {
+            for ($i = 0; $i < $maxItemsCount; $i++) {
 
                 foreach ($destinationDefinition->getFields() as $destinationFieldDefinition) {
 
                     $collectionIndex = ($isCollection ? $i : null);
                     $fieldKey = ($isCollection ? $i . '.' : '') . $destinationFieldDefinition->getName();
-                    $apply = $destinationFieldDefinition->getApply();
+                    $fieldApply = $destinationFieldDefinition->getApply();
+                    $fieldAttributes = $destinationFieldDefinition->getAttributes();
 
-                    if (!empty($apply)) {
+                    if (!empty($fieldApply)) {
 
                         // Apply
-                        $value = $this->processField($destinationFieldDefinition->getName(), null, $apply, $collectionIndex);
+                        $value = $this->processApply($destinationFieldDefinition->getName(), null, $fieldApply, $collectionIndex);
 
                         $dataDestination->getData()->set($fieldKey, $value);
+
+                    }
+
+                    // Process attributes
+                    if (!empty($fieldAttributes)) {
+
+                        foreach ($fieldAttributes as $attributeDefinition) {
+
+                            $attributeKey = $fieldKey . '@' . $attributeDefinition->getName();
+                            $attributeApply = $attributeDefinition->getApply();
+
+                            if (!empty($attributeApply)) {
+
+                                // Apply
+                                $value = $this->processApply($attributeDefinition->getName(), null, $attributeApply, $collectionIndex);
+
+                                $dataDestination->getData()->set($attributeKey, $value);
+
+                            }
+
+                        }
 
                     }
 
@@ -274,24 +326,24 @@ class MorphEngine {
      */
     public function load(array $destinationsDynamicOptions): array {
 
-        if($this->nextStep === self::STEP_EXTRACT) {
+        if ($this->nextStep === self::STEP_EXTRACT) {
 
             throw new MetamorphoseException('Data not extracted');
 
-        } elseif($this->nextStep === self::STEP_TRANSFORM) {
+        } elseif ($this->nextStep === self::STEP_TRANSFORM) {
 
             throw new MetamorphoseException('Data not transformed');
 
         }
 
         $return = [];
-        foreach($this->services->getContract()->getDestinations() as $destinationDefinition) {
+        foreach ($this->services->getContract()->getDestinations() as $destinationDefinition) {
 
             $destinationName = $destinationDefinition->getName();
             $formatterName = $destinationDefinition->getFormatter();
 
             // Update the options if dynamic options are provided
-            if(!empty($destinationsDynamicOptions[$destinationName])) {
+            if (!empty($destinationsDynamicOptions[$destinationName])) {
 
                 $destinationDefinition->setDynamicOptions($destinationsDynamicOptions[$destinationName]);
 
@@ -299,7 +351,7 @@ class MorphEngine {
 
             // Get the parser if provided
             $formatter = null;
-            if(isset($formatterName)) {
+            if (isset($formatterName)) {
 
                 $formatter = $this->services->getFormatterCollection()->getFormatter($formatterName);
 
@@ -320,58 +372,58 @@ class MorphEngine {
     /**
      * Process a field
      *
-     * @param string $fieldName
-     * @param mixed  $value
-     * @param ContractFieldApplyDefinition[]  $apply
-     * @param int    $index
+     * @param string                    $name
+     * @param mixed                     $value
+     * @param ContractApplyDefinition[] $apply
+     * @param int                       $index
      *
      * @return mixed
      * @throws MetamorphoseUndefinedServiceException
      * @throws MetamorphoseValidateException
      */
-    protected function processField(string $fieldName, $value, array $apply, int $index = null) {
+    protected function processApply(string $name, $value, array $apply, int $index = null) {
 
-        foreach($apply as $applyDefinition) {
+        foreach ($apply as $applyDefinition) {
 
             switch ($applyDefinition->getType()) {
 
-                case ContractFieldApplyDefinition::TYPE_VALUE:
+                case ContractApplyDefinition::TYPE_VALUE:
 
-                    if(is_string($applyDefinition->getValue()) && strpos($applyDefinition->getValue(), '$ref:') === 0) {
+                    if (is_string($applyDefinition->getValue()) && strpos($applyDefinition->getValue(), '$ref:') === 0) {
                         $value = $this->getReference($applyDefinition->getValue(), $index);
                     } else {
                         $value = $applyDefinition->getValue();
                     }
                     break;
 
-                case ContractFieldApplyDefinition::TYPE_PROCESSOR:
-                case ContractFieldApplyDefinition::TYPE_VALIDATOR:
+                case ContractApplyDefinition::TYPE_PROCESSOR:
+                case ContractApplyDefinition::TYPE_VALIDATOR:
 
-                    $name = $applyDefinition->getName();
+                    $applyName = $applyDefinition->getName();
                     $params = $applyDefinition->getArgs();
 
-                    foreach($params as &$param) {
+                    foreach ($params as &$param) {
 
-                        if(strpos($param, '$ref:') === 0) {
+                        if (strpos($param, '$ref:') === 0) {
                             $param = $this->getReference($param, $index);
                         }
 
                     }
 
-                    if($applyDefinition->getType() === ContractFieldApplyDefinition::TYPE_PROCESSOR) {
+                    if ($applyDefinition->getType() === ContractApplyDefinition::TYPE_PROCESSOR) {
 
-                        $processor = $this->services->getDataProcessorCollection()->getDataProcessor($name);
+                        $processor = $this->services->getDataProcessorCollection()->getDataProcessor($applyName);
 
                         $value = $processor->process($value, $params);
 
                     } else {
 
-                        $validator = $this->services->getDataValidatorCollection()->getDataValidator($name);
+                        $validator = $this->services->getDataValidatorCollection()->getDataValidator($applyName);
 
                         $isValid = $validator->validate($value, $params);
 
-                        if(!$isValid) {
-                            throw new MetamorphoseValidateException('Invalid value for the target field ' . $fieldName);
+                        if (!$isValid) {
+                            throw new MetamorphoseValidateException('Invalid value for the target field or attribute ' . $name);
                         }
 
                     }

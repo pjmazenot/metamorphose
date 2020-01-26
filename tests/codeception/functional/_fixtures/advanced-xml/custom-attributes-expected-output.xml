@@ -1,2 +1,2 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<root><id>1</id><firstname source="crm">John</firstname><lastname source="website">Smith</lastname></root>
+<?xml version="1.0" encoding="utf-8"?>
+<root><id>1</id><firstname verified="1">John</firstname><lastname verified="1">Smith</lastname></root>

@@ -17,29 +17,35 @@ namespace Metamorphose\Data;
  */
 class DataPoint {
 
-    // @TODO: Add support for attributes
-    // --> This could be a data processor since it's linked to the field name and not the field value
-    // That way we can even use the references
-    /** @var array $attributes */
-    protected $attributes;
-
     /** @var DataPoint|mixed $value */
     protected $value;
+
+    /** @var array $attributes */
+    protected $attributes;
 
     /**
      * DataPoint constructor.
      *
      * @param DataPoint|mixed $value
+     * @param array           $attributes
      */
-    public function __construct($value) {
+    public function __construct($value, array $attributes = []) {
 
-        if(is_array($value)) {
+        if (is_array($value)) {
 
             $this->value = [];
 
-            foreach($value as $key => $nextValue) {
+            foreach ($value as $key => $nextValue) {
 
-                $this->value[$key] = new DataPoint($nextValue);
+                if (is_array($nextValue) && array_key_exists('@attributes', $nextValue) && array_key_exists('value', $nextValue)) {
+
+                    $this->value[$key] = new DataPoint($nextValue['value'], $nextValue['@attributes']);
+
+                } else {
+
+                    $this->value[$key] = new DataPoint($nextValue);
+
+                }
 
             }
 
@@ -48,6 +54,8 @@ class DataPoint {
             $this->value = $value;
 
         }
+
+        $this->attributes = $attributes;
 
     }
 
@@ -74,13 +82,49 @@ class DataPoint {
     }
 
     /**
+     * Get the attributes
+     *
+     * @return array
+     */
+    public function getAttributes(): array {
+
+        return $this->attributes;
+
+    }
+
+    /**
+     * Get an attribute by name
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function getAttribute(string $name): string {
+
+        return isset($this->attributes[$name]) ? (string)$this->attributes[$name] : '';
+
+    }
+
+    /**
+     * Set an attribute by name
+     *
+     * @param string $name
+     * @param string $value
+     */
+    public function setAttribute(string $name, string $value): void {
+
+        $this->attributes[$name] = $value;
+
+    }
+
+    /**
      * Get the count of elements
      *
      * @return int
      */
     public function getCount(): int {
 
-        if(is_array($this->value)) {
+        if (is_array($this->value)) {
 
             return count($this->value);
 
@@ -95,32 +139,71 @@ class DataPoint {
     /**
      * Get the data as an array
      *
+     * @param bool $withAttributes
+     *
      * @return array
      */
-    public function toArray(): array {
+    public function toArray(bool $withAttributes = false): array {
 
-        if(is_a($this->value, self::class)) {
+        if (is_a($this->value, DataPoint::class)) {
 
-            return $this->value->toArray();
+            return $withAttributes
+                ? [
+                    '@attributes' => $this->attributes,
+                    'value' => $this->value->toArray(true),
+                ]
+                : $this->value->toArray();
 
-        } elseif(is_array($this->value) && !empty($this->value)) {
+        } elseif (is_array($this->value) && !empty($this->value)) {
 
             $valueArray = [];
 
-            foreach($this->value as $key => $nextValue) {
+            foreach ($this->value as $itemKey => $itemValue) {
 
-                /** @var DataPoint|mixed $nextValue */
-                if(is_a($nextValue, self::class)) {
+                /** @var DataPoint|mixed $itemValue */
+                if (is_a($itemValue, DataPoint::class)) {
 
-                    // @TODO: Do better - lol
-                    $nextValueValue = $nextValue->getValue();
-                    if(is_array($nextValueValue)) {
-                        $valueArray[$key] = $nextValue->toArray();
+                    // Grap the value from the next object level
+                    $nextLevelValue = $itemValue->getValue();
+
+                    if (is_a($nextLevelValue, DataPoint::class)) {
+
+                        $valueArray[$itemKey] = $withAttributes
+                            ? [
+                                '@attributes' => $itemValue->getAttributes(),
+                                'value' => $itemValue->getValue()->toArray(true),
+                            ]
+                            : $itemValue->getValue()->toArray();
+
+                    } elseif (is_array($nextLevelValue)) {
+
+                        $valueArray[$itemKey] = $withAttributes
+                            ? [
+                                '@attributes' => $itemValue->getAttributes(),
+                                'value' => $itemValue->toArray(true),
+                            ]
+                            : $itemValue->toArray();
+
                     } else {
-                        $valueArray[$key] = $nextValueValue;
+
+                        $valueArray[$itemKey] = $withAttributes
+                            ? [
+                                '@attributes' => $itemValue->getAttributes(),
+                                'value' => $nextLevelValue,
+                            ]
+                            : $nextLevelValue;
+
                     }
+
                 } else {
-                    $valueArray[$key] = $nextValue;
+
+                    $valueArray[$itemKey] = $withAttributes
+                        ? [
+                            '@attributes' => $itemValue->getAttributes(),
+                            'value' => $itemValue,
+                        ]
+                        : $itemValue;
+
                 }
 
             }
@@ -132,6 +215,17 @@ class DataPoint {
             return $this->value;
 
         }
+
+    }
+
+    /**
+     * Get the data as an array with attributes
+     *
+     * @return array
+     */
+    public function toArrayWithAttributes(): array {
+
+        return $this->toArray(true);
 
     }
 

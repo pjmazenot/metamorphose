@@ -15,7 +15,7 @@ namespace Metamorphose\Contract\Definitions;
  *
  * @package Metamorphose\Contract\Definitions
  */
-class ContractFieldApplyDefinition {
+class ContractApplyDefinition {
 
     const TYPE_VALUE = 'value';
     const TYPE_PROCESSOR = 'processor';
@@ -95,25 +95,25 @@ class ContractFieldApplyDefinition {
      */
     protected function parseApplyData(array $applyData): void {
 
-        if(isset($applyData['type'])) {
+        if (isset($applyData['type'])) {
 
             $this->type = $applyData['type'];
 
         }
 
-        if(isset($applyData['name'])) {
+        if (isset($applyData['name'])) {
 
             $this->name = $applyData['name'];
 
         }
 
-        if(isset($applyData['value'])) {
+        if (isset($applyData['value'])) {
 
             $this->value = $applyData['value'];
 
         }
 
-        if(isset($applyData['args'])) {
+        if (isset($applyData['args'])) {
 
             $this->args = $applyData['args'];
 

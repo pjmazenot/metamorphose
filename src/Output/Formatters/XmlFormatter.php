@@ -42,10 +42,10 @@ class XmlFormatter extends Formatter {
     public function format(DataSet $data, array $options = []): string {
 
         // Get the data array
-        $dataArray = $data->getData()->toArray();
+        $dataArray = $data->getData()->toArrayWithAttributes();
 
         // Check that there is only one root
-        if(count($dataArray) > 1) {
+        if (count($dataArray) > 1) {
 
             throw new MetamorphoseException('Only one XML root should be defined.');
 
@@ -71,16 +71,19 @@ class XmlFormatter extends Formatter {
     /**
      * Transform an array into xml
      *
-     * @param array $dataArray
+     * @param array             $dataArray
      * @param \SimpleXMLElement $xmlObject
      */
     protected function arrayToXml($dataArray, \SimpleXMLElement &$xmlObject): void {
 
-        foreach($dataArray as $key => $value) {
+        foreach ($dataArray['value'] as $key => $data) {
+
+            $value = $data['value'] ?? null;
+            $attributes = $data['@attributes'] ?? [];
 
             $key = is_numeric($key) ? 'item' . $key : $key;
 
-            if(is_array($value)) {
+            if (is_array($value)) {
 
                 $subNode = $xmlObject->addChild($key);
                 $this->arrayToXml($value, $subNode);
@@ -88,7 +91,7 @@ class XmlFormatter extends Formatter {
             } else {
 
                 // Workaround to allow CDATA section (the string is replace after getting the XML string)
-                if(strpos($value, self::CDATA_START) !== false && strpos($value, self::CDATA_END)) {
+                if (strpos($value, self::CDATA_START) !== false && strpos($value, self::CDATA_END)) {
                     $value = str_replace(
                         [self::CDATA_START, self::CDATA_END],
                         '',
@@ -97,7 +100,13 @@ class XmlFormatter extends Formatter {
                     $value = self::CDATA_FAKE_START . base64_encode($value) . self::CDATA_FAKE_END;
                 }
 
-                $xmlObject->addChild($key, $value);
+                $child = $xmlObject->addChild($key, $value);
+
+                foreach ($attributes as $attributeName => $attributeValue) {
+
+                    $child->addAttribute($attributeName, $attributeValue);
+
+                }
 
             }
 
@@ -121,6 +130,7 @@ class XmlFormatter extends Formatter {
                 $matches[0]
             );
             $value = self::CDATA_START . base64_decode($value) . self::CDATA_END;
+
             return $value;
 
         }, $xmlString);
