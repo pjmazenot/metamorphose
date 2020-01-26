@@ -11,7 +11,7 @@
 namespace Tests\Codeception\Functional\Advanced\Extensions\Custom;
 
 use Metamorphose\Data\DataSet;
-use Metamorphose\Input\Parser;
+use Metamorphose\Data\Extract\Parser;
 
 class CustomParser extends Parser {
 

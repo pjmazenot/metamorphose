@@ -11,8 +11,8 @@
 namespace Tests\Codeception\Functional\Advanced\Extensions;
 
 use Metamorphose\Metamorphose;
-use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomDataProcessor;
-use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomDataValidator;
+use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomProcessor;
+use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomValidator;
 use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomFormatter;
 use Tests\Codeception\Functional\Advanced\Extensions\Custom\CustomParser;
 use Tests\Codeception\FunctionalTester;
@@ -70,7 +70,7 @@ class ExtensionCest extends BaseFunctionalTest {
         $expectedOutputPath = $fixturesPath . 'custom-data-processor-expected-output.json';
 
         $metamorphose = new Metamorphose($contractPath);
-        $metamorphose->services()->registerDataProcessor(new CustomDataProcessor());
+        $metamorphose->services()->registerDataProcessor(new CustomProcessor());
         $metamorphose->extract([
             'source' => [
                 'file' => $inputDataPath
@@ -92,7 +92,7 @@ class ExtensionCest extends BaseFunctionalTest {
         try {
 
             $metamorphose = new Metamorphose($contractPath);
-            $metamorphose->services()->registerDataValidator(new CustomDataValidator());
+            $metamorphose->services()->registerDataValidator(new CustomValidator());
             $metamorphose->extract([
                 'source' => [
                     'file' => $inputDataPath

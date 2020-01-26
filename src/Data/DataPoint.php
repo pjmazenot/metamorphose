@@ -163,7 +163,7 @@ class DataPoint {
                 /** @var DataPoint|mixed $itemValue */
                 if (is_a($itemValue, DataPoint::class)) {
 
-                    // Grap the value from the next object level
+                    // Grab the value from the next object level
                     $nextLevelValue = $itemValue->getValue();
 
                     if (is_a($nextLevelValue, DataPoint::class)) {

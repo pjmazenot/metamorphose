@@ -8,26 +8,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Codeception\Functional\Advanced\Extensions\Custom;
+namespace Metamorphose\Data\Load\Formatters;
 
 use Metamorphose\Data\DataSet;
 use Metamorphose\Data\Load\Formatter;
 
-class CustomFormatter extends Formatter {
+/**
+ * Class JsonFormatter
+ *
+ * @package Metamorphose\Data\Load\Formatters
+ */
+class JsonFormatter extends Formatter {
 
-    const NAME = 'custom-formatter';
+    const NAME = 'json';
+    const FORMAT = 'application/json';
 
+    /**
+     * @inheritDoc
+     */
     public function format(DataSet $data, array $options = []): string {
 
-        $data = $data->getData()->toArray();
-        $finalData = [];
-        foreach($data as $property => $value) {
-
-            $finalData[] = $property . ':' . $value;
-
-        }
-
-        return implode('|', $finalData);
+        return json_encode($data->getData()->toArray());
 
     }
 

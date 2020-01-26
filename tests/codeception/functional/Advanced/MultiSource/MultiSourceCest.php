@@ -11,7 +11,7 @@
 namespace Tests\Codeception\Functional\Advanced\MultiSource;
 
 use Metamorphose\Metamorphose;
-use Metamorphose\Morph\MorphEngine;
+use Metamorphose\Core\Engine;
 use Tests\Codeception\FunctionalTester;
 use Tests\Codeception\TestCase\BaseFunctionalTest;
 

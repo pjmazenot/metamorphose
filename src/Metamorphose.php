@@ -17,8 +17,8 @@ use Metamorphose\Exceptions\MetamorphoseException;
 use Metamorphose\Exceptions\MetamorphoseFormatterException;
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
 use Metamorphose\Exceptions\MetamorphoseValidateException;
-use Metamorphose\Morph\MorphEngine;
-use Metamorphose\Morph\MorphServices;
+use Metamorphose\Core\Engine;
+use Metamorphose\Core\ServiceContainer;
 
 /**
  * Class Metamorphose
@@ -28,7 +28,7 @@ use Metamorphose\Morph\MorphServices;
  */
 class Metamorphose {
 
-    /** @var MorphEngine $engine */
+    /** @var Engine $engine */
     protected $engine;
 
     /**
@@ -43,16 +43,16 @@ class Metamorphose {
      */
     public function __construct(string $inputContractFilePath, ?string $outputContractFilePath = null) {
 
-        $this->engine = new MorphEngine($inputContractFilePath, $outputContractFilePath);
+        $this->engine = new Engine($inputContractFilePath, $outputContractFilePath);
 
     }
 
     /**
      * Get or customize the services
      *
-     * @return MorphServices
+     * @return ServiceContainer
      */
-    public function services(): MorphServices {
+    public function services(): ServiceContainer {
 
         return $this->engine->getServices();
 

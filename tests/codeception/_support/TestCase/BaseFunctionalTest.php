@@ -11,7 +11,7 @@
 namespace Tests\Codeception\TestCase;
 
 use Metamorphose\Metamorphose;
-use Metamorphose\Morph\MorphEngine;
+use Metamorphose\Core\Engine;
 use Tests\Codeception\FunctionalTester;
 
 class BaseFunctionalTest {

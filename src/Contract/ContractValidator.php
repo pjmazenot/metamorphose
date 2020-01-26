@@ -10,9 +10,9 @@
 
 namespace Metamorphose\Contract;
 
+use Metamorphose\Data\Load\FormatterCollection;
 use Metamorphose\Exceptions\MetamorphoseContractException;
 use Metamorphose\Exceptions\MetamorphoseUndefinedServiceException;
-use Metamorphose\Output\FormatterCollection;
 
 /**
  * Class ContractValidator
