@@ -27,6 +27,8 @@ composer require pjmazenot/metamorphose
 
 ## Getting Started
 
+Here is a simple contract example:
+
 ```json
 {
   "sources": [
@@ -69,6 +71,8 @@ composer require pjmazenot/metamorphose
   ]
 }
 ```
+
+To apply this transformation your code will look like this:
 
 ```php
 <?php
