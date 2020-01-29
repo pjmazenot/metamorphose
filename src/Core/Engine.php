@@ -153,8 +153,6 @@ class Engine {
 
     }
 
-    // @TODO: Buffer (nbItem) - for CSV for example or JSON/XML collections
-
     /**
      * Main transform function
      *

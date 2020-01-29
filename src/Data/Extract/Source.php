@@ -70,8 +70,6 @@ abstract class Source implements SourceInterface {
 
     }
 
-    // @TODO: Extract buffer
-
     /**
      * Get a data source exception
      *

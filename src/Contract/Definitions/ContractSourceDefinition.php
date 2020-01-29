@@ -13,8 +13,6 @@ namespace Metamorphose\Contract\Definitions;
 /**
  * Class ContractSourceDefinition
  *
- * @TODO: Support joins between two collections with <> number of rows (ex: ci) / define a dataset to process (order)?
- *
  * @package Metamorphose\Contract\Definitions
  */
 class ContractSourceDefinition {

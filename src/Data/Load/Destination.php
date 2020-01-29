@@ -63,8 +63,6 @@ abstract class Destination implements DestinationInterface {
 
     }
 
-    // @TODO: Load buffer
-
     /**
      * Get a data destination exception
      *
