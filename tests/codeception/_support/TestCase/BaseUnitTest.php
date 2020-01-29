@@ -10,6 +10,14 @@
 
 namespace Tests\Codeception\TestCase;
 
-class BaseUnitTest {
+use Codeception\Test\Unit;
+use Tests\Codeception\UnitTester;
+
+class BaseUnitTest extends Unit {
+
+    /**
+     * @var UnitTester
+     */
+    protected $tester;
 
 }
