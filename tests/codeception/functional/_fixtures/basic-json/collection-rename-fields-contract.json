@@ -4,9 +4,7 @@
       "name": "source",
       "type": "file",
       "parser": "json",
-      "structure": "collection",
-      "options": {},
-      "fields": []
+      "options": {}
     }
   ],
   "destinations": [
@@ -14,50 +12,54 @@
       "name": "dest",
       "type": "string",
       "formatter": "json",
-      "structure": "collection",
       "fields": [
         {
-          "name": "id",
+          "name": "[$g].id",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.id"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].id"]
             }
           ]
         },
         {
-          "name": "firstname",
+          "name": "[$g].firstname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.firstname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].firstname"]
             }
           ]
         },
         {
-          "name": "lastname",
+          "name": "[$g].lastname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.lastname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].lastname"]
             }
           ]
         },
         {
-          "name": "email",
+          "name": "[$g].email",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.primary_email"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].primary_email"]
             }
           ]
         },
         {
-          "name": "phone",
+          "name": "[$g].phone",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.primary_phone"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].primary_phone"]
             }
           ]
         }

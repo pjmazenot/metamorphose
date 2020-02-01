@@ -4,7 +4,6 @@
       "name": "source",
       "type": "file",
       "parser": "json",
-      "structure": "object",
       "options": {},
       "fields": []
     }
@@ -14,14 +13,14 @@
       "name": "dest",
       "type": "string",
       "formatter": "json",
-      "structure": "object",
       "fields": [
         {
           "name": "id",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.id"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.id"]
             }
           ]
         },
@@ -29,8 +28,9 @@
           "name": "firstname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.firstname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.firstname"]
             }
           ]
         },
@@ -38,8 +38,9 @@
           "name": "lastname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.lastname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.lastname"]
             }
           ]
         },
@@ -47,8 +48,9 @@
           "name": "email",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.primary_email"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.primary_email"]
             }
           ]
         },
@@ -56,8 +58,9 @@
           "name": "phone",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.primary_phone"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.primary_phone"]
             }
           ]
         }

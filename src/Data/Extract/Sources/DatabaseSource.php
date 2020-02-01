@@ -11,6 +11,7 @@
 namespace Metamorphose\Data\Extract\Sources;
 
 use Metamorphose\Contract\Definitions\ContractSourceDefinition;
+use Metamorphose\Data\DataSet;
 use Metamorphose\Exceptions\MetamorphoseDataSourceException;
 use Metamorphose\Exceptions\MetamorphoseParserException;
 use Metamorphose\Data\Extract\Source;
@@ -31,10 +32,11 @@ class DatabaseSource extends Source {
      * @param ContractSourceDefinition $sourceDefinition
      * @param ParserInterface|null $parser     Optional parser name
      *
+     * @return DataSet
      * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseParserException
      */
-    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): void {
+    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): DataSet {
 
         $options = $sourceDefinition->getOptions();
         
@@ -86,12 +88,17 @@ class DatabaseSource extends Source {
 
         if($sourceDefinition->getType() === ContractSourceDefinition::STRUCTURE_OBJECT) {
 
-            // @TODO: Should we send a warning when there is more than one result?
-            $this->data = $parser->parse($results[0], $sourceDefinition->getOptions());
+            if(count($results) > 1) {
+
+                throw new MetamorphoseDataSourceException('The query returned more than on result. Please add a LIMIT clause or change the structure to "collection"');
+
+            }
+
+            return $parser->parse($results[0], $sourceDefinition->getOptions());
 
         } else {
 
-            $this->data = $parser->parse($results[0], $sourceDefinition->getOptions());
+            return $parser->parse($results[0], $sourceDefinition->getOptions());
 
         }
 

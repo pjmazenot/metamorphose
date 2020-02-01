@@ -22,6 +22,9 @@ class ContractInspector {
     /**
      * Inspect a contract definition
      *
+     * @TODO: source/destination name conflict
+     * @TODO: Force at least one processor value in apply?
+     *
      * @param array $contractDefinition
      *
      * @throws MetamorphoseContractException
@@ -79,12 +82,6 @@ class ContractInspector {
 
         }
 
-        if (!isset($sourceDefinition['structure'])) {
-
-            throw new MetamorphoseContractException('The source definition needs to have a structure');
-
-        }
-
         if (!empty($sourceDefinition['fields'])) {
 
             foreach ($sourceDefinition['fields'] as $fieldDefinition) {
@@ -115,12 +112,6 @@ class ContractInspector {
         if (!isset($sourceDefinition['type'])) {
 
             throw new MetamorphoseContractException('The destination definition needs to have a type');
-
-        }
-
-        if (!isset($sourceDefinition['structure'])) {
-
-            throw new MetamorphoseContractException('The destination definition needs to have a structure');
 
         }
 

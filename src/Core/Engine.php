@@ -10,10 +10,11 @@
 
 namespace Metamorphose\Core;
 
-use Metamorphose\Contract\Definitions\ContractDestinationDefinition;
 use Metamorphose\Contract\Definitions\ContractApplyDefinition;
-use Metamorphose\Contract\Definitions\ContractSourceDefinition;
-use Metamorphose\Data\DataPoint;
+use Metamorphose\Contract\Definitions\ContractAttributeDefinition;
+use Metamorphose\Contract\Definitions\ContractFieldDefinition;
+use Metamorphose\Data\DataSet;
+use Metamorphose\Data\Find\ReferenceLocator;
 use Metamorphose\Exceptions\MetamorphoseContractException;
 use Metamorphose\Exceptions\MetamorphoseDataSourceException;
 use Metamorphose\Exceptions\MetamorphoseDataDestinationException;
@@ -71,28 +72,6 @@ class Engine {
     }
 
     /**
-     * Get the value by reference
-     *
-     * @param string $ref
-     * @param int    $index
-     *
-     * @return DataPoint|mixed
-     * @throws MetamorphoseUndefinedServiceException
-     */
-    public function getReference(string $ref, ?int $index = null) {
-
-        $fieldKeyParts = explode('.', $ref);
-        $sourceName = str_replace('$ref:', '', array_shift($fieldKeyParts));
-        if (isset($index)) {
-            array_unshift($fieldKeyParts, $index);
-        }
-        $fieldKey = implode('.', $fieldKeyParts);
-
-        return $this->services->getDataSourceCollection()->getDataSource($sourceName)->getData()->get($fieldKey);
-
-    }
-
-    /**
      * Extract the source data
      *
      * @param array $sourcesDynamicOptions
@@ -145,7 +124,10 @@ class Engine {
 
             // Extract the data
             $dataSource = $this->services->getDataSourceCollection()->getDataSource($sourceName);
-            $dataSource->extract($sourceDefinition, $parser);
+            $dataSet = $dataSource->extract($sourceDefinition, $parser);
+
+            // Register the data set
+            $this->services->getDataSetCollection()->registerDataSet($sourceName, $dataSet);
 
         }
 
@@ -172,75 +154,19 @@ class Engine {
 
         }
 
-        $maxItemsCount = 1;
-
         // Pre-process the data directly at the source
         foreach ($this->services->getContract()->getSources() as $sourceDefinition) {
 
-            $sourceName = $sourceDefinition->getName();
-            $source = $this->services->getDataSourceCollection()->getDataSource($sourceName);
+            // Get the source data set
+            $dataSet = $this->services->getDataSetCollection()->getDataSet($sourceDefinition->getName());
 
-            if ($sourceDefinition->getStructure() === ContractSourceDefinition::STRUCTURE_COLLECTION) {
+            // Process fields
+            foreach ($sourceDefinition->getFields() as $sourceFieldDefinition) {
 
-                $isCollection = true;
-                $itemCount = $source->getData()->getCount();
-
-            } else {
-
-                $isCollection = false;
-                $itemCount = 1;
-
-            }
-
-            if ($itemCount > $maxItemsCount) {
-
-                $maxItemsCount = $itemCount;
-
-            }
-
-            for ($i = 0; $i < $itemCount; $i++) {
-
-                // Process fields
-                foreach ($sourceDefinition->getFields() as $sourceFieldDefinition) {
-
-                    $collectionIndex = ($isCollection ? $i : null);
-                    $fieldKey = ($isCollection ? $i . '.' : '') . $sourceFieldDefinition->getName();
-                    $fieldApply = $sourceFieldDefinition->getApply();
-                    $fieldAttributes = $sourceFieldDefinition->getAttributes();
-
-                    if (!empty($fieldApply)) {
-
-                        // Apply
-                        $value = $source->getData()->get($fieldKey);
-                        $value = $this->processApply($sourceFieldDefinition->getName(), $value, $fieldApply, $collectionIndex);
-
-                        $source->getData()->set($fieldKey, $value);
-
-                    }
-
-                    // Process attributes
-                    if (!empty($fieldAttributes)) {
-
-                        foreach ($fieldAttributes as $attributeDefinition) {
-
-                            $attributeKey = $fieldKey . '@' . $attributeDefinition->getName();
-                            $attributeApply = $attributeDefinition->getApply();
-
-                            if (!empty($attributeApply)) {
-
-                                // Apply
-                                $value = $source->getData()->get($attributeKey);
-                                $value = $this->processApply($attributeDefinition->getName(), $value, $attributeApply, $collectionIndex);
-
-                                $source->getData()->set($attributeKey, $value);
-
-                            }
-
-                        }
-
-                    }
-
-                }
+                $this->processField(
+                    $sourceFieldDefinition,
+                    $dataSet
+                );
 
             }
 
@@ -249,59 +175,17 @@ class Engine {
         // Process the data to create the destinations
         foreach ($this->services->getContract()->getDestinations() as $destinationDefinition) {
 
+            // Register the destination and get the data set
             $this->services->getDataDestinationCollection()->registerDataDestinationFromModel($destinationDefinition->getType(), $destinationDefinition->getName());
-            $dataDestination = $this->services->getDataDestinationCollection()->getDataDestination($destinationDefinition->getName());
+            $this->services->getDataSetCollection()->registerDataSet($destinationDefinition->getName(), new DataSet());
+            $dataSet = $this->services->getDataSetCollection()->getDataSet($destinationDefinition->getName());
 
-            if ($destinationDefinition->getStructure() === ContractDestinationDefinition::STRUCTURE_COLLECTION) {
+            foreach ($destinationDefinition->getFields() as $destinationFieldDefinition) {
 
-                $isCollection = true;
-
-            } else {
-
-                $isCollection = false;
-
-            }
-
-            for ($i = 0; $i < $maxItemsCount; $i++) {
-
-                foreach ($destinationDefinition->getFields() as $destinationFieldDefinition) {
-
-                    $collectionIndex = ($isCollection ? $i : null);
-                    $fieldKey = ($isCollection ? $i . '.' : '') . $destinationFieldDefinition->getName();
-                    $fieldApply = $destinationFieldDefinition->getApply();
-                    $fieldAttributes = $destinationFieldDefinition->getAttributes();
-
-                    if (!empty($fieldApply)) {
-
-                        // Apply
-                        $value = $this->processApply($destinationFieldDefinition->getName(), null, $fieldApply, $collectionIndex);
-
-                        $dataDestination->getData()->set($fieldKey, $value);
-
-                    }
-
-                    // Process attributes
-                    if (!empty($fieldAttributes)) {
-
-                        foreach ($fieldAttributes as $attributeDefinition) {
-
-                            $attributeKey = $fieldKey . '@' . $attributeDefinition->getName();
-                            $attributeApply = $attributeDefinition->getApply();
-
-                            if (!empty($attributeApply)) {
-
-                                // Apply
-                                $value = $this->processApply($attributeDefinition->getName(), null, $attributeApply, $collectionIndex);
-
-                                $dataDestination->getData()->set($attributeKey, $value);
-
-                            }
-
-                        }
-
-                    }
-
-                }
+                $this->processField(
+                    $destinationFieldDefinition,
+                    $dataSet
+                );
 
             }
 
@@ -357,7 +241,8 @@ class Engine {
 
             // Load the data
             $dataDestination = $this->services->getDataDestinationCollection()->getDataDestination($destinationName);
-            $return[$destinationName] = $dataDestination->load($dataDestination->getData(), $destinationDefinition, $formatter);
+            $dataSet = $this->services->getDataSetCollection()->getDataSet($destinationName);
+            $return[$destinationName] = $dataDestination->load($dataSet, $destinationDefinition, $formatter);
 
         }
 
@@ -370,69 +255,208 @@ class Engine {
     /**
      * Process a field
      *
-     * @param string                    $name
-     * @param mixed                     $value
-     * @param ContractApplyDefinition[] $apply
-     * @param int                       $index
+     * @TODO: Move the processes to their own class?
      *
-     * @return mixed
+     * @param ContractFieldDefinition $fieldDefinition
+     * @param DataSet                 $dataSet
+     *
+     * @throws MetamorphoseException
      * @throws MetamorphoseUndefinedServiceException
      * @throws MetamorphoseValidateException
      */
-    protected function processApply(string $name, $value, array $apply, int $index = null) {
+    protected function processField(ContractFieldDefinition $fieldDefinition, DataSet $dataSet) {
 
-        foreach ($apply as $applyDefinition) {
+        $fieldApply = $fieldDefinition->getApply();
+        $fieldAttributes = $fieldDefinition->getAttributes();
 
-            switch ($applyDefinition->getType()) {
+        if (!empty($fieldApply)) {
 
-                case ContractApplyDefinition::TYPE_VALUE:
+            // Apply
+            $this->processFieldApply($fieldDefinition, $dataSet, null);
 
-                    if (is_string($applyDefinition->getValue()) && strpos($applyDefinition->getValue(), '$ref:') === 0) {
-                        $value = $this->getReference($applyDefinition->getValue(), $index);
-                    } else {
-                        $value = $applyDefinition->getValue();
-                    }
-                    break;
+        }
 
-                case ContractApplyDefinition::TYPE_PROCESSOR:
-                case ContractApplyDefinition::TYPE_VALIDATOR:
+        // Process attributes
+        if (!empty($fieldAttributes)) {
 
-                    $applyName = $applyDefinition->getName();
-                    $params = $applyDefinition->getArgs();
+            foreach ($fieldAttributes as $attributeDefinition) {
 
-                    foreach ($params as &$param) {
-
-                        if (strpos($param, '$ref:') === 0) {
-                            $param = $this->getReference($param, $index);
-                        }
-
-                    }
-
-                    if ($applyDefinition->getType() === ContractApplyDefinition::TYPE_PROCESSOR) {
-
-                        $processor = $this->services->getDataProcessorCollection()->getDataProcessor($applyName);
-
-                        $value = $processor->process($value, $params);
-
-                    } else {
-
-                        $validator = $this->services->getDataValidatorCollection()->getDataValidator($applyName);
-
-                        $isValid = $validator->validate($value, $params);
-
-                        if (!$isValid) {
-                            throw new MetamorphoseValidateException('Invalid value for the target field or attribute ' . $name);
-                        }
-
-                    }
-
-                    break;
+                $this->processFieldAttributeApply($fieldDefinition, $attributeDefinition, $dataSet, null);
 
             }
 
         }
 
-        return $value;
+    }
+
+    /**
+     * Process the apply list of a field
+     *
+     * @param ContractFieldDefinition $fieldDefinition
+     * @param DataSet                 $dataSet
+     * @param mixed                   $value
+     *
+     * @throws MetamorphoseException
+     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseValidateException
+     */
+    protected function processFieldApply(ContractFieldDefinition $fieldDefinition, DataSet $dataSet, $value): void {
+
+        $this->processApply($fieldDefinition->getApply(), $fieldDefinition->getName(), $dataSet, $value);
+
+    }
+
+    /**
+     * Process the apply list of an attribute
+     *
+     * @param ContractFieldDefinition     $fieldDefinition
+     * @param ContractAttributeDefinition $attributeDefinition
+     * @param DataSet                     $dataSet
+     * @param mixed                       $value
+     *
+     * @throws MetamorphoseException
+     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseValidateException
+     */
+    protected function processFieldAttributeApply(ContractFieldDefinition $fieldDefinition, ContractAttributeDefinition $attributeDefinition, DataSet $dataSet, $value): void {
+
+        $this->processApply($attributeDefinition->getApply(), $fieldDefinition->getName() . '@' . $attributeDefinition->getName(), $dataSet, $value);
+
+    }
+
+    /**
+     * Process the apply list
+     *
+     * @param array   $apply
+     * @param string  $name
+     * @param DataSet $dataSet
+     * @param mixed   $value
+     *
+     * @throws MetamorphoseException
+     * @throws MetamorphoseUndefinedServiceException
+     * @throws MetamorphoseValidateException
+     */
+    protected function processApply(array $apply, string $name, DataSet $dataSet, $value): void {
+
+        foreach ($apply as $applyIndex => $applyDefinition) {
+
+            $maxIndexes = [
+                'g' => 0,
+            ];
+
+            // Set this to false to start the process
+            $isDoneProcessing = false;
+
+            // End the process if everything has been processed
+            while (!$isDoneProcessing) {
+
+                // Set this to true - If a collection is being processed it'll update the status
+                $isDoneProcessing = true;
+
+                // Get the params
+                $params = $applyDefinition->getArgs();
+
+                // Process each params (retrieve reference if available)
+                foreach ($params as $paramIndex => &$param) {
+
+                    // Generate the reference locator key
+                    $referenceLocatorName = md5($name . $applyIndex . $paramIndex . (string)$param);
+
+                    // Retrieve the current reference locator if it is registered
+                    $referenceLocator = $this->services->getReferenceLocatorCollection()->getReferenceLocator($referenceLocatorName);
+
+                    // Init and register the reference locator if empty
+                    if (!isset($referenceLocator)) {
+
+                        $referenceLocator = new ReferenceLocator($param);
+                        $this->services->getReferenceLocatorCollection()->registerReferenceLocator($referenceLocatorName, $referenceLocator);
+
+                    }
+
+                    // Update the param value if it was a reference
+                    if ($referenceLocator->isReference()) {
+
+                        // Get the next reference available in the reference locator
+                        $reference = $referenceLocator->getNextReference($this->services->getDataSetCollection());
+
+                        // Update the reference string in the param with the reference value
+                        $param = $reference->getValue();
+
+                        if (!$referenceLocator->isDone()) {
+
+                            // Prevent the process to break out of the loop if we have other references to process
+                            $isDoneProcessing = false;
+
+                        }
+
+                        // Save the highest index set (default) to be able to generate the final field key later
+                        $referenceIndexes = $reference->getIndexes();
+                        if (isset($referenceIndexes['g']) && $referenceIndexes['g'] >= $maxIndexes['g']) {
+
+                            $maxIndexes = $referenceIndexes;
+
+                        }
+
+                    }
+
+                }
+
+                if ($applyDefinition->getType() === ContractApplyDefinition::TYPE_PROCESSOR) {
+
+                    // Get the processor by name
+                    $processor = $this->services->getDataProcessorCollection()->getDataProcessor($applyDefinition->getName());
+
+                    // If value = null try to get key first (this should only work in the case of a source since the
+                    // destination is supposed to be empty for now)
+                    if (!isset($value)) {
+
+                        $value = $dataSet->get($name);
+
+                    }
+
+                    // Apply the processor
+                    $value = $processor->process($value, $params);
+
+                    // Generate the final key
+                    $fieldKey = $name;
+                    foreach ($maxIndexes as $level => $index) {
+
+                        $fieldKey = str_replace('[$' . $level . ']', $index, $fieldKey);
+
+                    }
+
+                    // Set the final value
+                    $dataSet->set($fieldKey, $value);
+
+                } elseif ($applyDefinition->getType() === ContractApplyDefinition::TYPE_VALIDATOR) {
+
+                    // Get the validator by name
+                    $validator = $this->services->getDataValidatorCollection()->getDataValidator($applyDefinition->getName());
+
+                    // If value = null try to get key directly (this should only work in the case of a source since the
+                    // destination is supposed to be empty for now)
+                    if (!isset($value)) {
+
+                        $value = $dataSet->get($name);
+
+                    }
+
+                    // Apply the validator
+                    $isValid = $validator->validate($value, $params);
+
+                    if (!$isValid) {
+                        throw new MetamorphoseValidateException('Invalid value for the target field or attribute ' . $name);
+                    }
+
+                } else {
+
+                    throw new MetamorphoseException('Invalid apply type for ' . $name);
+
+                }
+
+            }
+
+        }
 
     }
 

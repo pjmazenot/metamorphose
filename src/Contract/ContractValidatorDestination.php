@@ -25,9 +25,6 @@ class ContractValidatorDestination {
     /** @var array $formats */
     protected $formats = [];
 
-    /** @var string $structure */
-    protected $structure;
-
     /** @var ContractValidatorField[] $fields */
     protected $fields = [];
 
@@ -50,17 +47,6 @@ class ContractValidatorDestination {
     public function getFormats(): array {
 
         return $this->formats;
-
-    }
-
-    /**
-     * Get the structure
-     *
-     * @return string
-     */
-    public function getStructure(): string {
-
-        return $this->structure;
 
     }
 
@@ -97,12 +83,6 @@ class ContractValidatorDestination {
         } else {
 
             throw new MetamorphoseContractException('The contract needs to have at least one output formats');
-
-        }
-
-        if(isset($destinationData['structure'])) {
-
-            $this->structure = $destinationData['structure'];
 
         }
 

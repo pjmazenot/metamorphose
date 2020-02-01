@@ -12,6 +12,8 @@ namespace Metamorphose\Data\Transform;
 
 use Metamorphose\Data\Transform\Processors\Arrays\ImplodeProcessor;
 use Metamorphose\Data\Transform\Processors\Arrays\UniqueProcessor;
+use Metamorphose\Data\Transform\Processors\Base\DefaultProcessor;
+use Metamorphose\Data\Transform\Processors\Base\ValueProcessor;
 use Metamorphose\Data\Transform\Processors\Json\JsonDecodeProcessor;
 use Metamorphose\Data\Transform\Processors\Json\JsonEncodeProcessor;
 use Metamorphose\Data\Transform\Processors\Strings\ConcatProcessor;
@@ -47,6 +49,10 @@ class ProcessorCollection {
         // Arrays
         $this->registerDataProcessor(new ImplodeProcessor());
         $this->registerDataProcessor(new UniqueProcessor());
+
+        // Base
+        $this->registerDataProcessor(new DefaultProcessor());
+        $this->registerDataProcessor(new ValueProcessor());
 
         // Json
         $this->registerDataProcessor(new JsonDecodeProcessor());

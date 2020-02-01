@@ -11,6 +11,7 @@
 namespace Metamorphose\Data\Extract\Sources;
 
 use Metamorphose\Contract\Definitions\ContractSourceDefinition;
+use Metamorphose\Data\DataSet;
 use Metamorphose\Exceptions\MetamorphoseDataSourceException;
 use Metamorphose\Exceptions\MetamorphoseParserException;
 use Metamorphose\Data\Extract\Source;
@@ -31,10 +32,11 @@ class FileSource extends Source {
      * @param ContractSourceDefinition $sourceDefinition
      * @param ParserInterface|null $parser     Parser instance to parse the file content
      *
+     * @return DataSet
      * @throws MetamorphoseDataSourceException
      * @throws MetamorphoseParserException
      */
-    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): void {
+    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser = null): DataSet {
 
         $options = $sourceDefinition->getOptions();
         $filePath = isset($options['file']) ? $options['file'] : null;
@@ -51,7 +53,7 @@ class FileSource extends Source {
 
             $fileContent = file_get_contents($filePath);
 
-            $this->data = $parser->parse($fileContent, $sourceDefinition->getOptions());
+            return $parser->parse($fileContent, $sourceDefinition->getOptions());
 
         }
 

@@ -30,22 +30,16 @@ interface SourceInterface {
     public function getName(): string;
 
     /**
-     * Get the data
-     *
-     * @return DataSet
-     */
-    public function getData(): DataSet;
-
-    /**
      * Extract the data from the data source
      *
      * @param ContractSourceDefinition $sourceDefinition
      * @param ParserInterface|null $parser
      *
+     * @return DataSet
      * @throws MetamorphoseParserException
      * @throws MetamorphoseDataSourceException
      */
-    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser): void;
+    public function extract(ContractSourceDefinition $sourceDefinition, ?ParserInterface $parser): DataSet;
 
     /**
      * Get the type

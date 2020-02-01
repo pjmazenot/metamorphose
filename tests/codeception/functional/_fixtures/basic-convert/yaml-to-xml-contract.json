@@ -20,8 +20,9 @@
           "name": "user.id",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.user.id"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.user.id"]
             }
           ]
         },
@@ -29,8 +30,9 @@
           "name": "user.firstname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.user.firstname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.user.firstname"]
             }
           ]
         },
@@ -38,8 +40,9 @@
           "name": "user.lastname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.user.lastname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.user.lastname"]
             }
           ]
         },
@@ -47,8 +50,9 @@
           "name": "user.email",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.user.email"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.user.email"]
             }
           ]
         },
@@ -56,8 +60,9 @@
           "name": "user.phone",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.user.phone"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.user.phone"]
             }
           ]
         }

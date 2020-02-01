@@ -20,47 +20,52 @@
       },
       "fields": [
         {
-          "name": "0",
+          "name": "[$g].0",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.0"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].0"]
             }
           ]
         },
         {
-          "name": "1",
+          "name": "[$g].1",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.1"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].1"]
             }
           ]
         },
         {
-          "name": "2",
+          "name": "[$g].2",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.2"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].2"]
             }
           ]
         },
         {
-          "name": "3",
+          "name": "[$g].3",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.4"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].4"]
             }
           ]
         },
         {
-          "name": "4",
+          "name": "[$g].4",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.3"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source[n].3"]
             }
           ]
         }

@@ -29,9 +29,6 @@ class ContractSourceDefinition {
     /** @var string|null $parser */
     protected $parser;
 
-    /** @var string $structure */
-    protected $structure;
-
     /** @var array $options */
     protected $options = [];
 
@@ -79,17 +76,6 @@ class ContractSourceDefinition {
     public function getParser(): ?string {
 
         return $this->parser;
-
-    }
-
-    /**
-     * Get the source structure
-     *
-     * @return string
-     */
-    public function getStructure(): string {
-
-        return $this->structure;
 
     }
 
@@ -148,12 +134,6 @@ class ContractSourceDefinition {
         if(isset($sourceData['parser'])) {
 
             $this->parser = $sourceData['parser'];
-
-        }
-
-        if(isset($sourceData['structure'])) {
-
-            $this->structure = $sourceData['structure'];
 
         }
 

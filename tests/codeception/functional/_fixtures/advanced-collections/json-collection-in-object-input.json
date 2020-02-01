@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "data": {
+    "users": [
+      {
+        "id": 1,
+        "firstname": "John",
+        "lastname": "Smith",
+        "email": "j.smith@test.com",
+        "phone": "+15140010001"
+      },
+      {
+        "id": 2,
+        "firstname": "Mark",
+        "lastname": "Jones",
+        "email": "m.jones@test.com",
+        "phone": "+15140010002"
+      }
+    ]
+  },
+  "message": ""
+}

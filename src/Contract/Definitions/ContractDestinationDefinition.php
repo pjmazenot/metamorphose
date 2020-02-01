@@ -29,9 +29,6 @@ class ContractDestinationDefinition {
     /** @var string|null $formatter */
     protected $formatter;
 
-    /** @var string $structure */
-    protected $structure;
-
     /** @var array $options */
     protected $options = [];
 
@@ -79,17 +76,6 @@ class ContractDestinationDefinition {
     public function getFormatter(): ?string {
 
         return $this->formatter;
-
-    }
-
-    /**
-     * Get the destination structure
-     *
-     * @return string
-     */
-    public function getStructure(): string {
-
-        return $this->structure;
 
     }
 
@@ -148,12 +134,6 @@ class ContractDestinationDefinition {
         if(isset($destinationData['formatter'])) {
 
             $this->formatter = $destinationData['formatter'];
-
-        }
-
-        if(isset($destinationData['structure'])) {
-
-            $this->structure = $destinationData['structure'];
 
         }
 

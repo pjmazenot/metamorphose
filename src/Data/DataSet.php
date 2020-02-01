@@ -67,7 +67,7 @@ class DataSet {
      *
      * @param string $key Key name
      *
-     * @return mixed
+     * @return DataPoint|mixed
      */
     public function get($key) {
 

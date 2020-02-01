@@ -50,8 +50,9 @@
           "name": "id",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source1.id"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source1.id"]
             }
           ]
         },
@@ -59,8 +60,9 @@
           "name": "firstname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source1.firstname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source1.firstname"]
             },
             {
               "type": "validator",
@@ -73,8 +75,9 @@
           "name": "lastname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source2.root.lastname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source2.root.lastname"]
             },
             {
               "type": "validator",
@@ -86,6 +89,11 @@
         {
           "name": "contact.full_name",
           "apply": [
+            {
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source1.firstname"]
+            },
             {
               "type": "processor",
               "name": "concat",
@@ -102,8 +110,9 @@
           "name": "flag",
           "apply": [
             {
-              "type": "value",
-              "value": "1"
+              "type": "processor",
+              "name": "value",
+              "args": ["1"]
             }
           ]
         }

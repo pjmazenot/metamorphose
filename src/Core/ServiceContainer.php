@@ -12,6 +12,10 @@ namespace Metamorphose\Core;
 
 use Metamorphose\Contract\Contract;
 use Metamorphose\Contract\ContractValidator;
+use Metamorphose\Data\DataSet;
+use Metamorphose\Data\DataSetCollection;
+use Metamorphose\Data\Find\ReferenceLocator;
+use Metamorphose\Data\Find\ReferenceLocatorCollection;
 use Metamorphose\Data\Load\DestinationCollection;
 use Metamorphose\Data\Load\DestinationInterface;
 use Metamorphose\Data\Load\FormatterCollection;
@@ -60,6 +64,12 @@ class ServiceContainer {
     /** @var DestinationCollection $dataDestinationCollection */
     protected $dataDestinationCollection;
 
+    /** @var DataSetCollection $dataSetCollection */
+    protected $dataSetCollection;
+
+    /** @var ReferenceLocatorCollection $referenceLocatorCollection */
+    protected $referenceLocatorCollection;
+
     /**
      * MorphServices constructor.
      *
@@ -76,12 +86,14 @@ class ServiceContainer {
         $this->dataProcessorCollection = new ProcessorCollection();
         $this->dataValidatorCollection = new ValidatorCollection();
         $this->formatterCollection = new FormatterCollection();
+        $this->dataSetCollection = new DataSetCollection();
+        $this->referenceLocatorCollection = new ReferenceLocatorCollection();
 
         // Init the contract
         $this->contract = new Contract($inputContractFilePath);
 
         // Init the contract validator and validate the contract right away
-        if(isset($outputContractFilePath)) {
+        if (isset($outputContractFilePath)) {
 
             $this->contractValidator = new ContractValidator($outputContractFilePath);
 
@@ -123,7 +135,7 @@ class ServiceContainer {
      */
     public function validateContract(): void {
 
-        if(!isset($this->contractValidator)) {
+        if (!isset($this->contractValidator)) {
 
             throw new MetamorphoseUndefinedServiceException('The contract validator service is not defined');
 
@@ -200,6 +212,28 @@ class ServiceContainer {
     }
 
     /**
+     * Get the data set collection
+     *
+     * @return DataSetCollection
+     */
+    public function getDataSetCollection(): DataSetCollection {
+
+        return $this->dataSetCollection;
+
+    }
+
+    /**
+     * Get the reference locator collection
+     *
+     * @return ReferenceLocatorCollection
+     */
+    public function getReferenceLocatorCollection(): ReferenceLocatorCollection {
+
+        return $this->referenceLocatorCollection;
+
+    }
+
+    /**
      * Register a parser
      *
      * @param ParserInterface $parser
@@ -258,12 +292,36 @@ class ServiceContainer {
     /**
      * Register a data destination
      *
-     * @param string $name
+     * @param string               $name
      * @param DestinationInterface $dataDestination
      */
     public function registerDataDestination(string $name, DestinationInterface $dataDestination): void {
 
         $this->dataDestinationCollection->registerDataDestination($name, $dataDestination);
+
+    }
+
+    /**
+     * Register a data set
+     *
+     * @param string  $name
+     * @param DataSet $dataSet
+     */
+    public function registerDataSet(string $name, DataSet $dataSet): void {
+
+        $this->dataSetCollection->registerDataSet($name, $dataSet);
+
+    }
+
+    /**
+     * Register a data locator
+     *
+     * @param string           $name
+     * @param ReferenceLocator $referenceLocator
+     */
+    public function registerReferenceLocator(string $name, ReferenceLocator $referenceLocator): void {
+
+        $this->referenceLocatorCollection->registerReferenceLocator($name, $referenceLocator);
 
     }
 

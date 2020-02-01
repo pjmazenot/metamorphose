@@ -10,9 +10,7 @@
 
 namespace Metamorphose\Data\Extract;
 
-use Metamorphose\Data\DataSet;
 use Metamorphose\Exceptions\MetamorphoseDataSourceException;
-use Metamorphose\Exceptions\MetamorphoseException;
 
 /**
  * Class DataSource
@@ -26,9 +24,6 @@ abstract class Source implements SourceInterface {
 
     /** @var string $name */
     protected $name;
-
-    /** @var DataSet $data */
-    protected $data;
 
     /**
      * DataSource constructor.
@@ -49,24 +44,6 @@ abstract class Source implements SourceInterface {
     public function getName(): string {
 
         return $this->name;
-
-    }
-
-    /**
-     * Get the raw data from a data source
-     *
-     * @return DataSet
-     * @throws MetamorphoseException
-     */
-    public function getData(): DataSet {
-
-        if(!isset($this->data)) {
-
-            throw new MetamorphoseException('Data not extracted');
-
-        }
-
-        return $this->data;
 
     }
 

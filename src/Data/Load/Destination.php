@@ -10,7 +10,6 @@
 
 namespace Metamorphose\Data\Load;
 
-use Metamorphose\Data\DataSet;
 use Metamorphose\Exceptions\MetamorphoseDataDestinationException;
 
 /**
@@ -26,9 +25,6 @@ abstract class Destination implements DestinationInterface {
     /** @var string $name */
     protected $name;
 
-    /** @var DataSet $data */
-    protected $data;
-
     /**
      * DataDestination constructor.
      *
@@ -37,7 +33,6 @@ abstract class Destination implements DestinationInterface {
     public function __construct(string $name) {
 
         $this->name = $name;
-        $this->data = new DataSet();
 
     }
 
@@ -49,17 +44,6 @@ abstract class Destination implements DestinationInterface {
     public function getName(): string {
 
         return $this->name;
-
-    }
-
-    /**
-     * Get the raw data from a data source
-     *
-     * @return DataSet
-     */
-    public function getData(): DataSet {
-
-        return $this->data;
 
     }
 

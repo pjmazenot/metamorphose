@@ -30,13 +30,6 @@ interface DestinationInterface {
     public function getName(): string;
 
     /**
-     * Get the data
-     *
-     * @return DataSet
-     */
-    public function getData(): DataSet;
-
-    /**
      * Load the data
      *
      * @param DataSet                       $finalDataSet

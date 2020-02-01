@@ -4,7 +4,6 @@
       "name": "source",
       "type": "file",
       "parser": "json",
-      "structure": "object",
       "options": {},
       "fields": []
     }
@@ -14,14 +13,14 @@
       "name": "dest",
       "type": "string",
       "formatter": "json",
-      "structure": "object",
       "fields": [
         {
           "name": "id",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.id"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.id"]
             }
           ]
         },
@@ -29,8 +28,9 @@
           "name": "firstname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.firstname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.firstname"]
             }
           ]
         },
@@ -38,8 +38,9 @@
           "name": "lastname",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.lastname"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.lastname"]
             }
           ]
         },
@@ -47,8 +48,9 @@
           "name": "user_data.email",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.extra_data.email"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.extra_data.email"]
             }
           ]
         },
@@ -56,8 +58,9 @@
           "name": "user_data.phone",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.extra_data.phone"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.extra_data.phone"]
             }
           ]
         },
@@ -65,8 +68,9 @@
           "name": "user_data.description",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.metas.description"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.metas.description"]
             }
           ]
         },
@@ -74,8 +78,9 @@
           "name": "description_title_copy",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.metas.description.title"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.metas.description.title"]
             }
           ]
         },
@@ -83,8 +88,9 @@
           "name": "meta.level.four",
           "apply": [
             {
-              "type": "value",
-              "value": "$ref:source.metas.permissions"
+              "type": "processor",
+              "name": "value",
+              "args": ["$ref:source.metas.permissions"]
             }
           ]
         }
